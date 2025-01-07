@@ -14,7 +14,13 @@ const FAQcard = ({ question, answer }) => {
     >
       <div className="flex justify-between items-center pr-10">
         <h1 className="text-lg font-medium">{question}</h1>
-        {isopen ? <ImCross size={10} /> : <FaPlus size={10} />}
+        {/* {isopen ? <ImCross size={12} /> : <FaPlus size={12} />} */}
+        <FaPlus
+          size={12}
+          className={`${
+            isopen ? 'rotate-45' : 'rotate-0'
+          } transition-all duration-100`}
+        />
       </div>
       <div
         className={`overflow-hidden transition-[height] duration-700 ease-[cubic-bezier(0.25,1,0.5,1)] ${

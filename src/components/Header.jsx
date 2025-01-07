@@ -8,7 +8,7 @@ const Header = () => {
         Effortless<span className="text-brand">Pay</span>
       </h1>
       <Link href={'/login'}>
-        <button className="bg-white border-[2px] px-4 py-1 rounded-2xl  text-xl font-medium hover:bg-brand hover:text-white">
+        <button className="px-4 py-2 rounded-2xl  text-xl font-medium  hover:text-brand transition-all">
           Login
         </button>
       </Link>

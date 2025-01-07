@@ -4,13 +4,13 @@ import { MdArrowOutward } from 'react-icons/md';
 
 const Hero = () => {
   return (
-    <div className="flex  justify-between bg-background h-[90vh] px-8">
+    <div className="flex  justify-around bg-background h-[90vh] px-8">
       <div className="flex flex-col justify-center gap-4">
-        <h1 className="text-5xl font-bold">Get paid early</h1>
-        <h1 className="text-5xl font-medium w-[16ch]">
+        <h1 className="md:text-5xl text-4xl font-bold">Get paid early</h1>
+        <h1 className="md:text-5xl text-3xl font-medium w-[16ch]">
           save automatically all your pay.
         </h1>
-        <p className="w-[50ch] text-sm">
+        <p className="text-wrap md:w-[50ch]  text-sm">
           Support small businesses with simple invoicing, powerful integrations,
           and cash flow management tools.
         </p>
@@ -18,8 +18,10 @@ const Hero = () => {
           Get Started <MdArrowOutward size={20} />
         </button>
       </div>
-      <div className="flex">
-        <Image src="/pay.jpg" alt="pay" height={500} width={800}></Image>
+      <div className="hidden lg:flex items-center justify-center">
+        <div className="">
+          <Image src="/dashboard.png" alt="pay" height={200} width={600} />
+        </div>
       </div>
     </div>
   );
