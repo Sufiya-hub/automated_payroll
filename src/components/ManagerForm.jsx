@@ -4,6 +4,7 @@ import { BsPersonFillAdd } from 'react-icons/bs';
 import { EMPLOYEEFORM } from '@/constants';
 import InputComponent from './InputComponent';
 import OtherInputs from './OtherInputs';
+import { ToastContainer, toast } from 'react-toastify';
 
 const ManagerForm = () => {
   const [data, setData] = useState({
@@ -18,20 +19,25 @@ const ManagerForm = () => {
   const handleInput = (key, value) => {
     setData((prev) => ({ ...prev, [key]: value }));
   };
-  const handleSubmit = async () => {
-    await fetch('/api/managers/', {
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    await fetch('/api/employees/', {
       method: 'POST',
       body: JSON.stringify(data),
     });
+    notify();
   };
+
+  const notify = () =>
+    toast(() => <p className="font-semibold">Added successfully</p>);
   return (
     <div className="flex flex-col  gap-4 py-6 items-center h-[100vh] w-full">
       <form
         onSubmit={handleSubmit}
         className="flex flex-col shadow-xl border-2 gap-4 w-[65%] p-4 rounded-xl bg-background"
       >
-        <div className="flex items-center justify-between">
-          <h1 className="flex gap-2 items-center justify-center font-semibold text-lg text-brand">
+        <div className="flex items-center justify-between p-4 bg-brand rounded-t-xl headers -mt-4 -ml-4 ">
+          <h1 className="flex gap-2 items-center justify-center font-semibold text-lg text-white">
             <BsPersonFillAdd /> Manager information
           </h1>
         </div>
@@ -61,6 +67,7 @@ const ManagerForm = () => {
           Add Manager
         </button>
       </form>
+      <ToastContainer />
     </div>
   );
 };

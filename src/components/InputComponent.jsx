@@ -30,8 +30,12 @@ const InputComponent = ({
           id=""
           cols="30"
           rows="4"
+          value={value}
+          onChange={(e) => {
+            handleInput(bodyKey, e.target.value);
+          }}
           required={required || false}
-          className="border-b-2 outline-none bg-transparent resize-none"
+          className="border-b-2 row-span-1 col-span-full outline-none bg-transparent resize-none focus:border-brand transition-all"
         />
       )}
     </div>
