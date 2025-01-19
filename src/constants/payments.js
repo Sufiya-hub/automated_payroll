@@ -1,8 +1,14 @@
+import { Annapurna_SIL } from 'next/font/google';
+import { PiCowboyHat } from 'react-icons/pi';
+
 export const PAYMENTS_DATA = [
   {
     EmployeeID: 'EMP001',
+    email: 'alice@gmail.com',
     Name: 'Alice Johnson',
     Position: 'Software Dev',
+    Department: 'Engineering',
+    Status: 'Full-Time',
     BaseSalary: 320000,
     Allowances: 40000, // Travel, Medical, Housing
     Deductions: 24000, // Taxes, Insurance.
@@ -12,8 +18,11 @@ export const PAYMENTS_DATA = [
   },
   {
     EmployeeID: 'EMP002',
+    email: 'bob@gmail.com',
     Name: 'Bob Smith',
     Position: 'HR Manager',
+    Department: 'Human Resources',
+    Status: 'Full-Time',
     BaseSalary: 400000,
     Allowances: 56000,
     Deductions: 32000,
@@ -23,8 +32,11 @@ export const PAYMENTS_DATA = [
   },
   {
     EmployeeID: 'EMP003',
+    email: 'clara@gmail.com',
     Name: 'Clara Lee',
     Position: 'Accountant',
+    Department: 'Finance',
+    Status: 'Part-Time',
     BaseSalary: 280000,
     Allowances: 24000,
     Deductions: 16000,
@@ -34,8 +46,11 @@ export const PAYMENTS_DATA = [
   },
   {
     EmployeeID: 'EMP004',
+    email: 'david@gmail.com',
     Name: 'David Wilson',
     Position: 'IT Technician',
+    Department: 'IT Support',
+    Status: 'Full-Time',
     BaseSalary: 304000,
     Allowances: 32000,
     Deductions: 20000,
@@ -45,8 +60,11 @@ export const PAYMENTS_DATA = [
   },
   {
     EmployeeID: 'EMP005',
+    email: 'emily@gmail.com',
     Name: 'Emily Brown',
     Position: 'Sales Manager',
+    Department: 'Product Management',
+    Status: 'Full-Time',
     BaseSalary: 360000,
     Allowances: 48000,
     Deductions: 28000,
@@ -56,8 +74,11 @@ export const PAYMENTS_DATA = [
   },
   {
     EmployeeID: 'EMP006',
+    email: 'frank@gmail.com',
     Name: 'Frank White',
     Position: 'Marketing Lead',
+    Department: 'Marketing',
+    Status: 'Freelancer',
     BaseSalary: 336000,
     Allowances: 44000,
     Deductions: 24000,
@@ -67,8 +88,11 @@ export const PAYMENTS_DATA = [
   },
   {
     EmployeeID: 'EMP007',
+    email: 'grace@gmail.com',
     Name: 'Grace Hall',
     Position: 'Data Analyst',
+    Department: 'Data Science',
+    Status: 'Part-Time',
     BaseSalary: 312000,
     Allowances: 36000,
     Deductions: 20000,
@@ -78,8 +102,11 @@ export const PAYMENTS_DATA = [
   },
   {
     EmployeeID: 'EMP008',
+    email: 'henry@gmail.com',
     Name: 'Henry Adams',
     Position: 'Operations Manager',
+    Department: 'Operations',
+    Status: 'Full-Time',
     BaseSalary: 376000,
     Allowances: 48000,
     Deductions: 32000,
@@ -89,8 +116,11 @@ export const PAYMENTS_DATA = [
   },
   {
     EmployeeID: 'EMP009',
+    email: 'ivy@gmail.com',
     Name: 'Ivy Carter',
     Position: 'UX Designer',
+    Department: 'Design',
+    Status: 'Freelancer',
     BaseSalary: 328000,
     Allowances: 40000,
     Deductions: 25600,
@@ -100,8 +130,11 @@ export const PAYMENTS_DATA = [
   },
   {
     EmployeeID: 'EMP010',
+    email: 'jack@gmail.com',
     Name: 'Jack Taylor',
     Position: 'Project Manager',
+    Department: 'Product Management',
+    Status: 'Full-Time',
     BaseSalary: 400000,
     Allowances: 64000,
     Deductions: 40000,

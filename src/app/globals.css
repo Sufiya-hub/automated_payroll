@@ -2,6 +2,18 @@
 @tailwind components;
 @tailwind utilities;
 
+::-webkit-scrollbar {
+  /* background: #000; */
+  width: 0.5rem;
+  border-radius: 35px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #c0c0c0;
+  border-radius: 35px;
+  /* display; */
+}
+
 .hero_right {
   background: linear-gradient(
     45deg,
@@ -14,6 +26,7 @@
   background-size: 300% 300%;
   animation: gradientShift 8s ease infinite;
 }
+
 @keyframes gradientShift {
   0% {
     background-position: 0% 50%;
