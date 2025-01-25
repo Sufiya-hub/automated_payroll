@@ -137,13 +137,38 @@ export const EMPLOYEEFORM = [
     required: true,
   },
   {
-    label: 'Department Manager',
-    bodyKey: 'managerId',
+    label: 'Role',
+    bodyKey: 'position',
     type: 'select',
-    placeholder: 'Select Manager',
+    options: [
+      {
+        label: 'UI/UX Designer',
+        value: 'UI/UX designer',
+      },
+      {
+        label: 'Software Developer',
+        value: 'software developer',
+      },
+      {
+        label: 'Tester',
+        value: 'tester',
+      },
+      {
+        label: 'Marketing',
+        value: 'marketing',
+      },
+    ],
+    placeholder: 'Assign Position',
     required: true,
-    options: [],
   },
+  // {
+  //   label: 'Department Manager',
+  //   bodyKey: 'managerId',
+  //   type: 'select',
+  //   placeholder: 'Select Manager',
+  //   required: true,
+  //   options: [],
+  // },
 ];
 
 export const DEPTFORM = [
