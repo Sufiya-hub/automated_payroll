@@ -1,5 +1,17 @@
 import { NextResponse } from 'next/server';
 import { addDepartment } from '@/server/queries';
+import { getDepartments } from '@/server/queries';
+
+export async function GET(req) {
+  try {
+    const data = await getDepartments();
+    console.log(data);
+    return NextResponse.json(data);
+  } catch (error) {
+    console.log(error);
+    return NextResponse.json({ message: error.message });
+  }
+}
 
 export async function POST(req) {
   try {

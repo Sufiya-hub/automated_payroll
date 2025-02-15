@@ -15,13 +15,37 @@ const authOptions = {
   },
   callbacks: {
     async signIn({ profile }) {
-      console.log('profile:', profile);
       if (!profile?.email) {
         return false;
       }
-      const userExists = await googleLogin(profile.email);
-      if (userExists) return true;
-      return false;
+
+      try {
+        const userExists = await googleLogin(profile.email);
+        if (userExists) {
+          profile.position = userExists.position;
+          return true;
+        }
+      } catch (error) {
+        console.error('Login verification error:', error);
+        return false;
+      }
+    },
+    async session({ token, session }) {
+      session.user.position = token.position;
+      console.log(session?.user);
+      return session;
+    },
+
+    async jwt({ profile, token }) {
+      if (profile) {
+        token.position = profile.position;
+      }
+      console.log(token);
+      return token;
+    },
+
+    async redirect({ url, baseUrl }) {
+      return `${baseUrl}/login`;
     },
   },
 };

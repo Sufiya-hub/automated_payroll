@@ -32,26 +32,6 @@ const SideBar = () => {
           </div>
         </div>
       ))}
-
-      {/* <div className="flex flex-col gap-4 font-medium mt-8">
-        <h1 className="text-normal  text-gray-400">TEAMMANAGEMENT</h1>
-        <div className="flex gap-3 items-center cursor-pointer">
-          <IoMdStats className="text-gray-600" size={20} />
-          <h1>Performance</h1>
-        </div>
-        <div className="flex gap-3  items-center cursor-pointer">
-          <FaCcApplePay className="text-gray-600" />
-          <h1>Payrolls</h1>
-        </div>
-        <div className="flex gap-3  items-center cursor-pointer">
-          <FaFileInvoice className="text-gray-600" />
-          <h1>Invoices</h1>
-        </div>
-        <div className="flex gap-3  items-center cursor-pointer">
-          <MdGroupAdd className="text-gray-600" size={20} />
-          <h1>Employees</h1>
-        </div>
-      </div> */}
     </div>
   );
 };

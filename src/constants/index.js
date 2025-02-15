@@ -136,8 +136,9 @@ export const EMPLOYEEFORM = [
     placeholder: 'Enter password',
     required: true,
   },
+
   {
-    label: 'Role',
+    label: 'Position',
     bodyKey: 'position',
     type: 'select',
     options: [
@@ -157,18 +158,43 @@ export const EMPLOYEEFORM = [
         label: 'Marketing',
         value: 'marketing',
       },
+      {
+        label: 'HR',
+        value: 'hr',
+      },
     ],
     placeholder: 'Assign Position',
     required: true,
   },
-  // {
-  //   label: 'Department Manager',
-  //   bodyKey: 'managerId',
-  //   type: 'select',
-  //   placeholder: 'Select Manager',
-  //   required: true,
-  //   options: [],
-  // },
+  {
+    label: 'Department',
+    bodyKey: 'department',
+    type: 'select',
+    options: [],
+    placeholder: 'Assign department',
+    required: true,
+  },
+  {
+    label: 'Status',
+    bodyKey: 'status',
+    type: 'select',
+    options: [
+      {
+        label: 'Full-Time',
+        value: 'Full-Time',
+      },
+      {
+        label: 'Part-Time',
+        value: 'Part-Time',
+      },
+      {
+        label: 'Freelancer',
+        value: 'Freelancer',
+      },
+    ],
+    placeholder: 'Select status',
+    required: true,
+  },
 ];
 
 export const DEPTFORM = [
@@ -179,13 +205,6 @@ export const DEPTFORM = [
     placeholder: 'Enter Department name',
     required: true,
   },
-  // {
-  //   label: 'Department Id',
-  //   bodyKey: 'departmentId',
-  //   type: 'number',
-  //   placeholder: 'Enter Department id',
-  //   required: true,
-  // },
   {
     label: 'Department Code',
     bodyKey: 'departmentCode',

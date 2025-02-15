@@ -20,38 +20,38 @@ const EmployeeForm = () => {
     birthDate: '',
     mobile: '',
     email: '',
-    managerId: '',
+    department: '',
+    status: '',
+    position: '',
   });
 
   useEffect(() => {
-    const getManagersData = async () => {
-      await fetch('api/managers', {
+    const getDepartmentData = async () => {
+      const promise = await fetch('/api/departments/', {
         method: 'GET',
-      })
-        .then((res) => res.json())
-        .then((res) => {
-          console.log(res);
-          const managersData = res.map((el) => ({
-            label: el.fullName,
-            value: el.id,
-          }));
-          console.log(managersData);
-          setFORM((prev) => {
-            const updated = prev.map((el) => {
-              if (el.bodyKey === 'managerId') {
-                el.options = managersData;
-              }
+      });
+      if (promise.ok) {
+        const json = await promise.json();
+        console.log(json);
+        setFORM((prev) => {
+          const updated = prev.map((el) => {
+            if (el.bodyKey === 'department') {
+              let updatedDepts = el;
+              const options = json.map((el) => ({
+                label: el.departmentName,
+                value: el.departmentId,
+              }));
+              updatedDepts.options = options;
+              return updatedDepts;
+            } else {
               return el;
-            });
-            // console.log('prev:', prev);
-            // prev.map((el) => {
-            //   console.log(el.bodyKey);
-            // });
-            return updated;
+            }
           });
+          return updated;
         });
+      }
     };
-    getManagersData();
+    getDepartmentData();
   }, []);
 
   const handleInput = (key, value) => {

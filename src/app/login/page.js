@@ -4,10 +4,18 @@ import Image from 'next/image';
 import { FcGoogle } from 'react-icons/fc';
 import { signIn } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
+import { useSession } from 'next-auth/react';
 
 const page = () => {
-  const [data, setData] = useState({ email: '', password: '' });
+  const session = useSession();
   const router = useRouter();
+  const user = session?.data?.user;
+  if (user) {
+    const role = user.position;
+    if (role === 'hr') router.push('/adminDashboard');
+    else router.push('/empDashboard');
+  }
+  const [data, setData] = useState({ email: '', password: '' });
   const handleSubmit = async (e) => {
     e.preventDefault();
     await fetch('/api/auth/login/', {
@@ -38,6 +46,7 @@ const page = () => {
             Keep Your Online business organized
           </h1>
           <button
+            type="button"
             onClick={() => signIn('google', { callbackUrl: '/' })}
             className="flex w-full font-medium mt-5 justify-center items-center gap-2 border-2 border-gray-300 rounded-lg p-2"
           >

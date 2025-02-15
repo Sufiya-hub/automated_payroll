@@ -10,11 +10,12 @@ export const googleLogin = async (email) => {
       .select()
       .from(employeeTable)
       .where(eq(employeeTable.email, email));
-    console.log(user);
+    // console.log(user);
     if (!user || !user?.length > 0) {
       throw new Error("User does't exists");
     }
-    return true;
+    // console.log('user:', user);
+    return user[0];
   } catch (error) {
     console.log(error);
     return false;
@@ -66,8 +67,25 @@ export const addManager = async (data) => {
 };
 
 export const addEmployee = async (data) => {
-  db.insert(employeeTable).values(data);
-  return { message: 'Successfully Added' };
+  try {
+    console.log('add emp:', data);
+    await db.insert(employeeTable).values(data);
+    return { message: 'Successfully Added' };
+  } catch (error) {
+    console.log('error:', error);
+    return { message: 'error' };
+  }
+};
+
+export const getDepartments = async (data) => {
+  try {
+    const dept = await db.select().from(departmentTable);
+    console.log('deps:', dept);
+    return dept;
+  } catch (error) {
+    console.log(error);
+    return { message: 'error' };
+  }
 };
 
 export const addDepartment = async (data) => {
