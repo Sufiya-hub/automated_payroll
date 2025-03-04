@@ -39,42 +39,45 @@ const Attendance = ({ setAttendanceDialog, attendanceDialog }) => {
     }
   }, []);
 
+  const handleImageLoad = async () => {
+    const img = refImgRef.current;
+    const canvas = refCanvasRef.current;
+
+    canvas.width = img.width;
+    canvas.height = img.height;
+
+    const fullFaceDescriptions = await faceapi
+      .detectAllFaces(img, new faceapi.SsdMobilenetv1Options())
+      .withFaceLandmarks()
+      .withFaceDescriptors();
+
+    if (!fullFaceDescriptions.length) {
+      console.log('No face detected in reference image');
+      return;
+    }
+
+    console.log('Reference Image Detections:', fullFaceDescriptions);
+    setFaceMatcher(new faceapi.FaceMatcher(fullFaceDescriptions));
+
+    // Draw bounding box
+    faceapi.matchDimensions(canvas, img);
+    const resizedResults = faceapi.resizeResults(fullFaceDescriptions, img);
+    resizedResults.forEach(({ detection }) => {
+      const drawBox = new faceapi.draw.DrawBox(detection.box, {
+        label: 'Reference',
+      });
+      drawBox.draw(canvas);
+    });
+
+    setLoading(false);
+  };
+
   // Handle Image Load
   useEffect(() => {
-    if (!modelsLoaded || !refImgRef.current || !refCanvasRef.current) return;
+    console.log('ref:', refImgRef.current);
+    if (!modelsLoaded || !refImgRef.current) return;
 
-    const handleImageLoad = async () => {
-      const img = refImgRef.current;
-      const canvas = refCanvasRef.current;
-
-      canvas.width = img.width;
-      canvas.height = img.height;
-
-      const fullFaceDescriptions = await faceapi
-        .detectAllFaces(img, new faceapi.SsdMobilenetv1Options())
-        .withFaceLandmarks()
-        .withFaceDescriptors();
-
-      if (!fullFaceDescriptions.length) {
-        console.log('No face detected in reference image');
-        return;
-      }
-
-      console.log('Reference Image Detections:', fullFaceDescriptions);
-      setFaceMatcher(new faceapi.FaceMatcher(fullFaceDescriptions));
-
-      // Draw bounding box
-      faceapi.matchDimensions(canvas, img);
-      const resizedResults = faceapi.resizeResults(fullFaceDescriptions, img);
-      resizedResults.forEach(({ detection }) => {
-        const drawBox = new faceapi.draw.DrawBox(detection.box, {
-          label: 'Reference',
-        });
-        drawBox.draw(canvas);
-      });
-
-      setLoading(false);
-    };
+    console.log('loading started');
 
     handleImageLoad();
   }, [modelsLoaded]);
@@ -125,10 +128,13 @@ const Attendance = ({ setAttendanceDialog, attendanceDialog }) => {
       setMatchResult(
         bestMatch.label === 'unknown' ? 'No Match Found' : 'Faces Matched'
       );
-      console.log('match Result:', matchResult);
+      console.log('match Result:', bestMatch.label);
       if (bestMatch.label !== 'unknown') {
-        console.log('matches ga');
+        // console.log('matches ga');
         setAttendanceDialog(false);
+        await fetch('/api/attendance', {
+          method: 'POST',
+        });
       }
     }, 3000);
 
@@ -146,80 +152,90 @@ const Attendance = ({ setAttendanceDialog, attendanceDialog }) => {
   }, []);
 
   return (
-    <div
-      className={`${
-        !attendanceDialog && 'hidden'
-      } bg-black/60 h-full flex items-center justify-center absolute w-full inset-0`}
-    >
-      <Script
-        src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"
-        strategy="afterInteractive"
-        onError={() => console.log('Error loading Materialize')}
-      />
-      <div className="h-5/6 w-2/5 bg-white rounded-lg p-4 overflow-hidden">
-        <div className="flex justify-end w-full">
-          <button
-            onClick={() => {
-              setAttendanceDialog(false);
-            }}
-          >
-            <IoClose size={24} />
-          </button>
-        </div>
-        {loading && (
-          <div className="flex items-center justify-center w-full">
-            <Spinner />
-          </div>
-        )}
-
-        <div style={{ position: 'relative' }} className="margin">
-          <Image
-            ref={refImgRef}
-            id="refImg"
-            src={imageSrc}
-            alt="Uploaded Reference"
-            width={200}
-            height={200}
-            style={{ maxWidth: '800px', position: 'absolute', opacity: 0 }}
+    <>
+      {attendanceDialog && (
+        <div
+          className={`${
+            !attendanceDialog && 'hidden'
+          } bg-black/60 h-full flex items-center justify-center absolute w-full inset-0`}
+        >
+          <Script
+            src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"
+            strategy="afterInteractive"
+            onError={() => console.log('Error loading Materialize')}
           />
-          <canvas
-            ref={refCanvasRef}
-            className="overlay"
-            style={{ position: 'absolute', top: 0, left: 0, display: 'none' }}
-          />
-        </div>
-        {!loading && (
-          <div style={{ position: 'relative', marginTop: '20px' }}>
-            <video
-              ref={videoRef}
-              autoPlay
-              muted
-              width="300"
-              height="300"
-              style={{ border: '1px solid black' }}
-            />
-            <canvas
-              ref={webcamCanvasRef}
-              className="overlay"
-              style={{ position: 'absolute', top: 0, left: 0 }}
-            />
-          </div>
-        )}
+          <div className="h-5/6 w-2/5 bg-white rounded-lg p-4 overflow-hidden">
+            <div className="flex justify-end w-full">
+              <button
+                onClick={() => {
+                  setAttendanceDialog(false);
+                }}
+              >
+                <IoClose size={24} />
+              </button>
+            </div>
+            {loading && (
+              <div className="flex items-center justify-center w-full">
+                <Spinner />
+              </div>
+            )}
 
-        {matchResult && (
-          <div
-            className="absolute bottom-4 left-1/2 transform -translate-x-1/2 px-4 py-2 rounded-lg"
-            style={{
-              backgroundColor:
-                matchResult === 'Faces Matched' ? 'green' : 'red',
-              color: 'white',
-            }}
-          >
-            <p>{matchResult}</p>
+            <div style={{ position: 'relative' }} className="margin">
+              <Image
+                ref={refImgRef}
+                id="refImg"
+                src={imageSrc}
+                alt="Uploaded Reference"
+                width={200}
+                height={200}
+                onLoad={handleImageLoad}
+                style={{ maxWidth: '800px', position: 'absolute', opacity: 0 }}
+              />
+              <canvas
+                ref={refCanvasRef}
+                className="overlay"
+                style={{
+                  position: 'absolute',
+                  top: 0,
+                  left: 0,
+                  display: 'none',
+                }}
+              />
+            </div>
+            {!loading && (
+              <div style={{ position: 'relative', marginTop: '20px' }}>
+                <video
+                  ref={videoRef}
+                  autoPlay
+                  muted
+                  width="300"
+                  height="300"
+                  style={{ border: '1px solid black' }}
+                />
+                <canvas
+                  ref={webcamCanvasRef}
+                  className="overlay"
+                  style={{ position: 'absolute', top: 0, left: 0 }}
+                />
+              </div>
+            )}
+
+            {matchResult && (
+              <div
+                className="absolute bottom-4 left-1/2 transform -translate-x-1/2 px-4 py-2 rounded-lg"
+                style={{
+                  backgroundColor:
+                    matchResult === 'Faces Matched' ? 'green' : 'red',
+                  color: 'white',
+                }}
+              >
+                <p>{matchResult}</p>
+              </div>
+            )}
           </div>
-        )}
-      </div>
-    </div>
+        </div>
+      )}
+    </>
   );
 };
 

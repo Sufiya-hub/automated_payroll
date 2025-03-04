@@ -5,7 +5,7 @@ import { getDepartments } from '@/server/queries';
 export async function GET(req) {
   try {
     const data = await getDepartments();
-    console.log(data);
+    // console.log(data);
     return NextResponse.json(data);
   } catch (error) {
     console.log(error);

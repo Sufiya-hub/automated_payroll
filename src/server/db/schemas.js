@@ -1,5 +1,11 @@
-import { integer, pgTable, varchar } from 'drizzle-orm/pg-core';
-import { parseParameter } from 'next/dist/shared/lib/router/utils/route-regex';
+import {
+  integer,
+  pgTable,
+  varchar,
+  date,
+  serial,
+  boolean,
+} from 'drizzle-orm/pg-core';
 
 export const employeeTable = pgTable('employees', {
   id: integer().primaryKey().generatedAlwaysAsIdentity(),
@@ -26,4 +32,13 @@ export const departmentTable = pgTable('department', {
   startTime: varchar(),
   endTime: varchar(),
   description: varchar({ length: 200 }),
+});
+
+export const attendanceTable = pgTable('attendance', {
+  id: serial('id').primaryKey(),
+  employeeId: integer('employeeid')
+    .notNull()
+    .references(() => employeeTable.id),
+  attendanceDate: date('attendance_date').notNull(), // Renaming for clarity and making it required
+  status: boolean('status').default(false),
 });

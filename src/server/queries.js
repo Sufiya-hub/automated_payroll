@@ -1,7 +1,8 @@
 import { drizzle } from 'drizzle-orm/node-postgres';
-import { departmentTable, employeeTable } from './db/schemas';
-import { eq, and, or } from 'drizzle-orm';
-
+import { attendanceTable, departmentTable, employeeTable } from './db/schemas';
+import { eq, and, or, gte, lt } from 'drizzle-orm';
+import { authOptions } from '@/app/api/auth/[...nextauth]/route';
+import { getServerSession } from 'next-auth';
 const db = drizzle(process.env.DATABASE_URL);
 
 export const googleLogin = async (email) => {
@@ -93,6 +94,59 @@ export const addDepartment = async (data) => {
     console.log(data);
     await db.insert(departmentTable).values(data);
     return { message: 'Successfully Added' };
+  } catch (error) {
+    console.log(error);
+    return { message: 'error' };
+  }
+};
+
+export const uploadAttendance = async (data) => {
+  try {
+    console.log(data);
+    await db.insert(attendanceTable).values(data);
+    return { message: 'Successfully' };
+  } catch (error) {
+    console.log(error);
+    return { message: 'error' };
+  }
+};
+
+export const getAllEmployees = async (data) => {
+  try {
+    const data = await db.select().from(employeeTable);
+    return data;
+  } catch (error) {
+    console.log(error);
+    return { message: 'error' };
+  }
+};
+
+export const getUserAttendance = async (data) => {
+  try {
+    const session = await getServerSession(authOptions);
+    // console.log('uid:', session.user.id);
+    const requiredYear = new Date().getFullYear();
+    const requiredMonth = new Date().getMonth() + 1;
+    const attendance = await db
+      .select({ attendanceDate: attendanceTable.attendanceDate })
+      .from(attendanceTable)
+      .where(
+        and(
+          eq(attendanceTable.status, true),
+          eq(attendanceTable.employeeId, session?.user?.id),
+          gte(
+            attendanceTable.attendanceDate,
+            `${requiredYear}-${requiredMonth.toString().padStart(2, '0')}-01`
+          ),
+          lt(
+            attendanceTable.attendanceDate,
+            `${requiredYear}-${(requiredMonth + 1)
+              .toString()
+              .padStart(2, '0')}-01`
+          )
+        )
+      );
+    return attendance;
   } catch (error) {
     console.log(error);
     return { message: 'error' };

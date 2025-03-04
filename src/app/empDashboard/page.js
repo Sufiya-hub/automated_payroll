@@ -7,8 +7,8 @@ import Attendance from '@/components/employee/Attendance';
 const page = () => {
   const [attendanceDialog, setAttendanceDialog] = useState(false);
   return (
-    <div className="relative flex flex-col p-4 bg-background w-full h-[100vh]">
-      <div className="flex flex-col p-4 bg-[#ceeff5] h-full rounded-xl gap-4">
+    <div className="relative flex flex-col p-4 bg-gradient-to-br from-[#e0f7fb] to-[#ceeff5] w-full h-[100vh]">
+      <div className="flex flex-col p-4  h-full rounded-xl gap-4">
         <Header1 setAttendanceDialog={setAttendanceDialog} />
         <EmpPhoto />
         <Attendance

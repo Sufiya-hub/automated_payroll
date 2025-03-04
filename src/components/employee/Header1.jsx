@@ -26,7 +26,7 @@ const Header1 = ({ setAttendanceDialog }) => {
           </button>
         </div>
       </div>
-      <div className="flex self-end gap-6">
+      {/* <div className="flex self-end gap-6">
         <div>
           <h1 className="text-5xl font-light">78</h1>
         </div>
@@ -36,7 +36,7 @@ const Header1 = ({ setAttendanceDialog }) => {
         <div>
           <h1 className="text-5xl font-light">203</h1>
         </div>
-      </div>
+      </div> */}
     </div>
   );
 };

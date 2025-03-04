@@ -2,7 +2,7 @@ import NextAuth from 'next-auth';
 import GoogleProvider from 'next-auth/providers/google';
 import { googleLogin } from '@/server/queries';
 
-const authOptions = {
+export const authOptions = {
   providers: [
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID,
@@ -22,6 +22,7 @@ const authOptions = {
       try {
         const userExists = await googleLogin(profile.email);
         if (userExists) {
+          profile.id = userExists.id;
           profile.position = userExists.position;
           return true;
         }
@@ -32,15 +33,17 @@ const authOptions = {
     },
     async session({ token, session }) {
       session.user.position = token.position;
-      console.log(session?.user);
+      session.user.id = token.id;
+      console.log('session:', session?.user);
       return session;
     },
 
     async jwt({ profile, token }) {
       if (profile) {
         token.position = profile.position;
+        token.id = profile.id;
       }
-      console.log(token);
+      // console.log(token);
       return token;
     },
 

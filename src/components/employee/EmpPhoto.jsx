@@ -5,7 +5,7 @@ import TimeTracker from './TimeTracker';
 
 const EmpPhoto = () => {
   return (
-    <div className="flex h-[45%] gap-2">
+    <div className="flex h-[50%] gap-2">
       <div className="relative flex bg-[url('/girl.jpg')] justify-between items-center bg-cover rounded-2xl w-[25%]  bg-no-repeat">
         <div className="text-white pb-2 absolute bottom-0 flex justify-between items-center px-4 left-0 right-0 h-1/4 rounded-2xl bg-black opacity-50">
           <div className="flex flex-col">
