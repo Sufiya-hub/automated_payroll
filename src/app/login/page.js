@@ -24,10 +24,15 @@ const page = () => {
     })
       .then((res) => res.json())
       .then((res) => {
-        // console.log(res.message);
+        console.log(res);
         if (res?.message === 'ok') {
           // window.location.assign('/');
-          router.push('/');
+          // router.push('/');
+          if (res?.data?.position === 'hr') {
+            window.location.assign('/adminDashboard');
+          } else {
+            window.location.assign('/empDashboard');
+          }
         } else {
           router.refresh();
           // window.location.reload();

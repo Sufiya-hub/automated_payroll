@@ -35,7 +35,7 @@ export const login = async (email, password) => {
         )
       );
     console.log(user);
-    if (user) return true;
+    if (user) return user;
     return false;
   } catch (error) {
     console.log(error);

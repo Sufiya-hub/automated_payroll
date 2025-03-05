@@ -6,7 +6,7 @@ export async function POST(req) {
     const { email, password } = await req.json();
     const res = await login(email, password);
     // console.log('res:', res);
-    if (res) return NextResponse.json({ message: 'ok' });
+    if (res) return NextResponse.json({ data: res[0], message: 'ok' });
     throw new Error('Problem Occured');
   } catch (error) {
     console.log(error);
