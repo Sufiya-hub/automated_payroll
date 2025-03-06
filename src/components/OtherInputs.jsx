@@ -1,5 +1,5 @@
 'use client';
-import React from 'react';
+import React, { useRef } from 'react';
 
 const OtherInputs = ({
   type,
@@ -10,6 +10,7 @@ const OtherInputs = ({
   required,
   handleInput,
 }) => {
+  const inputRef = useRef();
   return (
     <div className="flex flex-col gap-3" key={bodyKey}>
       <label className="font-medium text-md ml-1">{label}</label>
@@ -31,7 +32,18 @@ const OtherInputs = ({
         </select>
       ) : (
         <div>
-          <input type="file" name="" id="" />
+          <input
+            type="file"
+            // value={value || undefined}
+            name=""
+            id=""
+            onChange={(e) => {
+              if (e.target.files[0]) {
+                handleInput(bodyKey, e.target.files[0]);
+              }
+            }}
+          />
+          {/* button */}
         </div>
       )}
     </div>

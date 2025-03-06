@@ -6,14 +6,14 @@ import * as faceapi from 'face-api.js';
 import { IoClose } from 'react-icons/io5';
 import Spinner from '../Spinner';
 
-const Attendance = ({ setAttendanceDialog, attendanceDialog }) => {
+const Attendance = ({ imageName, setAttendanceDialog, attendanceDialog }) => {
   const refImgRef = useRef(null);
   const refCanvasRef = useRef(null);
   const videoRef = useRef(null);
   const webcamCanvasRef = useRef(null);
   const [modelsLoaded, setModelsLoaded] = useState(false);
   const [faceMatcher, setFaceMatcher] = useState(null);
-  const [imageSrc, setImageSrc] = useState('/employees/1.jpg');
+  const [imageSrc, setImageSrc] = useState(`/employees/${imageName}`);
   const [matchResult, setMatchResult] = useState(null);
   const intervalRef = useRef(null);
   const [loading, setLoading] = useState(true);
@@ -211,6 +211,7 @@ const Attendance = ({ setAttendanceDialog, attendanceDialog }) => {
                   width="300"
                   height="300"
                   style={{ border: '1px solid black' }}
+                  className="rounded-full"
                 />
                 <canvas
                   ref={webcamCanvasRef}

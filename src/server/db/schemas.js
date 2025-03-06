@@ -21,6 +21,7 @@ export const employeeTable = pgTable('employees', {
   password: varchar({ length: 30 }).notNull(),
   status: varchar({ length: 30 }).notNull(),
   salary: integer(),
+  image: varchar(),
 });
 
 export const departmentTable = pgTable('department', {

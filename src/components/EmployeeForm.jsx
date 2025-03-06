@@ -20,11 +20,15 @@ const EmployeeForm = () => {
     birthDate: '',
     mobile: '',
     email: '',
+    employeeImage: null,
     department: '',
     status: '',
     position: '',
   });
 
+  useEffect(() => {
+    console.log('jhadjsa', data);
+  }, [data]);
   useEffect(() => {
     const getDepartmentData = async () => {
       const promise = await fetch('/api/departments/', {
@@ -62,10 +66,15 @@ const EmployeeForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const formData = new FormData();
+    formData.append('data', JSON.stringify(data));
+    formData.append('employeeImage', data.employeeImage);
     await fetch('/api/employees/', {
       method: 'POST',
-      body: JSON.stringify(data),
-    });
+      body: formData,
+    })
+      .then((res) => res.json())
+      .then((res) => console.log('result:', res));
     notify();
   };
 

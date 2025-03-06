@@ -34,7 +34,7 @@ function getCurrentMonthDates() {
       day: date.toLocaleDateString('en-US', { weekday: 'long' }), // Get full day name
     });
   }
-  console.log(result);
+  // console.log(result);
 
   return result;
 }
@@ -63,7 +63,7 @@ const TimeTracker = () => {
         })
           .then((res) => res.json())
           .then((res) => {
-            console.log('res', res);
+            // console.log('res', res);
             try {
               if (res?.message === 'success') {
                 let updatedData;

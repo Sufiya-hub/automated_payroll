@@ -11,14 +11,14 @@ export const googleLogin = async (email) => {
       .select()
       .from(employeeTable)
       .where(eq(employeeTable.email, email));
-    // console.log(user);
-    if (!user || !user?.length > 0) {
-      throw new Error("User does't exists");
+
+    if (!user || user.length === 0) {
+      throw new Error("User doesn't exist");
     }
-    // console.log('user:', user);
+
     return user[0];
   } catch (error) {
-    console.log(error);
+    console.error('Google login error:', error);
     return false;
   }
 };
@@ -34,8 +34,8 @@ export const login = async (email, password) => {
           eq(employeeTable.password, password)
         )
       );
-    console.log(user);
-    if (user) return user;
+    console.log('in login:', user);
+    if (user?.[0]) return user[0];
     return false;
   } catch (error) {
     console.log(error);

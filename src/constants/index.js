@@ -195,6 +195,12 @@ export const EMPLOYEEFORM = [
     placeholder: 'Select status',
     required: true,
   },
+  {
+    label: 'Employee Image',
+    bodyKey: 'employeeImage',
+    type: 'file',
+    required: true,
+  },
 ];
 
 export const DEPTFORM = [

@@ -1,6 +1,7 @@
 import NextAuth from 'next-auth';
 import GoogleProvider from 'next-auth/providers/google';
-import { googleLogin } from '@/server/queries';
+import CredentialsProvider from 'next-auth/providers/credentials';
+import { googleLogin, login } from '@/server/queries';
 
 export const authOptions = {
   providers: [
@@ -8,48 +9,90 @@ export const authOptions = {
       clientId: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_CLIENT_SCERET,
     }),
+    CredentialsProvider({
+      name: 'Credentials',
+      credentials: {
+        email: {
+          label: 'Email',
+          type: 'email',
+          placeholder: 'you@example.com',
+        },
+        password: { label: 'Password', type: 'password' },
+      },
+      async authorize(credentials) {
+        console.log('creds:', credentials);
+        if (!credentials?.email || !credentials?.password) {
+          throw new Error('Missing email or password');
+        }
+
+        try {
+          const user = await login(credentials.email, credentials.password);
+          if (user) {
+            return {
+              id: user.id.toString(),
+              email: user.email,
+              position: user.position,
+              image: user.image,
+              name: user.fullName,
+            };
+          } else {
+            // console.log('hheacj');
+            throw new Error('Invalid credentials');
+          }
+        } catch (error) {
+          console.error('Authorization error:', error);
+          throw new Error('Login failed');
+        }
+      },
+    }),
   ],
   pages: {
     signIn: '/',
     error: '/auth/error',
   },
   callbacks: {
-    async signIn({ profile }) {
-      if (!profile?.email) {
-        return false;
-      }
-
-      try {
-        const userExists = await googleLogin(profile.email);
-        if (userExists) {
-          profile.id = userExists.id;
-          profile.position = userExists.position;
-          return true;
+    async signIn({ user, account, profile }) {
+      if (account?.provider === 'google') {
+        if (!profile?.email) return false;
+        try {
+          const userExists = await googleLogin(profile.email);
+          if (userExists) {
+            user.id = userExists.id;
+            user.position = userExists.position;
+            user.image = userExists.image;
+            user.name = userExists.fullName;
+          }
+        } catch (error) {
+          console.error('Google login error:', error);
+          return false;
         }
-      } catch (error) {
-        console.error('Login verification error:', error);
-        return false;
       }
+      return true;
     },
-    async session({ token, session }) {
-      session.user.position = token.position;
-      session.user.id = token.id;
-      console.log('session:', session?.user);
+    async session({ session, token }) {
+      if (session.user) {
+        session.user.id = token.id;
+        session.user.position = token.position;
+        session.user.image = token.image;
+        session.user.name = token.name;
+      }
       return session;
     },
-
-    async jwt({ profile, token }) {
-      if (profile) {
-        token.position = profile.position;
-        token.id = profile.id;
+    async jwt({ token, user }) {
+      if (user) {
+        token.id = user.id;
+        token.position = user.position;
+        token.image = user.image;
+        token.name = user.name;
       }
-      // console.log(token);
       return token;
     },
-
     async redirect({ url, baseUrl }) {
       return `${baseUrl}/login`;
     },
+  },
+  session: {
+    strategy: 'jwt',
   },
 };
 
