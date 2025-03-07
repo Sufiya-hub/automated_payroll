@@ -22,6 +22,7 @@ const page = () => {
         <Header1
           attendanceBtn={attendanceBtn}
           setAttendanceDialog={setAttendanceDialog}
+          empName={session?.data?.user?.name}
         />
         <EmpPhoto session={session} imageName={session?.data?.user?.image} />
         <Attendance

@@ -13,7 +13,7 @@ const Section1 = ({ setAttendanceDialog }) => {
       <div className="border-b-2 p-4 flex justify-between items-center">
         <h1 className="font-medium text-lg">Dashboard</h1>
         <div className="flex gap-3">
-          <button
+          {/* <button
             type="button"
             onClick={() => {
               setAttendanceDialog(true);
@@ -21,7 +21,7 @@ const Section1 = ({ setAttendanceDialog }) => {
             className="bg-brand font-bold text-white px-3 py-2 rounded-lg  shadow-md hover:bg-brand/80 transition-all"
           >
             Attendance
-          </button>
+          </button> */}
           <button
             type="button"
             onClick={signOut}

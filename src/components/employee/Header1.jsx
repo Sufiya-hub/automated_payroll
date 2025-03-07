@@ -2,11 +2,11 @@
 import React from 'react';
 import { signOut } from 'next-auth/react';
 
-const Header1 = ({ attendanceBtn, setAttendanceDialog }) => {
+const Header1 = ({ attendanceBtn, setAttendanceDialog, empName }) => {
   return (
     <div className="flex flex-col gap-4">
       <div className="flex justify-between items-center">
-        <h1 className="font-normal text-3xl">Welcome in, Employee</h1>
+        <h1 className="font-normal text-3xl">Welcome in, {empName}</h1>
         <div className="flex gap-2">
           {attendanceBtn && (
             <button
@@ -28,17 +28,6 @@ const Header1 = ({ attendanceBtn, setAttendanceDialog }) => {
           </button>
         </div>
       </div>
-      {/* <div className="flex self-end gap-6">
-        <div>
-          <h1 className="text-5xl font-light">78</h1>
-        </div>
-        <div>
-          <h1 className="text-5xl font-light">56</h1>
-        </div>
-        <div>
-          <h1 className="text-5xl font-light">203</h1>
-        </div>
-      </div> */}
     </div>
   );
 };
