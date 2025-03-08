@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { addDepartment } from '@/server/queries';
 
-export async function POST(req) {
+export async function GET() {
   try {
     const data = {
       departmentName: 'ECE',
