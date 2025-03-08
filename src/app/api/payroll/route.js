@@ -28,7 +28,8 @@ const salaryCalc = (basic) => {
 
   // DEDUCTIONS
   const pf = basic * (12 / 100);
-  const pt = basic < 15000 ? 0 : basic < 20000 ? 150 : 200;
+  // const pt = basic < 15000 ? 0 : basic < 20000 ? 150 : 200;
+  const pt = gross < 15000 ? 0 : gross < 20000 ? 150 : 200;
   const deductions = pf + pt;
 
   // NET
