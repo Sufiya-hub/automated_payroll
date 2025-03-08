@@ -152,3 +152,19 @@ export const getUserAttendance = async (data) => {
     return { message: 'error' };
   }
 };
+
+export const getPayrollEmployees = async () => {
+  try {
+    const data = await db
+      .select({
+        id: employeeTable.id,
+        fullName: employeeTable.fullName,
+        salary: employeeTable.salary,
+      })
+      .from(employeeTable);
+    return data;
+  } catch (error) {
+    console.log(error);
+    return { message: 'error' };
+  }
+};
