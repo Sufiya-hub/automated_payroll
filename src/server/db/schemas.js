@@ -20,6 +20,7 @@ export const employeeTable = pgTable('employees', {
   email: varchar({ length: 255 }).notNull().unique(),
   password: varchar({ length: 30 }).notNull(),
   status: varchar({ length: 30 }).notNull(),
+  leaves: integer().default(15),
   salary: integer(),
   image: varchar(),
 });

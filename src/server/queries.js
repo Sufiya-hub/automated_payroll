@@ -1,6 +1,6 @@
 import { drizzle } from 'drizzle-orm/node-postgres';
 import { attendanceTable, departmentTable, employeeTable } from './db/schemas';
-import { eq, and, or, gte, lt } from 'drizzle-orm';
+import { eq, and, or, gte, lt, lte, between, sql } from 'drizzle-orm';
 import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 import { getServerSession } from 'next-auth';
 const db = drizzle(process.env.DATABASE_URL);
@@ -111,6 +111,49 @@ export const uploadAttendance = async (data) => {
   }
 };
 
+export const adminAttendanceRequest = async (data, date) => {
+  try {
+    // data.map((emp) => {
+    //   const values = {
+    //     employeeId: emp.id,
+    //     attendanceDate: date,
+    //     status: false
+    //   }
+    //   await db.insert(attendanceTable).values(values);
+    // })
+    for (const emp of data) {
+      const values = {
+        employeeId: emp.id,
+        attendanceDate: date,
+        status: false,
+      };
+      await db.insert(attendanceTable).values(values);
+    }
+    console.log('success records creation');
+    return { message: 'success' };
+  } catch (error) {
+    console.log(error);
+    return { message: 'error' };
+  }
+};
+
+export const makeAttendance = async (id, date) => {
+  try {
+    await db
+      .update(attendanceTable)
+      .set({ status: true })
+      .where(
+        and(
+          eq(attendanceTable.employeeId, id),
+          eq(attendanceTable.attendanceDate, date)
+        )
+      );
+  } catch (error) {
+    console.log(error);
+    return { message: 'error' };
+  }
+};
+
 export const getAllEmployees = async (data) => {
   try {
     const data = await db.select().from(employeeTable);
@@ -121,7 +164,7 @@ export const getAllEmployees = async (data) => {
   }
 };
 
-export const getUserAttendance = async (data) => {
+export const getUserAttendance = async () => {
   try {
     const session = await getServerSession(authOptions);
     // console.log('uid:', session.user.id);
@@ -163,6 +206,42 @@ export const getPayrollEmployees = async () => {
       })
       .from(employeeTable);
     return data;
+  } catch (error) {
+    console.log(error);
+    return { message: 'error' };
+  }
+};
+
+export const getEmpLeaves = async (id) => {
+  try {
+    const curyear = new Date().getFullYear();
+    const leaves = await db
+      .select({ count: sql`count(*)` })
+      .from(attendanceTable)
+      .where(
+        and(
+          eq(attendanceTable.employeeId, id),
+          eq(attendanceTable.status, false),
+          gte(attendanceTable.attendanceDate, `${curyear}-01-01`),
+          lte(attendanceTable.attendanceDate, `${curyear}-12-31`)
+        )
+      );
+    // console.log({ leaves: data });
+    if (!leaves) throw new Error('no data');
+    return leaves[0].count;
+  } catch (error) {
+    console.log(error);
+    return { message: 'error' };
+  }
+};
+
+export const updateEmpLeaves = async (id, newLeaves) => {
+  try {
+    await db
+      .update(employeeTable)
+      .set({ leaves: newLeaves })
+      .where(employeeTable.id, id);
+    return { message: 'success' };
   } catch (error) {
     console.log(error);
     return { message: 'error' };

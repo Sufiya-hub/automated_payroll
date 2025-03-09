@@ -1,5 +1,5 @@
 'use client';
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 
 import EmployeeTable from './admin/EmployeeTable';
 import Head from './admin/Head';
@@ -8,6 +8,19 @@ import AttendaceOverview from './admin/AttendaceOverview';
 import { signOut } from 'next-auth/react';
 
 const Section1 = ({ setAttendanceDialog }) => {
+  const handleAtRequest = async () => {
+    try {
+      await fetch('/api/attendance/', {
+        method: 'POST',
+      })
+        .then((res) => res.json())
+        .then((res) => {
+          console.log(res);
+        });
+    } catch (error) {
+      console.error(error);
+    }
+  };
   return (
     <div className="flex flex-col gap-2">
       <div className="border-b-2 p-4 flex justify-between items-center">
@@ -22,6 +35,13 @@ const Section1 = ({ setAttendanceDialog }) => {
           >
             Attendance
           </button> */}
+          <button
+            type="button"
+            onClick={handleAtRequest}
+            className=" bg-brand font-bold text-white px-3 py-2 rounded-lg  shadow-md hover:bg-brand/80 transition-all"
+          >
+            Generate AT request
+          </button>
           <button
             type="button"
             onClick={signOut}

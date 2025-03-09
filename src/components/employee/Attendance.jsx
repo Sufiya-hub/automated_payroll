@@ -133,7 +133,7 @@ const Attendance = ({ imageName, setAttendanceDialog, attendanceDialog }) => {
         // console.log('matches ga');
         setAttendanceDialog(false);
         await fetch('/api/attendance', {
-          method: 'POST',
+          method: 'PATCH',
         });
       }
     }, 3000);
