@@ -1,39 +1,35 @@
 import React, { useState } from 'react';
 import { FaPlus } from 'react-icons/fa';
-import { ImCross } from 'react-icons/im';
 
 const FAQcard = ({ question, answer }) => {
-  const [isopen, setIsopen] = useState(false);
-  const Open = () => {
-    setIsopen((prev) => !prev);
+  const [isOpen, setIsOpen] = useState(false);
+
+  const toggleOpen = () => {
+    setIsOpen((prev) => !prev);
   };
+
   return (
     <div
-      className="flex flex-col border-b-2 pb-4 cursor-pointer transition-transform duration-500 ease-[cubic-bezier(0.25,1,0.5,1)]"
-      onClick={Open}
+      className="flex flex-col border-b-2 pb-4 cursor-pointer transition-all duration-500 ease-in-out"
+      onClick={toggleOpen}
     >
+      {/* Question + Icon */}
       <div className="flex justify-between items-center pr-10">
         <h1 className="text-lg font-medium">{question}</h1>
-        {/* {isopen ? <ImCross size={12} /> : <FaPlus size={12} />} */}
         <FaPlus
-          size={12}
-          className={`${
-            isopen ? 'rotate-45' : 'rotate-0'
-          } transition-all duration-100`}
+          size={14}
+          className={`transition-transform duration-300 ${
+            isOpen ? 'rotate-45' : 'rotate-0'
+          }`}
         />
       </div>
+
       <div
-        className={`overflow-hidden transition-[height] duration-700 ease-[cubic-bezier(0.25,1,0.5,1)] ${
-          isopen ? 'h-auto' : 'h-0'
+        className={`grid transition-all duration-500 ease-in-out ${
+          isOpen ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'
         }`}
       >
-        <p
-          className={`transition-opacity duration-700 ease-[cubic-bezier(0.25,1,0.5,1)] ${
-            isopen ? 'opacity-100' : 'opacity-0'
-          }`}
-        >
-          {answer}
-        </p>
+        <div className="overflow-hidden">{answer}</div>
       </div>
     </div>
   );

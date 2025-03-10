@@ -8,7 +8,7 @@ import Footer from '@/components/Footer';
 
 export default function Home() {
   return (
-    <div className="flex flex-col transition-all">
+    <div className="flex flex-col h-auto transition-all">
       <Header />
       <Hero />
       <Features />

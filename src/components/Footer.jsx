@@ -5,14 +5,14 @@ import { MdFacebook } from 'react-icons/md';
 
 const Footer = () => {
   return (
-    <div className="px-8 flex flex-col md:flex-row gap-8 justify-between py-10 bg-background transition-all">
+    <section className="px-8 flex flex-col md:flex-row gap-8 justify-between py-10 bg-background ">
       <h1 className="font-bold text-3xl">
         Effortless<span className="text-brand">Pay</span>
       </h1>
       <div className="flex gap-6 lg:gap-24">
         <div className="flex flex-col gap-2">
           <h1 className="font-medium text-xl">Solutions</h1>
-          <h1>Small Bussiness</h1>
+          <h1>Small Business</h1>
           <h1>Freelancers</h1>
           <h1>Customers</h1>
           <h1>Taxes</h1>
@@ -39,7 +39,7 @@ const Footer = () => {
           <MdFacebook size={25} />
         </div>
       </div>
-    </div>
+    </section>
   );
 };
 

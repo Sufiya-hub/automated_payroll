@@ -41,6 +41,15 @@ export const attendanceTable = pgTable('attendance', {
   employeeId: integer('employeeid')
     .notNull()
     .references(() => employeeTable.id),
-  attendanceDate: date('attendance_date').notNull(), // Renaming for clarity and making it required
+  attendanceDate: date('attendance_date').notNull(),
   status: boolean('status').default(false),
+});
+
+export const bankTable = pgTable('bank', {
+  id: serial('id').primaryKey(),
+  employeeId: integer('employeeid')
+    .notNull()
+    .references(() => employeeTable.id),
+  ifsc: varchar({ length: 11 }),
+  account_number: varchar({ length: 12 }),
 });

@@ -4,7 +4,7 @@ import { MdArrowOutward } from 'react-icons/md';
 
 const Hero = () => {
   return (
-    <div className="flex  justify-around bg-background h-[90vh] px-8">
+    <div className="flex justify-around bg-background h-[90vh] px-8">
       <div className="flex flex-col justify-center gap-4">
         <h1 className="md:text-5xl text-4xl font-bold">Get paid early</h1>
         <h1 className="md:text-5xl text-3xl font-medium w-[16ch]">
@@ -14,7 +14,7 @@ const Hero = () => {
           Support small businesses with simple invoicing, powerful integrations,
           and cash flow management tools.
         </p>
-        <button className=" flex gap-3 shadow-lg items-center font-medium border-none mt-4 bg-brand self-start px-4 py-2 rounded-lg text-white">
+        <button className=" flex gap-3 hover:shadow-lg transition-all items-center font-medium border-none mt-4 bg-brand self-start px-4 py-2 rounded-lg text-white">
           Get Started <MdArrowOutward size={20} />
         </button>
       </div>

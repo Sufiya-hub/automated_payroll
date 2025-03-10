@@ -25,7 +25,7 @@ const Features = () => {
             className="rounded-3xl"
           />
           <div className="grid lg:grid-cols-2 gap-4  ">
-            <div className="flex flex-col hover:shadow-md transition-all bg-white rounded-xl p-4 gap-10">
+            <div className="flex flex-col transition-all bg-white rounded-xl p-4 gap-10">
               <div className="flex gap-4 flex-wrap">
                 <IoLogoReact
                   size={40}
@@ -46,7 +46,7 @@ const Features = () => {
                 <FaArrowRight />
               </div>
             </div>
-            <div className="flex flex-col transition-all hover:shadow-md bg-white rounded-xl p-4 gap-10  ">
+            <div className="flex flex-col transition-all bg-white rounded-xl p-4 gap-10  ">
               <div className="flex gap-4 flex-wrap">
                 <PiChartBarHorizontal
                   size={40}

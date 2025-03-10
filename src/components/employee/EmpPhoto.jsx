@@ -3,6 +3,15 @@ import React from 'react';
 import Progress from './Progress';
 import TimeTracker from './TimeTracker';
 
+const formatINR = (amount) => {
+  if (!amount) return '';
+  return new Intl.NumberFormat('en-IN', {
+    style: 'currency',
+    currency: 'INR',
+    maximumFractionDigits: 2,
+  }).format(amount);
+};
+
 const EmpPhoto = ({ imageName, session }) => {
   return (
     <div className="flex h-[50%] gap-2">
@@ -28,7 +37,7 @@ const EmpPhoto = ({ imageName, session }) => {
             </h1>
           </div>
           <div className="border-2 px-3 rounded-xl border-gray-400">
-            <h1>$1,200</h1>
+            <h1>{formatINR(session?.data?.user?.salary)}</h1>
           </div>
         </div>
       </div>

@@ -34,6 +34,7 @@ export const authOptions = {
               position: user.position,
               image: user.image,
               name: user.fullName,
+              salary: user.salary,
             };
           } else {
             // console.log('hheacj');
@@ -61,6 +62,7 @@ export const authOptions = {
             user.position = userExists.position;
             user.image = userExists.image;
             user.name = userExists.fullName;
+            user.salary = userExists.salary;
           }
         } catch (error) {
           console.error('Google login error:', error);
@@ -75,6 +77,7 @@ export const authOptions = {
         session.user.position = token.position;
         session.user.image = token.image;
         session.user.name = token.name;
+        session.user.salary = token.salary;
       }
       return session;
     },
@@ -84,6 +87,7 @@ export const authOptions = {
         token.position = user.position;
         token.image = user.image;
         token.name = user.name;
+        token.salary = user.salary;
       }
       return token;
     },
