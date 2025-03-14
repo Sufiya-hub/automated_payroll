@@ -26,13 +26,13 @@ export const SIDEBAR = [
       {
         label: 'Attendance',
         icon: <IoCalendarSharp className="" />,
-        link: '/',
+        link: '/admin/attendance',
         key: 'attendance',
       },
       {
         label: 'Settings',
         icon: <IoSettings className="" />,
-        link: '/',
+        link: '/admin/settings',
         key: 'settings',
       },
     ],
@@ -44,13 +44,13 @@ export const SIDEBAR = [
       {
         label: 'Performance',
         icon: <IoMdStats className="" />,
-        link: '/',
+        link: '/admin/performance',
         key: 'performance',
       },
       {
         label: 'Payrolls',
         icon: <FaCcApplePay className="" />,
-        link: '/',
+        link: '/admin/payrolls',
         key: 'payrolls',
       },
       {

@@ -2,7 +2,7 @@ import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 
-const EmployeeCard = ({ emp }) => {
+const EmployeeCard = ({ ...emp }) => {
   return (
     <div className="relative empCardImage flex flex-col gap-4 h-fit w-4/5 p-4 px-10 rounded-lg  shadow-lg items-center justify-center">
       <div className="rounded-full mt-10 z-10 p-1 bg-white">

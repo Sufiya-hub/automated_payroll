@@ -14,8 +14,9 @@ const page = () => {
   }, []);
   return (
     <AdminLayout>
-      <div className="grid md:grid-cols-3 gap-8 w-full h-screen p-4 overflow-scroll">
-        {data && data.map((item, index) => <EmployeeCard key={index} emp={...item} />)}
+      <div className="grid md:grid-cols-3 gap-8 w-full h-screen p-4 overflow-scroll bg-white rounded-xl">
+        {data &&
+          data.map((item, index) => <EmployeeCard key={index} {...item} />)}
       </div>
     </AdminLayout>
   );
