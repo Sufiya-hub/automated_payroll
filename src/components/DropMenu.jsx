@@ -1,4 +1,5 @@
 import { Button } from '@/components/ui/button';
+import React, { useState } from 'react';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -13,65 +14,42 @@ import {
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import EmployeeForm from './EmployeeForm';
+import DepartmentForm from './DepartmentForm';
 
 export function DropdownMenuDemo() {
+  const [employeeForm, setEmployeeForm] = useState(false);
+  const [departmentForm, setDepartmentForm] = useState(false);
   return (
-    <DropdownMenu className="">
-      <DropdownMenuTrigger className="" asChild>
-        <Button className=" bg-brand text-white px-4 rounded-[12px]  shadow-md hover:bg-brand">
-          ADD
-        </Button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent className="">
-        {/* <DropdownMenuLabel className="">Employees</DropdownMenuLabel> */}
-        <DropdownMenuSeparator />
-        <DropdownMenuGroup className="shadow-lg rounded-[5px]">
-          <DropdownMenuItem className="cursor-pointer">
-            Add Employee
-            <DropdownMenuShortcut>⌘E</DropdownMenuShortcut>
-          </DropdownMenuItem>
-          <DropdownMenuItem className="cursor-pointer">
-            Add Manager
-            <DropdownMenuShortcut>⌘M</DropdownMenuShortcut>
-          </DropdownMenuItem>
-          <DropdownMenuItem className="cursor-pointer">
-            Add Department
-            <DropdownMenuShortcut>⌘D</DropdownMenuShortcut>
-          </DropdownMenuItem>
-          {/* <DropdownMenuItem className="cursor-pointer">
-            Settings
-            <DropdownMenuShortcut>⌘S</DropdownMenuShortcut>
-          </DropdownMenuItem> */}
-        </DropdownMenuGroup>
-        {/* <DropdownMenuSeparator /> */}
-        {/* <DropdownMenuGroup>
-          <DropdownMenuItem>Team</DropdownMenuItem>
-          <DropdownMenuSub>
-            <DropdownMenuSubTrigger>Invite users</DropdownMenuSubTrigger>
-            <DropdownMenuPortal>
-              <DropdownMenuSubContent>
-                <DropdownMenuItem>Email</DropdownMenuItem>
-                <DropdownMenuItem>Message</DropdownMenuItem>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem>More...</DropdownMenuItem>
-              </DropdownMenuSubContent>
-            </DropdownMenuPortal>
-          </DropdownMenuSub>
-          <DropdownMenuItem>
-            New Team
-            <DropdownMenuShortcut>⌘+T</DropdownMenuShortcut>
-          </DropdownMenuItem>
-        </DropdownMenuGroup>
-        <DropdownMenuSeparator />
-        <DropdownMenuItem>GitHub</DropdownMenuItem>
-        <DropdownMenuItem>Support</DropdownMenuItem>
-        <DropdownMenuItem disabled>API</DropdownMenuItem>
-        <DropdownMenuSeparator /> */}
-        {/* <DropdownMenuItem className="cursor-pointer">
-          Log out
-          <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
-        </DropdownMenuItem> */}
-      </DropdownMenuContent>
-    </DropdownMenu>
+    <>
+      {employeeForm && <EmployeeForm setEmployeeForm={setEmployeeForm} />}
+      {departmentForm && (
+        <DepartmentForm setDepartmentForm={setDepartmentForm} />
+      )}
+      <DropdownMenu className="">
+        <DropdownMenuTrigger className="" asChild>
+          <Button className=" bg-brand  text-white px-4 rounded-[10px]  shadow-md hover:bg-brand">
+            ADD
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent className="">
+          <DropdownMenuSeparator />
+          <DropdownMenuGroup className="shadow-lg rounded-[5px]">
+            <DropdownMenuItem
+              className="cursor-pointer"
+              onClick={() => setEmployeeForm(true)}
+            >
+              Add Employee
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              className="cursor-pointer"
+              onClick={() => setDepartmentForm(true)}
+            >
+              Add Department
+            </DropdownMenuItem>
+          </DropdownMenuGroup>
+        </DropdownMenuContent>
+      </DropdownMenu>
+    </>
   );
 }
