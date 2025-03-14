@@ -8,12 +8,28 @@ import { useSession } from 'next-auth/react';
 const page = () => {
   const [attendanceDialog, setAttendanceDialog] = useState(false);
   const [attendanceBtn, setAttendanceBtn] = useState(false);
+  const [messages, setMessages] = useState([]);
 
   const session = useSession();
 
+  // useEffect(() => {
+  //   if (session?.status === 'authenticated');
+  // }, [session]);
+
   useEffect(() => {
-    console.log('session:', session);
-    if (session?.status === 'authenticated') setAttendanceBtn(true);
+    const socket = new WebSocket('ws://localhost:3001');
+
+    socket.onmessage = (event) => {
+      // setMessages((prev) => [...prev, event.data]);
+      // console.log('auth:', session?.status === 'authenticated');
+      if (
+        session?.status === 'authenticated' &&
+        session?.data?.user?.position !== 'hr'
+      )
+        setAttendanceBtn(true);
+    };
+
+    return () => socket.close();
   }, [session]);
 
   return (
