@@ -10,7 +10,7 @@ import OtherInputs from './OtherInputs';
 import Spinner from './Spinner';
 import { ToastContainer, toast } from 'react-toastify';
 
-const DepartmentForm = () => {
+const DepartmentForm = ({ setDepartmentForm }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [FORM, setFORM] = useState(DEPTFORM);
   const [data, setData] = useState({
@@ -41,7 +41,7 @@ const DepartmentForm = () => {
     toast(() => <p className="font-semibold">Added successfully</p>);
 
   return (
-    <div className="flex flex-col gap-4 py-6 items-center h-[100vh] w-full">
+    <div className="absolute inset-0 z-50 bg-black/70 justify-center flex flex-col gap-4 py-6 items-center h-[100vh] w-full">
       <form
         onSubmit={handleSubmit}
         className="flex flex-col shadow-xl border-2 gap-4 w-[65%] p-4 rounded-xl bg-background"
@@ -73,12 +73,21 @@ const DepartmentForm = () => {
         {isLoading ? (
           <Spinner />
         ) : (
-          <button
-            type="submit"
-            className="bg-brand px-4 self-end py-2 rounded-lg hover:shadow-sm transition-all text-white"
-          >
-            Add Department
-          </button>
+          <div className="flex gap-4 justify-end">
+            <button
+              type="submit"
+              onClick={() => setDepartmentForm(false)}
+              className="bg-red-500 px-4 self-end py-2 rounded-lg hover:shadow-sm transition-all text-white"
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
+              className="bg-brand px-4 self-end py-2 rounded-lg hover:shadow-sm transition-all text-white"
+            >
+              Add Department
+            </button>
+          </div>
         )}
       </form>
       <ToastContainer />

@@ -211,6 +211,11 @@ export function EmployeeTable() {
     },
   ];
 
+  const [pagination, setPagination] = React.useState({
+    pageIndex: 0,
+    pageSize: 6,
+  });
+
   const table = useReactTable({
     data,
     columns,
@@ -228,6 +233,7 @@ export function EmployeeTable() {
       columnFilters,
       columnVisibility,
       rowSelection,
+      pagination,
     },
   });
 
@@ -325,8 +331,15 @@ export function EmployeeTable() {
             <div className="space-x-2">
               <Button
                 variant="outline"
+                className=""
                 size="sm"
-                onClick={() => table.previousPage()}
+                onClick={() => {
+                  setPagination((prev) => ({
+                    ...prev,
+                    pageIndex: prev.pageIndex - 1,
+                  }));
+                }}
+                // onClick={() => table.previousPage()}
                 disabled={!table.getCanPreviousPage()}
               >
                 Previous
@@ -334,8 +347,14 @@ export function EmployeeTable() {
               <Button
                 variant="outline"
                 size="sm"
-                onClick={() => table.nextPage()}
-                disabled={!table.getCanNextPage()}
+                // onClick={() => table.nextPage()}
+                onClick={() => {
+                  setPagination((prev) => ({
+                    ...prev,
+                    pageIndex: prev.pageIndex + 1,
+                  }));
+                }}
+                disabled={table.getCanNextPage()}
               >
                 Next
               </Button>

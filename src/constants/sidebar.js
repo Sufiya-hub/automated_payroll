@@ -10,7 +10,7 @@ import { MdGroupAdd } from 'react-icons/md';
 export const SIDEBAR = [
   {
     heading: 'EffortLessPay',
-    styles: 'mb-8',
+    styles: 'mb-12',
     links: [
       {
         label: 'Dashboard',
