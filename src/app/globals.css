@@ -1,0 +1,55 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+::-webkit-scrollbar {
+  /* background: #000; */
+  width: 0.5rem;
+  border-radius: 35px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #c0c0c0;
+  border-radius: 35px;
+  /* display; */
+}
+
+.hero_right {
+  background: linear-gradient(
+    45deg,
+    #ff6f61,
+    #ffcc00,
+    #6bffb8,
+    #4a90e2,
+    #d647ff
+  );
+  background-size: 300% 300%;
+  animation: gradientShift 8s ease infinite;
+}
+
+@keyframes gradientShift {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.headers {
+  width: calc(100% + 2rem);
+}
+
+.empCardImage::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: #2a8e9e;
+  height: 40%;
+  width: 100%;
+  z-index: 0;
+  border-radius: 5px;
+}
