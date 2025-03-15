@@ -8,32 +8,28 @@ const Section1 = ({ setAttendanceDialog }) => {
   const [ws, setWs] = useState(null);
   const [messages, setMessages] = useState([]);
 
-  // useEffect(() => {
-  //   const socket = new WebSocket('ws://localhost:3001');
-  //   setWs(socket);
-  //   return () => socket.close(); // Cleanup WebSocket on unmount
-  // }, []);
-
-  // const sendMessage = () => {
-  //   if (ws) {
-  //     ws.send(JSON.stringify({ role: 'admin', message: 'Task Assigned' }));
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   const socket = new WebSocket('ws://localhost:3001');
-
-  //   socket.onmessage = (event) => {
-  //     setMessages((prev) => [...prev, event.data]);
-  //   };
-
-  //   return () => socket.close();
-  // }, []);
+  const getIpAddress = async () => {
+    let ip;
+    await fetch('https://api64.ipify.org?format=json')
+      .then((res) => res.json())
+      .then((res) => {
+        ip = res.ip;
+      });
+    if (typeof ip === 'string') {
+      return { message: 'success', ip: ip };
+    }
+    return { message: 'failure' };
+  };
 
   const sendMessage = () => {
     const socket = new WebSocket('ws://localhost:3001');
-    socket.onopen = () => {
-      socket.send('attendace activated');
+    socket.onopen = async () => {
+      const res = await getIpAddress();
+      console.log('socket: ', res);
+      if (res?.message === 'success') {
+        socket.send(JSON.stringify({ ip: res.ip }));
+      }
+
       // setInput('');
     };
   };

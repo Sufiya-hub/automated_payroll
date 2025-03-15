@@ -16,17 +16,34 @@ const page = () => {
   //   if (session?.status === 'authenticated');
   // }, [session]);
 
+  const getIpAddress = async () => {
+    let ip;
+    await fetch('https://api64.ipify.org?format=json')
+      .then((res) => res.json())
+      .then((res) => {
+        ip = res.ip;
+      });
+    if (typeof ip === 'string') {
+      return { message: 'success', ip: ip };
+    }
+    return { message: 'failure' };
+  };
+
   useEffect(() => {
     const socket = new WebSocket('ws://localhost:3001');
 
-    socket.onmessage = (event) => {
-      // setMessages((prev) => [...prev, event.data]);
-      // console.log('auth:', session?.status === 'authenticated');
+    socket.onmessage = async (event) => {
       if (
         session?.status === 'authenticated' &&
         session?.data?.user?.position !== 'hr'
-      )
-        setAttendanceBtn(true);
+      ) {
+        const adminIp = event?.data && JSON.parse(event.data)?.ip;
+        console.log('event', adminIp);
+        const res = await getIpAddress();
+        if (res?.message === 'success' && res.ip === adminIp) {
+          setAttendanceBtn(true);
+        }
+      }
     };
 
     return () => socket.close();
