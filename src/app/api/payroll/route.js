@@ -102,11 +102,6 @@ export async function GET() {
       })
     );
 
-    // for (let emp in payroll) {
-    //   const
-
-    // }
-
     employees.forEach(async (emp) => {
       const idempotencyKey = uuidv4();
       const fund_account_number = await getFundAccountNumber(emp.id);

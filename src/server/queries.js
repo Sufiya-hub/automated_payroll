@@ -1,5 +1,4 @@
 import { drizzle } from 'drizzle-orm/node-postgres';
-
 import {
   attendanceTable,
   departmentTable,
@@ -7,10 +6,22 @@ import {
   bankTable,
   payrollTable,
 } from './db/schemas';
-import { eq, and, or, gte, lt, lte, between, sql } from 'drizzle-orm';
+import {
+  eq,
+  and,
+  or,
+  gte,
+  lt,
+  lte,
+  between,
+  sql,
+  ne,
+  exists,
+  isNotNull,
+} from 'drizzle-orm';
 import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 import { getServerSession } from 'next-auth';
-import { vector } from 'drizzle-orm/pg-core';
+
 const db = drizzle(process.env.DATABASE_URL);
 
 export const googleLogin = async (email) => {
@@ -324,6 +335,30 @@ export const postPayroll = async (data) => {
   try {
     await db.insert(payrollTable).values(data);
     return { message: 'success' };
+  } catch (error) {
+    console.log(error);
+    return { message: 'error' };
+  }
+};
+
+// where(eq(PayrollTable.employeeId,employeeId.id))
+export const getAllPayrolls = async () => {
+  try {
+    const data = await db
+      .select({
+        payrollId: payrollTable.id,
+        employeeId: payrollTable.employeeId,
+        amount: payrollTable.amount,
+        fullName: employeeTable.fullName,
+        transactionId: payrollTable.transactionId,
+        status: payrollTable.status,
+        purpose: payrollTable.purpose,
+      })
+      .from(payrollTable)
+      .fullJoin(employeeTable, eq(payrollTable.employeeId, employeeTable.id))
+      .where(isNotNull(payrollTable.employeeId));
+
+    return { message: 'success', data };
   } catch (error) {
     console.log(error);
     return { message: 'error' };
