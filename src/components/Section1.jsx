@@ -22,12 +22,17 @@ const Section1 = ({ setAttendanceDialog }) => {
   };
 
   const sendMessage = () => {
-    const socket = new WebSocket('ws://localhost:3001');
+    // const socket = new WebSocket('ws://localhost:3001');
+    console.log('sending message event');
+    console.log(process.env.NEXT_PUBLIC_WS_URL);
+    const socket = new WebSocket(process.env.NEXT_PUBLIC_WS_URL);
     socket.onopen = async () => {
       const res = await getIpAddress();
+      // console.log('socket: ', res);
       console.log('socket: ', res);
       if (res?.message === 'success') {
         socket.send(JSON.stringify({ ip: res.ip }));
+        await handleAtRequest();
       }
 
       // setInput('');
@@ -56,7 +61,6 @@ const Section1 = ({ setAttendanceDialog }) => {
         <div className="flex gap-3">
           <button
             type="button"
-            // onClick={handleAtRequest}
             onClick={() => sendMessage()}
             className=" bg-brand font-bold text-white px-3 py-2 rounded-lg  shadow-md hover:bg-brand/80 transition-all"
           >

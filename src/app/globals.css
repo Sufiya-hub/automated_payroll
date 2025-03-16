@@ -3,7 +3,6 @@
 @tailwind utilities;
 
 ::-webkit-scrollbar {
-  /* background: #000; */
   width: 0.5rem;
   border-radius: 35px;
 }
@@ -47,9 +46,10 @@
   content: '';
   position: absolute;
   inset: 0;
-  background: #2a8e9e;
+  background: #87ccd7;
   height: 40%;
   width: 100%;
   z-index: 0;
   border-radius: 5px;
+  border-top-right-radius: 40px;
 }

@@ -56,3 +56,17 @@ export const bankTable = pgTable('bank', {
   account_number: varchar({ length: 15 }),
   fund_account_number: varchar({ length: 17 }),
 });
+
+export const payrollTable = pgTable('payroll', {
+  id: serial('id').primaryKey(),
+  employeeId: integer('employeeid')
+    .notNull()
+    .references(() => employeeTable.id),
+  transactionId: varchar({ length: 19 }),
+  amount: varchar(),
+  fund_account_number: varchar({ length: 17 }),
+  status: varchar(),
+  purpose: varchar(),
+
+  merchant_id: varchar({ length: 14 }),
+});

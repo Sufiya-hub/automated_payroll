@@ -21,7 +21,7 @@ export async function PATCH(req) {
     //   attendanceDate: today,
     //   status: true,
     // };
-    const res = await makeAttendance();
+    const res = await makeAttendance(id, today);
     // const body = await req.json();
 
     // {

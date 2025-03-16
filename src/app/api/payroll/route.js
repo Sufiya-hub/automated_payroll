@@ -4,6 +4,7 @@ import {
   getFundAccountId,
   getFundAccountNumber,
   getPayrollEmployees,
+  postPayroll,
   updateEmpLeaves,
 } from '@/server/queries';
 import axios from 'axios';
@@ -109,6 +110,7 @@ export async function GET() {
     employees.forEach(async (emp) => {
       const idempotencyKey = uuidv4();
       const fund_account_number = await getFundAccountNumber(emp.id);
+      let transaction_status = null;
       if (fund_account_number) {
         const transaction_data = {
           account_number: process.env.ACCOUNT_NUMBER, // COMPANYS GLOBAL
@@ -125,7 +127,7 @@ export async function GET() {
           },
         };
 
-        await axios
+        const transaction_res = await axios
           .post('https://api.razorpay.com/v1/payouts', transaction_data, {
             headers: {
               'Content-Type': 'application/json',
@@ -136,6 +138,8 @@ export async function GET() {
           })
           .then((response) => {
             console.log('Success:', response.data);
+            transaction_status = 'success';
+            return response.data;
             // return NextResponse.json({ response });
           })
           .catch((error) => {
@@ -144,6 +148,17 @@ export async function GET() {
               error.response ? error.response.data : error.message
             );
           });
+        if (transaction_status === 'success') {
+          const dbData = {
+            employeeId: emp.id,
+            transactionId: transaction_res.id,
+            amount: transaction_res.amount,
+            fund_account_number: transaction_res.fund_account_id,
+            status: 'success',
+            purpose: 'salary',
+          };
+          await postPayroll(dbData);
+        }
       }
     });
 

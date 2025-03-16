@@ -1,13 +1,16 @@
 import { drizzle } from 'drizzle-orm/node-postgres';
+
 import {
   attendanceTable,
   departmentTable,
   employeeTable,
   bankTable,
+  payrollTable,
 } from './db/schemas';
 import { eq, and, or, gte, lt, lte, between, sql } from 'drizzle-orm';
 import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 import { getServerSession } from 'next-auth';
+import { vector } from 'drizzle-orm/pg-core';
 const db = drizzle(process.env.DATABASE_URL);
 
 export const googleLogin = async (email) => {
@@ -39,7 +42,7 @@ export const login = async (email, password) => {
           eq(employeeTable.password, password)
         )
       );
-    console.log('in login:', user);
+    // console.log('in login:', user);
     if (user?.[0]) return user[0];
     return false;
   } catch (error) {
@@ -74,7 +77,7 @@ export const addManager = async (data) => {
 
 export const addEmployee = async (data) => {
   try {
-    console.log('add emp:', data);
+    // console.log('add emp:', data);
     await db.insert(employeeTable).values(data);
     return { message: 'Successfully Added' };
   } catch (error) {
@@ -86,7 +89,7 @@ export const addEmployee = async (data) => {
 export const getDepartments = async (data) => {
   try {
     const dept = await db.select().from(departmentTable);
-    console.log('deps:', dept);
+    // console.log('deps:', dept);
     return dept;
   } catch (error) {
     console.log(error);
@@ -96,7 +99,7 @@ export const getDepartments = async (data) => {
 
 export const addDepartment = async (data) => {
   try {
-    console.log(data);
+    // console.log(data);
     await db.insert(departmentTable).values(data);
     return { message: 'Successfully Added' };
   } catch (error) {
@@ -107,7 +110,7 @@ export const addDepartment = async (data) => {
 
 export const uploadAttendance = async (data) => {
   try {
-    console.log(data);
+    // console.log(data);
     await db.insert(attendanceTable).values(data);
     return { message: 'Successfully' };
   } catch (error) {
@@ -159,9 +162,27 @@ export const makeAttendance = async (id, date) => {
   }
 };
 
-export const getAllEmployees = async (data) => {
+export const getAllEmployees = async () => {
   try {
     const data = await db.select().from(employeeTable);
+    return data;
+  } catch (error) {
+    console.log(error);
+    return { message: 'error' };
+  }
+};
+
+export const getEmployeeStats = async () => {
+  try {
+    const data = await db
+      .select({
+        totalEmployees: sql`COUNT(*)`,
+        maleEmployees: sql`COUNT(*) FILTER (WHERE gender = 'male')`,
+        femaleEmployees: sql`COUNT(*) FILTER (WHERE gender = 'female')`,
+        noFundAccount: sql`COUNT(*) FILTER (WHERE "isFundAccountAdded" = false)`,
+      })
+      .from(employeeTable);
+    console.log(data);
     return data;
   } catch (error) {
     console.log(error);
@@ -293,6 +314,16 @@ export const getFundAccountNumber = async (id) => {
     if (data?.[0]) {
       return data[0]?.fund_account_number;
     }
+  } catch (error) {
+    console.log(error);
+    return { message: 'error' };
+  }
+};
+
+export const postPayroll = async (data) => {
+  try {
+    await db.insert(payrollTable).values(data);
+    return { message: 'success' };
   } catch (error) {
     console.log(error);
     return { message: 'error' };

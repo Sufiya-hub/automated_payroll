@@ -1,5 +1,15 @@
 import { Annapurna_SIL } from 'next/font/google';
 import { PiCowboyHat } from 'react-icons/pi';
+import { FaCheckCircle } from 'react-icons/fa';
+import { RiTimeFill } from 'react-icons/ri';
+import { AiOutlineFieldTime } from 'react-icons/ai';
+import { MdPeopleAlt } from 'react-icons/md';
+import { HiMiniArrowSmallUp } from 'react-icons/hi2';
+import { HiMiniArrowSmallDown } from 'react-icons/hi2';
+import { IoIosPeople } from 'react-icons/io';
+import { MdPersonAddAlt1 } from 'react-icons/md';
+import { GrUserFemale } from 'react-icons/gr';
+import { GrUserManager } from 'react-icons/gr';
 
 export const PAYMENTS_DATA = [
   {
@@ -141,5 +151,72 @@ export const PAYMENTS_DATA = [
     OvertimeHours: 3,
     OvertimeRate: 2400,
     BankAccountNo: '6789012345',
+  },
+];
+
+export const ATTENDANCE_DATA = [
+  {
+    icon: <FaCheckCircle size={13} />,
+    label: 'Total Employees Present',
+    count: 120,
+    arrow: <HiMiniArrowSmallUp />,
+    per: '5%',
+    tag: 'from Yesterday',
+  },
+  {
+    icon: <AiOutlineFieldTime size={15} />,
+    label: 'Late Arrivals Today',
+    count: 15,
+    arrow: <HiMiniArrowSmallUp size={15} />,
+    per: '3 people',
+    tag: 'compared to last week',
+  },
+  {
+    icon: <MdPeopleAlt size={15} />,
+    label: 'Employees Absent',
+    key: 'leaves',
+    count: 8,
+    arrow: <HiMiniArrowSmallDown size={15} />,
+    per: '2 people',
+    tag: 'comapred to last monday',
+    styles: 'bg-red-100 text-red-700',
+  },
+  {
+    icon: <RiTimeFill size={15} />,
+    label: 'Average Check-In Time ',
+    count: '08:25 AM',
+    tag: 'cosistent with last week',
+    styles: 'self-start',
+  },
+];
+
+export const EMP_DATA = [
+  {
+    icon: <IoIosPeople size={24} />,
+    label: 'Total Employee',
+    key: 'totalEmployees',
+    count: 0,
+    iconstyles: '',
+  },
+  {
+    icon: <MdPersonAddAlt1 size={24} />,
+    label: 'New Employee',
+    key: 'noFundAccount',
+    count: 0,
+    iconstyles: 'bg-green-400',
+  },
+  {
+    icon: <GrUserFemale size={24} />,
+    label: 'Female',
+    key: 'femaleEmployees',
+    count: 0,
+    iconstyles: 'bg-blue-400',
+  },
+  {
+    icon: <GrUserManager size={24} />,
+    label: 'Male',
+    key: 'maleEmployees',
+    count: 0,
+    iconstyles: 'bg-purple-400',
   },
 ];

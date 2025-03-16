@@ -4,8 +4,8 @@ import Link from 'next/link';
 
 const EmployeeCard = ({ ...emp }) => {
   return (
-    <div className="relative empCardImage flex flex-col gap-4 h-fit w-4/5 p-4 px-10 rounded-lg  shadow-lg items-center justify-center">
-      <div className="rounded-full mt-10 z-10 p-1 bg-white">
+    <div className="relative empCardImage flex flex-col gap-4 rounded-tr-[40px] border-[1px] border-gray-300 h-fit w-4/5 p-4 px-10 rounded-lg  hover:shadow-lg transition-all items-center justify-center">
+      <div className="rounded-full mt-6 z-10 p-1 bg-white">
         <Image
           src={`/employees/${
             emp?.image

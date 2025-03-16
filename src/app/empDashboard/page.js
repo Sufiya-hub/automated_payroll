@@ -1,6 +1,7 @@
 'use client';
 import React, { useState, useEffect } from 'react';
 import Header1 from '@/components/employee/Header1';
+import Header from '@/components/employee/Header';
 import EmpPhoto from '@/components/employee/EmpPhoto';
 import Attendance from '@/components/employee/Attendance';
 import { useSession } from 'next-auth/react';
@@ -30,8 +31,8 @@ const page = () => {
   };
 
   useEffect(() => {
-    const socket = new WebSocket('ws://localhost:3001');
-
+    const socket = new WebSocket(process.env.NEXT_PUBLIC_WS_URL);
+    console.log('session data:', session);
     socket.onmessage = async (event) => {
       if (
         session?.status === 'authenticated' &&
@@ -50,19 +51,22 @@ const page = () => {
   }, [session]);
 
   return (
-    <div className="relative flex flex-col p-4 bg-gradient-to-br from-[#e0f7fb] to-[#ceeff5] w-full h-[100vh]">
-      <div className="flex flex-col p-4  h-full rounded-xl gap-4">
+    <div className="relative flex flex-col px-4 bg-gradient-to-br from-[#e0f7fb] to-[#ceeff5] w-full h-[100vh]">
+      <div className="flex flex-col p-2  h-full rounded-xl gap-4">
+        <Header />
         <Header1
           attendanceBtn={attendanceBtn}
           setAttendanceDialog={setAttendanceDialog}
           empName={session?.data?.user?.name}
         />
         <EmpPhoto session={session} imageName={session?.data?.user?.image} />
-        <Attendance
-          imageName={session?.data?.user?.image}
-          attendanceDialog={attendanceDialog}
-          setAttendanceDialog={setAttendanceDialog}
-        />
+        {session?.data?.user && (
+          <Attendance
+            imageName={session?.data?.user?.image}
+            attendanceDialog={attendanceDialog}
+            setAttendanceDialog={setAttendanceDialog}
+          />
+        )}
       </div>
     </div>
   );
