@@ -31,19 +31,30 @@ import {
   TableRow,
 } from '@/components/ui/table';
 
-const statusStyle = (stat, element) => {
+const statusStyle = (status, element) => {
   if (element === 'parent')
-    return stat === 'Full-Time'
-      ? 'border-green-500 text-green-500'
-      : stat === 'Part-Time'
-      ? 'border-blue-500 text-blue-500'
-      : 'border-orange-500 text-orange-500';
+    return status === 'success'
+      ? 'test-green-500'
+      : status === 'processing'
+      ? 'text-blue-500'
+      : 'text-red-500';
   if (element === 'indicator')
-    return stat === 'Full-Time'
+    return status === 'success'
       ? 'bg-green-500'
-      : stat === 'Part-Time'
+      : status === 'processing'
       ? 'bg-blue-500'
-      : 'bg-orange-500';
+      : 'bg-red-500';
+  // if(status === 'success')
+  // return 'text'
+};
+
+const formatINR = (amount) => {
+  if (!amount) return '';
+  return new Intl.NumberFormat('en-IN', {
+    style: 'currency',
+    currency: 'INR',
+    maximumFractionDigits: 2,
+  }).format(amount);
 };
 
 export function PayrollTable() {
@@ -55,7 +66,7 @@ export function PayrollTable() {
 
   useEffect(() => {
     const getData = async () => {
-      await fetch('/api/employees')
+      await fetch('/api/payroll/getPayrolls')
         .then((res) => res.json())
         .then((res) => {
           if (res?.message === 'success') {
@@ -68,27 +79,30 @@ export function PayrollTable() {
 
   const columns = [
     {
-      accessorKey: 'id',
-      header: 'Employee Id',
+      accessorKey: 'payrollId',
+      header: 'Payroll Id',
       cell: ({ row }) => (
-        <div className="text-center">{row.getValue('id')}</div>
+        <div className="text-center">{row.getValue('payrollId')}</div>
       ),
     },
     {
-      accessorKey: 'email',
+      accessorKey: 'employeeId',
       header: ({ column }) => {
         return (
           <Button
             variant="ghost"
+            className=""
             onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
           >
-            Email
+            Emp Id
             <ArrowUpDown />
           </Button>
         );
       },
       cell: ({ row }) => (
-        <div className="lowercase">{row.getValue('email')}</div>
+        <div className="lowercase text-center pr-10">
+          {row.getValue('employeeId')}
+        </div>
       ),
     },
     {
@@ -105,42 +119,47 @@ export function PayrollTable() {
         );
       },
       cell: ({ row }) => (
-        <div className="capitalize text-center">{row.getValue('fullName')}</div>
+        <div className="capitalize text-center pr-10">
+          {row.getValue('fullName')}
+        </div>
       ),
     },
     {
-      accessorKey: 'position',
+      accessorKey: 'transactionId',
       header: ({ column }) => {
         return (
           <Button
             variant="ghost"
+            className="pl-16"
             onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
           >
-            Position
-            <ArrowUpDown />
-          </Button>
-        );
-      },
-      cell: ({ row }) => (
-        <div className="capitalize text-center">{row.getValue('position')}</div>
-      ),
-    },
-    {
-      accessorKey: 'department',
-      header: ({ column }) => {
-        return (
-          <Button
-            variant="ghost"
-            onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-          >
-            Department
+            TR ID
             <ArrowUpDown />
           </Button>
         );
       },
       cell: ({ row }) => (
         <div className="capitalize text-center">
-          {row.getValue('department')}
+          {row.getValue('transactionId')}
+        </div>
+      ),
+    },
+    {
+      accessorKey: 'amount',
+      header: ({ column }) => {
+        return (
+          <Button
+            variant="ghost"
+            onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+          >
+            Amount
+            <ArrowUpDown />
+          </Button>
+        );
+      },
+      cell: ({ row }) => (
+        <div className="capitalize text-center">
+          {formatINR(row.getValue('amount'))}
         </div>
       ),
     },
@@ -150,6 +169,7 @@ export function PayrollTable() {
         return (
           <Button
             variant="ghost"
+            className="pl-28"
             onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
           >
             Status
@@ -159,7 +179,7 @@ export function PayrollTable() {
       },
       cell: ({ row }) => (
         <div
-          className={`capitalize p-1 flex rounded-[5px] justify-center items-center gap-3  border-[1px] ${statusStyle(
+          className={`capitalize p-1 flex justify-center items-center gap-3 ${statusStyle(
             row.getValue('status'),
             'parent'
           )}`}
@@ -239,10 +259,10 @@ export function PayrollTable() {
         <div className="w-full h-full">
           <div className="flex items-center py-4">
             <Input
-              placeholder="Filter emails..."
-              value={table.getColumn('email')?.getFilterValue() ?? ''}
+              placeholder="Employee Name..."
+              value={table.getColumn('fullName')?.getFilterValue() ?? ''}
               onChange={(event) =>
-                table.getColumn('email')?.setFilterValue(event.target.value)
+                table.getColumn('fullName')?.setFilterValue(event.target.value)
               }
               className="max-w-sm"
             />

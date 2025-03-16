@@ -9,18 +9,14 @@ import {
 import { getServerSession } from 'next-auth';
 import { authOptions } from '../auth/[...nextauth]/route';
 
-export async function PATCH(req) {
+export async function PATCH() {
   try {
     const session = await getServerSession(authOptions);
     // console.log('session in route', session);
     const id = session.user.id;
-    const today = new Date().toISOString().split('T')[0];
-    // console.log(today);
-    // const data = {
-    //   employeeId: id,
-    //   attendanceDate: today,
-    //   status: true,
-    // };
+    const today = new Date().toLocaleDateString('en-CA'); // Format: YYYY-MM-DD
+    console.log(today);
+
     const res = await makeAttendance(id, today);
     // const body = await req.json();
 
@@ -37,7 +33,9 @@ export async function PATCH(req) {
 
 export async function POST() {
   try {
-    const today = new Date().toISOString().split('T')[0];
+    // const today = new Date().toISOString().split('T')[0];
+    const today = new Date().toLocaleDateString('en-CA'); // Format: YYYY-MM-DD
+    console.log(today);
     const employeeData = await getPayrollEmployees();
     if (!employeeData) {
       throw new error('No employee data');
