@@ -92,15 +92,16 @@ export async function GET() {
     ).toString('base64');
     // console.log(employees);
     // await getEmpLeaves(10);
-    const payroll = await Promise.all(
-      employees.map(async (emp) => {
-        const totalLeaves = await getEmpLeaves(emp.id);
-        return {
-          ...emp,
-          final: salaryCalc(emp.salary, emp.leaves, totalLeaves, emp.id), // Use the fetched leaves
-        };
-      })
-    );
+
+    // const payroll = await Promise.all(
+    //   employees.map(async (emp) => {
+    //     const totalLeaves = await getEmpLeaves(emp.id);
+    //     return {
+    //       ...emp,
+    //       final: salaryCalc(emp.salary, emp.leaves, totalLeaves, emp.id), // Use the fetched leaves
+    //     };
+    //   })
+    // );
 
     // for (let emp in payroll) {
     //   const
@@ -109,13 +110,15 @@ export async function GET() {
 
     employees.forEach(async (emp) => {
       const idempotencyKey = uuidv4();
+      const totalLeaves = await getEmpLeaves(emp.id);
       const fund_account_number = await getFundAccountNumber(emp.id);
       let transaction_status = null;
       if (fund_account_number) {
         const transaction_data = {
           account_number: process.env.ACCOUNT_NUMBER, // COMPANYS GLOBAL
           fund_account_id: fund_account_number,
-          amount: emp.salary,
+          // amount: emp.salary,
+          amount: salaryCalc(emp.salary, emp.leaves, totalLeaves, emp.id),
           currency: 'INR',
           mode: 'IMPS',
           purpose: 'salary',
@@ -162,7 +165,7 @@ export async function GET() {
       }
     });
 
-    return NextResponse.json(payroll);
+    return NextResponse.json({ message: 'success of payouts' });
   } catch (error) {
     console.log(error);
     return NextResponse.json({ message: error.message });
