@@ -67,6 +67,15 @@ export const payrollTable = pgTable('payroll', {
   fund_account_number: varchar({ length: 17 }),
   status: varchar(),
   purpose: varchar(),
-
   merchant_id: varchar({ length: 14 }),
+});
+
+export const notifTable = pgTable('notifs', {
+  id: serial('id').primaryKey(),
+  message: varchar(),
+  date: date('date').notNull(),
+  startTime: varchar(),
+  endTime: varchar(),
+  ip: varchar(),
+  setting: varchar(),
 });

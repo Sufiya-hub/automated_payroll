@@ -5,6 +5,7 @@ import {
   employeeTable,
   bankTable,
   payrollTable,
+  notifTable,
 } from './db/schemas';
 import {
   eq,
@@ -21,6 +22,7 @@ import {
 } from 'drizzle-orm';
 import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 import { getServerSession } from 'next-auth';
+import { format, addMinutes } from 'date-fns';
 
 const db = drizzle(process.env.DATABASE_URL);
 
@@ -359,6 +361,51 @@ export const getAllPayrolls = async () => {
       .where(isNotNull(payrollTable.employeeId));
 
     return { message: 'success', data };
+  } catch (error) {
+    console.log(error);
+    return { message: 'error' };
+  }
+};
+
+export const getAttendanceNotif = async () => {
+  try {
+    const currentDate = format(new Date(), 'yyyy-MM-dd');
+    const currentTime = format(new Date(), 'HH:mm');
+
+    const data = await db
+      .select()
+      .from(notifTable)
+      .where(
+        and(
+          eq(notifTable.date, currentDate),
+          gte(notifTable.startTime, currentTime),
+          lte(notifTable.endTime, currentTime)
+        )
+      );
+    console.log('atnotif data:', data);
+    return { message: 'success', data };
+  } catch (error) {
+    console.log(error);
+    return { message: 'error' };
+  }
+};
+
+export const postAttendanceNotif = async (ip) => {
+  try {
+    const currentDate = format(new Date(), 'yyyy-MM-dd');
+    const currentTime = format(new Date(), 'HH:mm');
+    const endTime = format(addMinutes(new Date(), 15), 'HH:mm');
+
+    await db.insert(notifTable).values({
+      message: 'attendance acticated',
+      date: currentDate,
+      startTime: currentTime,
+      endTime,
+      ip,
+      setting: 'ip',
+    });
+
+    return { message: 'success' };
   } catch (error) {
     console.log(error);
     return { message: 'error' };
