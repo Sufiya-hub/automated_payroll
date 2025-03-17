@@ -19,13 +19,13 @@ const Header1 = ({ attendanceBtn, setAttendanceDialog, empName }) => {
               Attendance
             </button>
           )}
-          <button
+          {/* <button
             type="button"
             className="bg-red-500 font-bold text-white px-3 py-2 rounded-lg  shadow-md hover:bg-red-700 transition-all"
             onClick={signOut}
           >
             Logout
-          </button>
+          </button> */}
         </div>
       </div>
     </div>

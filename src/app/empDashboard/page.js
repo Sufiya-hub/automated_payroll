@@ -13,10 +13,6 @@ const page = () => {
 
   const session = useSession();
 
-  // useEffect(() => {
-  //   if (session?.status === 'authenticated');
-  // }, [session]);
-
   const getIpAddress = async () => {
     let ip;
     await fetch('https://api64.ipify.org?format=json')
@@ -53,7 +49,11 @@ const page = () => {
   return (
     <div className="relative flex flex-col px-4 bg-gradient-to-br from-[#e0f7fb] to-[#ceeff5] w-full h-[100vh]">
       <div className="flex flex-col p-2  h-full rounded-xl gap-4">
-        <Header />
+        <Header
+          empName={session?.data?.user?.name}
+          imageName={session?.data?.user?.image}
+          position={session?.data?.user?.position}
+        />
         <Header1
           attendanceBtn={attendanceBtn}
           setAttendanceDialog={setAttendanceDialog}
