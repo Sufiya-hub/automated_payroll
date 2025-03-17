@@ -1,7 +1,5 @@
 'use client';
 import React from 'react';
-import Progress from './Progress';
-import TimeTracker from './TimeTracker';
 
 const formatINR = (amount) => {
   if (!amount) return '';
@@ -14,13 +12,9 @@ const formatINR = (amount) => {
 
 const EmpPhoto = ({ imageName, session }) => {
   return (
-    <div className="flex h-[50%] gap-2">
-      {/* <div 
-        // className={`relative flex bg-[url('/employees/${imageName}')] justify-between items-center bg-cover rounded-2xl w-[25%]  bg-no-repeat`}
-      // >
-      */}
+    <div className="flex ">
       <div
-        className={`relative flex justify-between items-center bg-cover rounded-2xl w-[20%]  bg-no-repeat`}
+        className={`relative flex justify-between items-center bg-cover rounded-2xl w-[50%] bg-no-repeat`}
       >
         {imageName && (
           <img
@@ -41,8 +35,6 @@ const EmpPhoto = ({ imageName, session }) => {
           </div>
         </div>
       </div>
-      <Progress />
-      <TimeTracker />
     </div>
   );
 };

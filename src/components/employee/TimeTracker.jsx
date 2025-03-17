@@ -94,14 +94,14 @@ const TimeTracker = () => {
   }, [days]);
   // console.log(attendance);
   return (
-    <div className="flex flex-col gap-3 px-7 py-4 shadow-lg rounded-2xl bg-background w-[25%]">
+    <div className="flex flex-col gap-3 px-7 py-4 shadow-lg rounded-2xl bg-background w-[50%]">
       <div className="flex justify-between">
         <h1 className="font-semibold text-xl text-gray-700">
           Month Attendance
         </h1>
-        <div className="border-2 border-white rounded-full p-2 bg-white">
+        {/* <div className="border-2 border-white rounded-full p-2 bg-white">
           <MdArrowOutward size={20} />
-        </div>
+        </div> */}
       </div>
       <div className="grid grid-cols-7 gap-5 font-semibold text-black/80">
         <p>S</p>
@@ -126,7 +126,7 @@ const TimeTracker = () => {
                 : el.status
                 ? 'bg-green-600'
                 : 'bg-green-200  border-green-800'
-            } rounded-lg`}
+            } rounded-full`}
             key={i}
           >
             {i + 1}

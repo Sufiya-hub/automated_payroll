@@ -5,6 +5,8 @@ import Header from '@/components/employee/Header';
 import EmpPhoto from '@/components/employee/EmpPhoto';
 import Attendance from '@/components/employee/Attendance';
 import { useSession } from 'next-auth/react';
+import Progress from '@/components/employee/Progress';
+import TimeTracker from '@/components/employee/TimeTracker';
 
 const page = () => {
   const [attendanceDialog, setAttendanceDialog] = useState(false);
@@ -59,14 +61,20 @@ const page = () => {
           setAttendanceDialog={setAttendanceDialog}
           empName={session?.data?.user?.name}
         />
-        <EmpPhoto session={session} imageName={session?.data?.user?.image} />
-        {session?.data?.user && (
-          <Attendance
-            imageName={session?.data?.user?.image}
-            attendanceDialog={attendanceDialog}
-            setAttendanceDialog={setAttendanceDialog}
-          />
-        )}
+        <div className="grid grid-cols-2  w-full gap-4">
+          <EmpPhoto session={session} imageName={session?.data?.user?.image} />
+          {session?.data?.user && (
+            <Attendance
+              imageName={session?.data?.user?.image}
+              attendanceDialog={attendanceDialog}
+              setAttendanceDialog={setAttendanceDialog}
+            />
+          )}
+          <div className="flex gap-3">
+            <Progress />
+            <TimeTracker />
+          </div>
+        </div>
       </div>
     </div>
   );

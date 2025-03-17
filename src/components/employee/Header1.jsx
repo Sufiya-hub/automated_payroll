@@ -6,7 +6,7 @@ const Header1 = ({ attendanceBtn, setAttendanceDialog, empName }) => {
   return (
     <div className="flex flex-col gap-4">
       <div className="flex justify-between items-center">
-        <h1 className="font-normal text-3xl">Welcome in, {empName}</h1>
+        <h1 className="font-normal text-3xl -mt-16">Welcome in, {empName}</h1>
         <div className="flex gap-2">
           {attendanceBtn && (
             <button

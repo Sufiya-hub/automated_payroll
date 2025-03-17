@@ -27,8 +27,8 @@ const Header = ({ empName, imageName, position }) => {
           Transactions
         </h1>
       </div>
-      <h1 className="flex gap-1 items-center hover:bg-black hover:text-white bg-white px-4 py-2 rounded-full cursor-pointer">
-        <IoSettingsOutline /> Settings
+      <h1 className="flex gap-1 items-center hover:bg-black hover:text-white bg-white p-2 rounded-full cursor-pointer">
+        <IoSettingsOutline size={20} />
       </h1>
       <button className="bg-white rounded-full p-2  hover:bg-black hover:text-white">
         <IoMdNotificationsOutline size={20} />
