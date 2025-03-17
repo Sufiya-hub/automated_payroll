@@ -8,6 +8,7 @@ import { useSession } from 'next-auth/react';
 import axios from 'axios';
 import Progress from '@/components/employee/Progress';
 import TimeTracker from '@/components/employee/TimeTracker';
+import Section from '@/components/employee/Section';
 
 const page = () => {
   const [attendanceDialog, setAttendanceDialog] = useState(false);
@@ -64,8 +65,27 @@ const page = () => {
     }
   };
 
+  // useEffect(() => document.documentElement.classList.add('dark'), []);
+
   return (
-    <div className="relative flex flex-col px-4 bg-gradient-to-br from-[#e0f7fb] to-[#ceeff5] w-full h-[100vh]">
+    <div className="h-[100vh] -z-10 max-h-screen overflow-hidden relative w-full p-4 bg-empbg1 dark:bg-empdark">
+      <div className="absolute -z-10 bg-brand h-[850px] w-[950px] blur-[200px] -right-1/3 -bottom-1/2"></div>
+      <div className="absolute -z-10  bg-brand/80 h-[850px] w-[950px] blur-[200px]  left-0 -bottom-[700px]"></div>
+
+      <Header1
+        attendanceBtn={attendanceBtn}
+        setAttendanceDialog={setAttendanceDialog}
+        empName={session?.data?.user?.name}
+      />
+      <Section />
+    </div>
+  );
+};
+
+export default page;
+
+{
+  /* <div className="relative flex flex-col px-4 bg-gradient-to-br from-[#e0f7fb] to-[#ceeff5] w-full h-[100vh]">
       <div className="flex flex-col p-2  h-full rounded-xl gap-4">
         <Header
           empName={session?.data?.user?.name}
@@ -92,8 +112,5 @@ const page = () => {
           </div>
         </div>
       </div>
-    </div>
-  );
-};
-
-export default page;
+    </div> */
+}

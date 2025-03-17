@@ -17,6 +17,13 @@ export default {
         brand: '#2A8E9E',
         background: '#F4F5F7',
         // background: '#F1F1F1',
+        empbg1: '#F2F2F2',
+        eprimary: '#D7FAFF',
+        ehighlight: '#024E7A',
+        empbg2: '#ECFDFF',
+        empaccent: '#282828',
+        empdark: '#1E1E1E',
+
         foreground: 'hsl(var(--foreground))',
         card: {
           DEFAULT: 'hsl(var(--card))',
