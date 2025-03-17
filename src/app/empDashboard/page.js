@@ -5,6 +5,7 @@ import Header from '@/components/employee/Header';
 import EmpPhoto from '@/components/employee/EmpPhoto';
 import Attendance from '@/components/employee/Attendance';
 import { useSession } from 'next-auth/react';
+import axios from 'axios';
 import Progress from '@/components/employee/Progress';
 import TimeTracker from '@/components/employee/TimeTracker';
 
@@ -31,6 +32,9 @@ const page = () => {
   useEffect(() => {
     const socket = new WebSocket(process.env.NEXT_PUBLIC_WS_URL);
     console.log('session data:', session);
+
+    if (session?.status === 'authenticated') checkActiveNotif();
+
     socket.onmessage = async (event) => {
       if (
         session?.status === 'authenticated' &&
@@ -47,6 +51,18 @@ const page = () => {
 
     return () => socket.close();
   }, [session]);
+
+  const checkActiveNotif = async () => {
+    try {
+      // console.log('sne/');
+      await axios('/api/attendance/notif').then((res) => {
+        // console.log('ans:', res);
+        if (res?.data?.message === 'success') setAttendanceBtn(true);
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <div className="relative flex flex-col px-4 bg-gradient-to-br from-[#e0f7fb] to-[#ceeff5] w-full h-[100vh]">

@@ -23,20 +23,20 @@ const Section1 = ({ setAttendanceDialog }) => {
 
   const sendMessage = () => {
     // const socket = new WebSocket('ws://localhost:3001');
-    console.log('sending message event');
-    console.log(process.env.NEXT_PUBLIC_WS_URL);
-    const socket = new WebSocket(process.env.NEXT_PUBLIC_WS_URL);
-    socket.onopen = async () => {
-      const res = await getIpAddress();
-      // console.log('socket: ', res);
-      console.log('socket: ', res);
-      if (res?.message === 'success') {
-        socket.send(JSON.stringify({ ip: res.ip }));
-        await handleAtRequest();
-      }
-
-      // setInput('');
-    };
+    try {
+      console.log('sending message event');
+      const socket = new WebSocket(process.env.NEXT_PUBLIC_WS_URL);
+      socket.onopen = async () => {
+        const res = await getIpAddress();
+        if (res?.message === 'success') {
+          socket.send(JSON.stringify({ ip: res.ip }));
+          // await handleAtRequest();
+          await postNotif({ ip: res.ip });
+        }
+      };
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const handleAtRequest = async () => {
@@ -53,6 +53,22 @@ const Section1 = ({ setAttendanceDialog }) => {
     }
   };
 
+  const postNotif = async (body) => {
+    try {
+      console.log('postNotif');
+      await fetch('/api/attendance/notif', {
+        method: 'POST',
+        body: JSON.stringify(body),
+      })
+        .then((res) => res.json())
+        .then((res) => {
+          console.log('notif response:', res);
+        });
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   const session = useSession();
   return (
     <div className="flex flex-col gap-2">
@@ -61,7 +77,8 @@ const Section1 = ({ setAttendanceDialog }) => {
         <div className="flex gap-3">
           <button
             type="button"
-            onClick={() => sendMessage()}
+            // onClick={postNotif}
+            onClick={sendMessage}
             className=" bg-brand font-bold text-white px-3 py-2 rounded-lg  shadow-md hover:bg-brand/80 transition-all"
           >
             Generate AT request
