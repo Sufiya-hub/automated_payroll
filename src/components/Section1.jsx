@@ -3,10 +3,18 @@ import React, { useState, useEffect } from 'react';
 import { useSession } from 'next-auth/react';
 import EmployeeTable from './admin/EmployeeTable';
 import Head from './admin/Head';
+import { ToastContainer, toast } from 'react-toastify';
+import Spinner from './Spinner';
 
 const Section1 = ({ setAttendanceDialog }) => {
   const [ws, setWs] = useState(null);
   const [messages, setMessages] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const notify = (type) =>
+    type === 'success'
+      ? toast.success(<p className="font-semibold">Generated AT Requests</p>)
+      : toast.error(<p className="font-semibold">Can't Generate Requests</p>);
 
   const getIpAddress = async () => {
     let ip;
@@ -24,18 +32,27 @@ const Section1 = ({ setAttendanceDialog }) => {
   const sendMessage = () => {
     // const socket = new WebSocket('ws://localhost:3001');
     try {
+      setIsLoading(true);
       console.log('sending message event');
       const socket = new WebSocket(process.env.NEXT_PUBLIC_WS_URL);
       socket.onopen = async () => {
         const res = await getIpAddress();
         if (res?.message === 'success') {
           socket.send(JSON.stringify({ ip: res.ip }));
-          // await handleAtRequest();
+          await handleAtRequest();
           await postNotif({ ip: res.ip });
+          setIsLoading(false);
+
+          return notify('success');
         }
+        setIsLoading(false);
+        notify('fail');
       };
     } catch (error) {
+      setIsLoading(false);
+      notify('fail');
       console.log(error);
+    } finally {
     }
   };
 
@@ -75,14 +92,18 @@ const Section1 = ({ setAttendanceDialog }) => {
       <div className="border-b-2 p-4 flex justify-between items-center">
         <h1 className="font-medium text-lg">Dashboard</h1>
         <div className="flex gap-3">
-          <button
-            type="button"
-            // onClick={postNotif}
-            onClick={sendMessage}
-            className=" bg-brand font-bold text-white px-3 py-2 rounded-lg  shadow-md hover:bg-brand/80 transition-all"
-          >
-            Generate AT request
-          </button>
+          {isLoading ? (
+            <Spinner />
+          ) : (
+            <button
+              type="button"
+              // onClick={postNotif}
+              onClick={sendMessage}
+              className=" bg-brand font-bold active:scale-90 text-white px-3 py-2 rounded-lg  shadow-md transition-all"
+            >
+              Generate AT request
+            </button>
+          )}
         </div>
       </div>
       <Head empName={session?.data?.user?.name} />
@@ -92,6 +113,7 @@ const Section1 = ({ setAttendanceDialog }) => {
           <EmployeeTable />
         </div>
       </div>
+      <ToastContainer />
     </div>
   );
 };

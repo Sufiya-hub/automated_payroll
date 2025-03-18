@@ -434,3 +434,24 @@ export const postAttendanceNotif = async (ip) => {
     return { message: 'error' };
   }
 };
+
+export const getAttendanceByDate = async (date) => {
+  // let date = '2025-03-10';
+  try {
+    const data = await db
+      .select({
+        empId: employeeTable.id,
+        empName: employeeTable.fullName,
+        empPosition: employeeTable.position,
+        status: attendanceTable.status,
+      })
+      .from(attendanceTable)
+      .fullJoin(employeeTable, eq(attendanceTable.employeeId, employeeTable.id))
+      .where(eq(attendanceTable.attendanceDate, date));
+    console.log('attendance: ', data);
+    return { message: 'success', data };
+  } catch (error) {
+    console.log(error);
+    return { message: 'error' };
+  }
+};

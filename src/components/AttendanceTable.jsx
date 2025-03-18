@@ -1,5 +1,6 @@
 'use client';
 import React, { useState, useEffect } from 'react';
+import Link from 'next/link';
 import {
   flexRender,
   getCoreRowModel,
@@ -11,7 +12,6 @@ import {
 import { ArrowUpDown, ChevronDown, MoreHorizontal } from 'lucide-react';
 import { IoDocumentTextSharp } from 'react-icons/io5';
 
-import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import {
   DropdownMenu,
@@ -33,22 +33,22 @@ import {
 } from '@/components/ui/table';
 import { employeeTable } from '@/server/db/schemas';
 import { PAYMENTS_DATA } from '@/constants/payments';
+import { CalendarIcon } from 'lucide-react';
+import { format } from 'date-fns';
+import { Button } from '@/components/ui/button';
+import { Calendar } from '@/components/ui/calendar';
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '@/components/ui/popover';
 
 // const data = PAYMENTS_DATA;
 
-const statusStyle = (stat, element) => {
-  if (element === 'parent')
-    return stat === 'Full-Time'
-      ? 'border-green-500 text-green-500'
-      : stat === 'Part-Time'
-      ? 'border-blue-500 text-blue-500'
-      : 'border-orange-500 text-orange-500';
-  if (element === 'indicator')
-    return stat === 'Full-Time'
-      ? 'bg-green-500'
-      : stat === 'Part-Time'
-      ? 'bg-blue-500'
-      : 'bg-orange-500';
+const statusStyle = (status, element) => {
+  if (status)
+    return element === 'indicator' ? 'bg-green-500' : 'text-green-500';
+  else return element === 'indicator' ? 'bg-orange-500' : 'text-orange-500';
 };
 
 export function AttendanceTable() {
@@ -56,11 +56,15 @@ export function AttendanceTable() {
   const [columnFilters, setColumnFilters] = React.useState([]);
   const [columnVisibility, setColumnVisibility] = React.useState({});
   const [rowSelection, setRowSelection] = React.useState({});
-  const [data, setData] = useState();
+  const [data, setData] = React.useState();
+  const [date, setDate] = React.useState();
 
   useEffect(() => {
     const getData = async () => {
-      await fetch('/api/employees')
+      await fetch('/api/attendance/byDate', {
+        method: 'POST',
+        body: JSON.stringify({ date: format(new Date(date), 'yyyy-MM-dd') }),
+      })
         .then((res) => res.json())
         .then((res) => {
           if (res?.message === 'success') {
@@ -68,103 +72,119 @@ export function AttendanceTable() {
           }
         });
     };
-    getData();
-  }, []);
+    if (date) getData();
+  }, [date]);
 
   const columns = [
     {
-      accessorKey: 'id',
-      header: 'Employee Id',
+      accessorKey: 'empId',
+      header: () => <div className="text-center">Employee Id</div>,
       cell: ({ row }) => (
-        <div className="text-center">{row.getValue('id')}</div>
+        <div className="text-center">{row.getValue('empId')}</div>
       ),
     },
+    // {
+    //   accessorKey: 'email',
+    //   header: ({ column }) => {
+    //     return (
+    //       <Button
+    //         variant="ghost"
+    //         onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+    //       >
+    //         Email
+    //         <ArrowUpDown />
+    //       </Button>
+    //     );
+    //   },
+    //   cell: ({ row }) => (
+    //     <div className="lowercase">{row.getValue('email')}</div>
+    //   ),
+    // },
     {
-      accessorKey: 'email',
+      accessorKey: 'empName',
       header: ({ column }) => {
         return (
-          <Button
-            variant="ghost"
-            onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-          >
-            Email
-            <ArrowUpDown />
-          </Button>
+          <div className="flex justify-center">
+            <Button
+              variant="ghost"
+              onClick={() =>
+                column.toggleSorting(column.getIsSorted() === 'asc')
+              }
+            >
+              Employee Name
+              <ArrowUpDown />
+            </Button>
+          </div>
         );
       },
       cell: ({ row }) => (
-        <div className="lowercase">{row.getValue('email')}</div>
+        <div className="capitalize text-center">{row.getValue('empName')}</div>
       ),
     },
     {
-      accessorKey: 'fullName',
+      accessorKey: 'empPosition',
       header: ({ column }) => {
         return (
-          <Button
-            variant="ghost"
-            onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-          >
-            Employee Name
-            <ArrowUpDown />
-          </Button>
+          <div className="flex justify-center">
+            <Button
+              variant="ghost"
+              onClick={() =>
+                column.toggleSorting(column.getIsSorted() === 'asc')
+              }
+            >
+              Position
+              <ArrowUpDown />
+            </Button>
+          </div>
         );
       },
       cell: ({ row }) => (
-        <div className="capitalize text-center">{row.getValue('fullName')}</div>
-      ),
-    },
-    {
-      accessorKey: 'position',
-      header: ({ column }) => {
-        return (
-          <Button
-            variant="ghost"
-            onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-          >
-            Position
-            <ArrowUpDown />
-          </Button>
-        );
-      },
-      cell: ({ row }) => (
-        <div className="capitalize text-center">{row.getValue('position')}</div>
-      ),
-    },
-    {
-      accessorKey: 'department',
-      header: ({ column }) => {
-        return (
-          <Button
-            variant="ghost"
-            onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-          >
-            Department
-            <ArrowUpDown />
-          </Button>
-        );
-      },
-      cell: ({ row }) => (
+        // <div className="flex justify-center">
         <div className="capitalize text-center">
-          {row.getValue('department')}
+          {row.getValue('empPosition')}
         </div>
+        // </div>
       ),
     },
+    // {
+    //   accessorKey: 'department',
+    //   header: ({ column }) => {
+    //     return (
+    //       <Button
+    //         variant="ghost"
+    //         onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+    //       >
+    //         Department
+    //         <ArrowUpDown />
+    //       </Button>
+    //     );
+    //   },
+    //   cell: ({ row }) => (
+    //     <div className="capitalize text-center">
+    //       {row.getValue('department')}
+    //     </div>
+    //   ),
+    // },
     {
       accessorKey: 'status',
       header: ({ column }) => {
         return (
-          <Button
-            variant="ghost"
-            onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-          >
-            Status
-            <ArrowUpDown />
-          </Button>
+          <div className="">
+            <Button
+              variant="ghost"
+              onClick={() =>
+                column.toggleSorting(column.getIsSorted() === 'asc')
+              }
+            >
+              Status
+              <ArrowUpDown />
+            </Button>
+          </div>
         );
       },
       cell: ({ row }) => (
         <div
-          className={`capitalize p-1 flex rounded-[5px] justify-center items-center gap-3  border-[1px] ${statusStyle(
+          className={`capitalize p-1 flex rounded-[5px] pl-2 items-center gap-3  ${statusStyle(
             row.getValue('status'),
             'parent'
           )}`}
@@ -175,7 +195,7 @@ export function AttendanceTable() {
               'indicator'
             )}`}
           ></div>
-          {row.getValue('status')}
+          {row.getValue('status') ? 'Present' : 'Leave'}
         </div>
       ),
     },
@@ -196,14 +216,16 @@ export function AttendanceTable() {
             <DropdownMenuContent align="end">
               <DropdownMenuLabel>Actions</DropdownMenuLabel>
               <DropdownMenuItem
-                onClick={() =>
-                  navigator.clipboard.writeText(employee.EmployeeID)
-                }
+                onClick={() => navigator.clipboard.writeText(employee.empId)}
               >
                 Copy Id
               </DropdownMenuItem>
               <DropdownMenuSeparator />
-              <DropdownMenuItem>View Employee</DropdownMenuItem>
+              <DropdownMenuItem>
+                <Link href={`/admin/employees/${employee.empId}`}>
+                  View Employee
+                </Link>
+              </DropdownMenuItem>
               <DropdownMenuItem>View payment details</DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
@@ -214,7 +236,7 @@ export function AttendanceTable() {
 
   const [pagination, setPagination] = React.useState({
     pageIndex: 0,
-    pageSize: 6,
+    pageSize: 8,
   });
 
   const table = useReactTable({
@@ -238,51 +260,81 @@ export function AttendanceTable() {
     },
   });
 
+  useEffect(() => {
+    setDate(new Date());
+  }, []);
+
   return (
     <>
       {data && (
         <div className="w-full h-full px-4 shadow-xl rounded-lg">
-          <div className="flex items-center py-4">
+          <div className="flex items-end justify-between py-4">
             <div className="flex flex-col gap-2">
               <h1 className="flex gap-2 items-center font-medium text-sm">
                 <IoDocumentTextSharp size={15} className="text-blue-700" />
                 Attendance History
               </h1>
               <Input
-                placeholder="Filter emails..."
-                value={table.getColumn('email')?.getFilterValue() ?? ''}
+                placeholder="Search Employee..."
+                value={table.getColumn('empName')?.getFilterValue() ?? ''}
                 onChange={(event) =>
-                  table.getColumn('email')?.setFilterValue(event.target.value)
+                  table.getColumn('empName')?.setFilterValue(event.target.value)
                 }
-                className="max-w-sm"
+                className="max-w-sm outline-none focus:border-none"
               />
             </div>
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="outline" className="ml-auto">
-                  Columns <ChevronDown />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
-                {table
-                  .getAllColumns()
-                  .filter((column) => column.getCanHide())
-                  .map((column) => {
-                    return (
-                      <DropdownMenuCheckboxItem
-                        key={column.id}
-                        className="capitalize"
-                        checked={column.getIsVisible()}
-                        onCheckedChange={(value) =>
-                          column.toggleVisibility(!!value)
-                        }
-                      >
-                        {column.id}
-                      </DropdownMenuCheckboxItem>
-                    );
-                  })}
-              </DropdownMenuContent>
-            </DropdownMenu>
+            <div className="flex items-center gap-2">
+              <Popover>
+                <PopoverTrigger asChild>
+                  <Button
+                    variant={'outline'}
+                    className={`w-[240px] justify-start text-left font-normal
+                      ${!date && 'text-muted-foreground'}`}
+                  >
+                    <CalendarIcon />
+                    {date ? (
+                      format(date, 'yyyy-MM-dd')
+                    ) : (
+                      <span>Pick a date</span>
+                    )}
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-auto p-0" align="start">
+                  <Calendar
+                    mode="single"
+                    selected={date}
+                    onSelect={setDate}
+                    initialFocus
+                  />
+                </PopoverContent>
+              </Popover>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="outline" className="ml-auto">
+                    Columns <ChevronDown />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  {table
+                    .getAllColumns()
+                    .filter((column) => column.getCanHide())
+                    .map((column) => {
+                      return (
+                        <DropdownMenuCheckboxItem
+                          key={column.id}
+                          className="capitalize"
+                          checked={column.getIsVisible()}
+                          onCheckedChange={(value) =>
+                            column.toggleVisibility(!!value)
+                          }
+                        >
+                          {column.id}
+                        </DropdownMenuCheckboxItem>
+                      );
+                    })}
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </div>
           </div>
           <div className="rounded-md border">
             <Table>
