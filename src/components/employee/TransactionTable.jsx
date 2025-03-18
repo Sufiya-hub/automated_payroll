@@ -20,7 +20,7 @@ const TransactionTable = () => {
   return (
     <div className="p-2">
       <table className="w-[100%] items-center">
-        <thead>
+        <thead className="border-b-[1px]">
           <tr className="grid grid-cols-5 gap-2 text-center text-eprimary font-bold py-2">
             <th>Payroll Id</th>
             <th>Date</th>
@@ -29,7 +29,7 @@ const TransactionTable = () => {
             <th>Tax</th>
           </tr>
         </thead>
-        <hr />
+        {/* <hr /> */}
         <tbody>
           {data ? (
             data.map((item, index) => (

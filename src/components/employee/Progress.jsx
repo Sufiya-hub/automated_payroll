@@ -35,7 +35,7 @@ const Progress = ({ attendance }) => {
     if (attendance) setProgress(getDayRatios(attendance));
   }, [attendance]);
   return (
-    <div className="flex flex-col gap-3 px-7 py-4  rounded-xl bg-white/5 border-[1px] border-white/60 w-full text-ehighlight">
+    <div className="flex flex-col gap-3 px-7 py-4  rounded-xl bg-white/5 border-[1px] border-white/60 w-full text-ehighlight h-auto transition-all">
       <div className="flex justify-between">
         <h1 className="font-medium text-2xl">Progress</h1>
       </div>

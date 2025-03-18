@@ -68,20 +68,23 @@ const page = () => {
   // useEffect(() => document.documentElement.classList.add('dark'), []);
 
   return (
-    <div className="h-[100vh] -z-10 max-h-screen overflow-hidden relative w-full p-4 bg-empbg1 dark:bg-empdark">
-      <div className="absolute -z-10 bg-brand h-[850px] w-[950px] blur-[200px] -right-1/3 -bottom-1/2"></div>
-      <div className="absolute -z-10  bg-brand/80 h-[850px] w-[950px] blur-[200px]  left-0 -bottom-[700px]"></div>
+    <div className="h-[100vh] z-10 max-h-screen overflow-hidden relative w-full p-4 bg-empbg1 dark:bg-empdark">
+      <div className="absolute z-[-1] bg-brand h-[850px] w-[950px] blur-[200px] -right-1/2 -bottom-1/2"></div>
+      <div className="absolute z-[-1] bg-brand/60 h-[850px] w-[950px] blur-[200px] -right-0 -top-1/3"></div>
+      <div className="absolute z-[-1] bg-brand/80 h-[850px] w-[950px] blur-[200px]  left-0 -bottom-[700px]"></div>
 
-      <Header1
-        attendanceBtn={attendanceBtn}
-        setAttendanceDialog={setAttendanceDialog}
-        empName={session?.data?.user?.name}
-      />
-      <Section
-        empName={session?.data?.user?.name}
-        imageName={session?.data?.user?.image}
-        position={session?.data?.user?.position}
-      />
+      <div className="z-20">
+        <Header1
+          attendanceBtn={attendanceBtn}
+          setAttendanceDialog={setAttendanceDialog}
+          empName={session?.data?.user?.name}
+        />
+        <Section
+          empName={session?.data?.user?.name}
+          imageName={session?.data?.user?.image}
+          position={session?.data?.user?.position}
+        />
+      </div>
     </div>
   );
 };

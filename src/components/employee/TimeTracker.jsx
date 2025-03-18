@@ -11,7 +11,11 @@ const TimeTracker = ({ attendance }) => {
   const startOffset = getStartDayOffset();
 
   return (
-    <div className="flex flex-col gap-3 px-7 py-4 backdrop-blur-lg rounded-xl bg-white/5 border-[1px] border-white/60 w-full">
+    <div
+      className={`flex flex-col gap-3 px-7 py-4 backdrop-blur-lg rounded-xl bg-white/5 border-[1px] border-white/60 w-full transition-all duration-500 overflow-hidden ${
+        attendance?.length ? 'max-h-[400px]' : 'max-h-[100px]'
+      }`}
+    >
       <div className="flex justify-between">
         <h1 className="font-semibold text-xl text-ehighlight">Attendance</h1>
       </div>
@@ -34,10 +38,10 @@ const TimeTracker = ({ attendance }) => {
           <div
             className={`h-6 w-6 font-light text-white/70 flex justify-center items-center text-xs ${
               el.day === 'Sunday' || el.day === 'Saturday'
-                ? ' border-[1px] border-eprimary/50 text-eprimary'
+                ? 'border-[1px] border-eprimary/50 text-eprimary'
                 : el.status
                 ? 'bg-brand border-white/50 text-[#F1F1F1]'
-                : 'bg-eprimary text-black  '
+                : 'bg-eprimary text-black'
             } rounded-full`}
             key={i}
           >
