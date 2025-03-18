@@ -367,6 +367,25 @@ export const getAllPayrolls = async () => {
   }
 };
 
+export const getPayrollsById = async (id) => {
+  try {
+    const data = await db
+      .select({
+        payrollId: payrollTable.id,
+        tax: payrollTable.tax,
+        date: payrollTable.date,
+        amount: payrollTable.amount,
+        purpose: payrollTable.purpose,
+      })
+      .from(payrollTable)
+      .where(eq(payrollTable.employeeId, id));
+    return { message: 'success', data };
+  } catch (error) {
+    console.log(error);
+    return { message: 'error' };
+  }
+};
+
 export const getAttendanceNotif = async () => {
   try {
     const currentDate = format(new Date(), 'yyyy-MM-dd');

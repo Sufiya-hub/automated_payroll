@@ -67,6 +67,8 @@ export const payrollTable = pgTable('payroll', {
   fund_account_number: varchar({ length: 17 }),
   status: varchar(),
   purpose: varchar(),
+  tax: integer(),
+  date: date().notNull(),
   merchant_id: varchar({ length: 14 }),
 });
 
