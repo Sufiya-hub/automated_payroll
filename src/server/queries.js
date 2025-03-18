@@ -22,7 +22,7 @@ import {
 } from 'drizzle-orm';
 import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 import { getServerSession } from 'next-auth';
-import { format, addMinutes } from 'date-fns';
+import { format, addMinutes, isWithinInterval, parse } from 'date-fns';
 
 const db = drizzle(process.env.DATABASE_URL);
 
@@ -335,7 +335,9 @@ export const getFundAccountNumber = async (id) => {
 
 export const postPayroll = async (data) => {
   try {
-    await db.insert(payrollTable).values(data);
+    await db
+      .insert(payrollTable)
+      .values({ ...data, date: format(new Date(), 'yyyy-MM-dd') });
     return { message: 'success' };
   } catch (error) {
     console.log(error);
@@ -375,14 +377,17 @@ export const getAttendanceNotif = async () => {
     const data = await db
       .select()
       .from(notifTable)
-      .where(
-        and(
-          eq(notifTable.date, currentDate),
-          sql`CAST(${payrollTable.startTime} AS TIME) <= ${currentTime} 
-        AND ${currentTime} <= CAST(${payrollTable.endTime} AS TIME)`
-        )
-      );
-    return { message: 'success', data };
+      .where(and(eq(notifTable.date, currentDate)));
+
+    const filteredData = data.filter(({ startTime, endTime }) =>
+      isWithinInterval(parse(currentTime, 'HH:mm', new Date()), {
+        start: parse(startTime, 'HH:mm', new Date()),
+        end: parse(endTime, 'HH:mm', new Date()),
+      })
+    );
+
+    // console.log('notifs:', filteredData);
+    return { message: 'success', data: filteredData };
   } catch (error) {
     console.log(error);
     return { message: 'error' };

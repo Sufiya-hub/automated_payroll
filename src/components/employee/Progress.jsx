@@ -20,7 +20,7 @@ function getDayRatios(data) {
   const output = Object.fromEntries(
     Object.entries(dayCounts).map(([day, { total, trueCount }]) => [
       day.toLowerCase(),
-      (trueCount / total) * 100,
+      (trueCount / total) * 200,
     ])
   );
 
@@ -44,7 +44,7 @@ const Progress = ({ attendance }) => {
       <div className="grid grid-cols-7 mt-4 gap-3 h-full">
         <div className="flex flex-col items-center justify-end">
           <div
-            className="h-[100%] bg-eprimary w-[6px] rounded-3xl"
+            className="h-0 bg-eprimary w-[6px] rounded-3xl transition-all"
             ref={progressBars[0]}
           ></div>
           <div className="text-eprimary">
@@ -57,7 +57,7 @@ const Progress = ({ attendance }) => {
           ref={progressBars[1]}
         >
           <div
-            className="h-0 bg-eprimary w-[6px] rounded-3xl"
+            className="h-0 bg-eprimary w-[6px] rounded-3xl transition-all"
             style={{ height: progress && progress['monday'] }}
           ></div>
           <div className="text-eprimary">
@@ -69,7 +69,7 @@ const Progress = ({ attendance }) => {
           className="flex flex-col items-center justify-end"
           ref={progressBars[2]}
         >
-          <div className="h-[100%] bg-eprimary w-[6px] rounded-3xl"></div>
+          <div className="h-0 bg-eprimary w-[6px] rounded-3xl transition-all"></div>
           <div className="text-eprimary">
             <GoDotFill />
           </div>
@@ -77,7 +77,7 @@ const Progress = ({ attendance }) => {
         </div>
         <div className="flex flex-col items-center justify-end">
           <div
-            className="h-[100%] bg-eprimary w-[6px] rounded-3xl"
+            className="h-0 bg-eprimary w-[6px] rounded-3xl transition-all"
             ref={progressBars[3]}
           ></div>
           <div className="text-eprimary">
@@ -87,7 +87,7 @@ const Progress = ({ attendance }) => {
         </div>
         <div className="flex flex-col items-center justify-end">
           <div
-            className="h-[100%] bg-eprimary w-[6px] rounded-3xl"
+            className="h-0 bg-eprimary w-[6px] rounded-3xl transition-all"
             ref={progressBars[4]}
           ></div>
           <div className="text-eprimary">
@@ -97,7 +97,7 @@ const Progress = ({ attendance }) => {
         </div>
         <div className="flex flex-col items-center justify-end">
           <div
-            className="h-[100%] bg-eprimary w-[6px] rounded-3xl"
+            className="h-0 bg-eprimary w-[6px] rounded-3xl transition-all"
             ref={progressBars[5]}
           ></div>
           <div className="text-eprimary">
@@ -107,7 +107,7 @@ const Progress = ({ attendance }) => {
         </div>
         <div className="flex flex-col items-center justify-end">
           <div
-            className="h-[100%] bg-eprimary w-[6px] rounded-3xl"
+            className="h-0 bg-eprimary w-[6px] rounded-3xl transition-all"
             ref={progressBars[6]}
           ></div>
           <div className="text-eprimary">

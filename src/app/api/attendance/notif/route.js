@@ -6,7 +6,6 @@ export async function GET() {
     const data = await getAttendanceNotif();
     if (!data && data?.message !== 'success' && data?.data?.length === 0)
       throw new Error('No attendace requests');
-    console.log('at reqs:', data);
     return NextResponse.json({ message: 'success', data: data.data });
   } catch (error) {
     console.log(error);

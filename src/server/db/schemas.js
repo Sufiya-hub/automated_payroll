@@ -6,6 +6,7 @@ import {
   serial,
   boolean,
   time,
+  timestamp,
 } from 'drizzle-orm/pg-core';
 
 export const employeeTable = pgTable('employees', {
@@ -69,14 +70,18 @@ export const payrollTable = pgTable('payroll', {
   status: varchar(),
   purpose: varchar(),
   merchant_id: varchar({ length: 14 }),
+  tax: varchar(),
+  date: date().notNull(),
 });
 
 export const notifTable = pgTable('notifs', {
   id: serial('id').primaryKey(),
   message: varchar(),
   date: date('date').notNull(),
-  startTime: time(),
-  endTime: time(),
+  // startTime: time(),
+  // endTime: time(),
+  startTime: varchar(),
+  endTime: varchar(),
   ip: varchar(),
   setting: varchar(),
 });

@@ -57,7 +57,7 @@ const page = () => {
     try {
       // console.log('sne/');
       await axios('/api/attendance/notif').then((res) => {
-        console.log('ans:', res);
+        // console.log('ans:', res);
         if (res?.data?.message === 'success' && res?.data?.data?.length !== 0)
           setAttendanceBtn(true);
       });
@@ -87,13 +87,14 @@ const page = () => {
         />
       </div>
 
-      {session?.data?.user && (
-        <Attendance
-          imageName={session?.data?.user?.image}
-          attendanceDialog={attendanceDialog}
-          setAttendanceDialog={setAttendanceDialog}
-        />
-      )}
+      {session?.status === 'authenticated' &&
+        session?.data?.user.name !== '' && (
+          <Attendance
+            imageName={session?.data?.user?.image}
+            attendanceDialog={attendanceDialog}
+            setAttendanceDialog={setAttendanceDialog}
+          />
+        )}
     </div>
   );
 };

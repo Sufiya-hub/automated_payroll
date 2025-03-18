@@ -69,19 +69,32 @@ const salaryCalc = async (gross, leaves, totalLeaves, employeeId) => {
 
   // net * 12 = 10,80,000 * 14%
   // NET
-  let net = gross - deductions;
+  let net = Math.floor(gross - deductions);
   const tax = calculateIncomeTax(net);
-  net -= tax;
+  net -= Math.floor(tax);
 
   // LOL
   // (totalfalse) - x
   //  if(totalfalse > x) net - (gross//30 * (totalfalse % x))
   let excessLeaves = 0;
   if (totalLeaves > leaves) {
-    net = net - Math.floor(gross / 30) * (totalLeaves % leaves);
+    net = Math.floor(net - Math.floor(gross / 30) * (totalLeaves % leaves));
     await updateEmpLeaves(employeeId, totalLeaves);
   }
-  return { basic, da, hra, allowances, gross, pf, pt, deductions, net, tax };
+  const results = {
+    basic,
+    da,
+    hra,
+    allowances,
+    gross,
+    pf,
+    pt,
+    deductions,
+    net,
+    tax,
+  };
+  console.log('results:', results);
+  return results;
 };
 
 export async function GET() {
@@ -109,12 +122,13 @@ export async function GET() {
       const fund_account_number = await getFundAccountNumber(emp.id);
       let transaction_status = null;
       if (fund_account_number) {
-        const paydivision = salaryCalc(
+        const paydivision = await salaryCalc(
           emp.salary,
           emp.leaves,
           totalLeaves,
           emp.id
         );
+
         const transaction_data = {
           account_number: process.env.ACCOUNT_NUMBER, // COMPANYS GLOBAL
           fund_account_id: fund_account_number,
@@ -160,6 +174,7 @@ export async function GET() {
             fund_account_number: transaction_res.fund_account_id,
             status: 'success',
             purpose: 'salary',
+            tax: paydivision.tax,
           };
           await postPayroll(dbData);
         }
