@@ -17,9 +17,11 @@ const TimeTracker = ({ attendance }) => {
       }`}
     >
       <div className="flex justify-between">
-        <h1 className="font-semibold text-xl text-ehighlight">Attendance</h1>
+        <h1 className="font-semibold text-xl text-ehighlight dark:text-ewhite">
+          Attendance
+        </h1>
       </div>
-      <div className="grid grid-cols-7 gap-5 font-semibold text-eprimary/90">
+      <div className="grid grid-cols-7 gap-5 font-semibold text-eprimary/90 dark:text-ewhite/60">
         <p>S</p>
         <p>M</p>
         <p>T</p>
@@ -36,7 +38,7 @@ const TimeTracker = ({ attendance }) => {
 
         {attendance?.map((el, i) => (
           <div
-            className={`h-6 w-6 font-light text-white/70 flex justify-center items-center text-xs ${
+            className={`h-6 w-6 font-light flex justify-center items-center text-xs ${
               el.day === 'Sunday' || el.day === 'Saturday'
                 ? 'border-[1px] border-eprimary/50 text-eprimary'
                 : el.status

@@ -103,18 +103,6 @@ export async function GET() {
     const auth = Buffer.from(
       `${process.env.RAZORPAY_TEST_ID}:${process.env.RAZORPAY_SECRET}`
     ).toString('base64');
-    // console.log(employees);
-    // await getEmpLeaves(10);
-
-    // const payroll = await Promise.all(
-    //   employees.map(async (emp) => {
-    //     const totalLeaves = await getEmpLeaves(emp.id);
-    //     return {
-    //       ...emp,
-    //       final: salaryCalc(emp.salary, emp.leaves, totalLeaves, emp.id), // Use the fetched leaves
-    //     };
-    //   })
-    // );
 
     employees.forEach(async (emp) => {
       const idempotencyKey = uuidv4();

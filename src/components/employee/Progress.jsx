@@ -39,7 +39,7 @@ const Progress = ({ attendance }) => {
   return (
     <div className="flex flex-col gap-3 px-7 py-4  rounded-xl bg-white/5 border-[1px] border-white/60 w-full text-ehighlight h-auto transition-all">
       <div className="flex justify-between">
-        <h1 className="font-medium text-2xl">Progress</h1>
+        <h1 className="font-medium text-2xl dark:text-ewhite">Progress</h1>
       </div>
 
       <div className="grid grid-cols-7 mt-4 gap-3 h-full">
@@ -49,79 +49,93 @@ const Progress = ({ attendance }) => {
             ref={progressBars[0]}
           ></div>
           <div
-            className="h-0 bg-eprimary w-[6px] rounded-3xl"
+            className="h-0 bg-eprimary dark:bg-white/40 w-[6px] rounded-3xl"
             style={{ height: progress && progress['sunday'] }}
           ></div>
-          <div className="text-eprimary">
+          <div className="text-eprimary dark:text-white/40">
             <GoDotFill />
           </div>
-          <h1 className="text-eprimary/90 font-semibold">S</h1>
+          <h1 className="text-eprimary/90 dark:text-ewhite/60 font-semibold">
+            S
+          </h1>
         </div>
         <div
           className="flex flex-col items-center justify-end"
           ref={progressBars[1]}
         >
           <div
-            className="h-0 bg-eprimary w-[6px] rounded-3xl transition-all"
+            className="h-0 bg-eprimary dark:bg-lwhite w-[6px] rounded-3xl transition-all"
             style={{ height: progress && progress['monday'] }}
           ></div>
-          <div className="text-eprimary">
+          <div className="text-eprimary dark:text-lwhite">
             <GoDotFill />
           </div>
-          <h1 className="text-eprimary/90 font-semibold">M</h1>
+          <h1 className="text-eprimary/90 dark:text-ewhite/60 font-semibold">
+            M
+          </h1>
         </div>
         <div
           className="flex flex-col items-center justify-end"
           ref={progressBars[2]}
         >
           <div
-            className="h-0 bg-eprimary w-[6px] rounded-3xl"
+            className="h-0 bg-eprimary dark:bg-lwhite w-[6px] rounded-3xl"
             style={{ height: progress && progress['tuesday'] }}
           ></div>
-          <div className="text-eprimary">
+          <div className="text-eprimary dark:text-lwhite">
             <GoDotFill />
           </div>
-          <h1 className="text-eprimary/90 font-semibold">T</h1>
+          <h1 className="text-eprimary/90 dark:text-ewhite/60 font-semibold">
+            T
+          </h1>
         </div>
         <div className="flex flex-col items-center justify-end">
           <div
-            className="h-0 bg-eprimary w-[6px] rounded-3xl"
+            className="h-0 bg-eprimary dark:bg-lwhite w-[6px] rounded-3xl"
             style={{ height: progress && progress['wednesday'] }}
           ></div>
-          <div className="text-eprimary">
+          <div className="text-eprimary dark:text-lwhite">
             <GoDotFill />
           </div>
-          <h1 className="text-eprimary/90 font-semibold">W</h1>
+          <h1 className="text-eprimary/90 dark:text-ewhite/60 font-semibold">
+            W
+          </h1>
         </div>
         <div className="flex flex-col items-center justify-end">
           <div
-            className="h-0 bg-eprimary w-[6px] rounded-3xl"
+            className="h-0 bg-eprimary dark:bg-lwhite w-[6px] rounded-3xl"
             style={{ height: progress && progress['thursday'] }}
           ></div>
-          <div className="text-eprimary">
+          <div className="text-eprimary dark:text-lwhite">
             <GoDotFill />
           </div>
-          <h1 className="text-eprimary/90 font-semibold">T</h1>
+          <h1 className="text-eprimary/90 dark:text-ewhite/60 font-semibold">
+            T
+          </h1>
         </div>
         <div className="flex flex-col items-center justify-end">
           <div
-            className="h-0 bg-eprimary w-[6px] rounded-3xl"
+            className="h-0 bg-eprimary dark:bg-lwhite w-[6px] rounded-3xl"
             style={{ height: progress && progress['friday'] }}
           ></div>
-          <div className="text-eprimary">
+          <div className="text-eprimary dark:text-lwhite">
             <GoDotFill />
           </div>
-          <h1 className="text-eprimary/90 font-semibold">F</h1>
+          <h1 className="text-eprimary/90 dark:text-ewhite/60 font-semibold">
+            F
+          </h1>
         </div>
         <div className="flex flex-col items-center justify-end">
           <div
-            className="h-0 bg-eprimary w-[6px] rounded-3xl"
+            className="h-0 bg-eprimary dark:bg-white/40 w-[6px] rounded-3xl"
             style={{ height: progress && progress['saturday'] }}
           ></div>
-          <div className="text-eprimary">
+          <div className="text-eprimary dark:text-white/40">
             <GoDotFill />
           </div>
-          <h1 className="text-eprimary/90 font-semibold">S</h1>
+          <h1 className="text-eprimary/90 dark:text-ewhite/60 font-semibold">
+            S
+          </h1>
         </div>
       </div>
     </div>

@@ -23,6 +23,8 @@ export default {
         empbg2: '#ECFDFF',
         empaccent: '#282828',
         empdark: '#1E1E1E',
+        ewhite: '#E3E5E6',
+        lwhite: '#D9D9D9',
 
         foreground: 'hsl(var(--foreground))',
         card: {

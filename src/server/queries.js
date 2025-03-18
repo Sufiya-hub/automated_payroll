@@ -373,7 +373,7 @@ export const getPayrollsById = async (id) => {
   try {
     const data = await db
       .select({
-        payrollId: payrollTable.id,
+        id: payrollTable.id,
         tax: payrollTable.tax,
         date: payrollTable.date,
         amount: payrollTable.amount,
