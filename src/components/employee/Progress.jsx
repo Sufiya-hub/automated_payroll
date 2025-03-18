@@ -35,6 +35,7 @@ const Progress = ({ attendance }) => {
   useEffect(() => {
     if (attendance) setProgress(getDayRatios(attendance));
   }, [attendance]);
+  console.log('progress: ', progress);
   return (
     <div className="flex flex-col gap-3 px-7 py-4  rounded-xl bg-white/5 border-[1px] border-white/60 w-full text-ehighlight h-auto transition-all">
       <div className="flex justify-between">
@@ -46,6 +47,10 @@ const Progress = ({ attendance }) => {
           <div
             className="h-0 bg-eprimary w-[6px] rounded-3xl transition-all"
             ref={progressBars[0]}
+          ></div>
+          <div
+            className="h-0 bg-eprimary w-[6px] rounded-3xl"
+            style={{ height: progress && progress['sunday'] }}
           ></div>
           <div className="text-eprimary">
             <GoDotFill />
@@ -69,7 +74,10 @@ const Progress = ({ attendance }) => {
           className="flex flex-col items-center justify-end"
           ref={progressBars[2]}
         >
-          <div className="h-0 bg-eprimary w-[6px] rounded-3xl transition-all"></div>
+          <div
+            className="h-0 bg-eprimary w-[6px] rounded-3xl"
+            style={{ height: progress && progress['tuesday'] }}
+          ></div>
           <div className="text-eprimary">
             <GoDotFill />
           </div>
@@ -77,8 +85,8 @@ const Progress = ({ attendance }) => {
         </div>
         <div className="flex flex-col items-center justify-end">
           <div
-            className="h-0 bg-eprimary w-[6px] rounded-3xl transition-all"
-            ref={progressBars[3]}
+            className="h-0 bg-eprimary w-[6px] rounded-3xl"
+            style={{ height: progress && progress['wednesday'] }}
           ></div>
           <div className="text-eprimary">
             <GoDotFill />
@@ -87,8 +95,8 @@ const Progress = ({ attendance }) => {
         </div>
         <div className="flex flex-col items-center justify-end">
           <div
-            className="h-0 bg-eprimary w-[6px] rounded-3xl transition-all"
-            ref={progressBars[4]}
+            className="h-0 bg-eprimary w-[6px] rounded-3xl"
+            style={{ height: progress && progress['thursday'] }}
           ></div>
           <div className="text-eprimary">
             <GoDotFill />
@@ -97,8 +105,8 @@ const Progress = ({ attendance }) => {
         </div>
         <div className="flex flex-col items-center justify-end">
           <div
-            className="h-0 bg-eprimary w-[6px] rounded-3xl transition-all"
-            ref={progressBars[5]}
+            className="h-0 bg-eprimary w-[6px] rounded-3xl"
+            style={{ height: progress && progress['friday'] }}
           ></div>
           <div className="text-eprimary">
             <GoDotFill />
@@ -107,8 +115,8 @@ const Progress = ({ attendance }) => {
         </div>
         <div className="flex flex-col items-center justify-end">
           <div
-            className="h-0 bg-eprimary w-[6px] rounded-3xl transition-all"
-            ref={progressBars[6]}
+            className="h-0 bg-eprimary w-[6px] rounded-3xl"
+            style={{ height: progress && progress['saturday'] }}
           ></div>
           <div className="text-eprimary">
             <GoDotFill />
