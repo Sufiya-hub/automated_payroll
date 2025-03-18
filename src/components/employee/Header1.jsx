@@ -13,6 +13,17 @@ const Header1 = ({ attendanceBtn, setAttendanceDialog, empName }) => {
     <div className="z-20 flex justify-between items-center px-4 py-2">
       <h1 className="text-2xl">Welcome...</h1>
       <div className="flex gap-2">
+        {attendanceBtn && (
+          <button
+            type="button"
+            onClick={() => {
+              setAttendanceDialog(true);
+            }}
+            className="bg-brand font-bold text-white px-3 py-2 rounded-full  shadow-md hover:bg-brand/80 transition-all"
+          >
+            Attendance
+          </button>
+        )}
         <Navbar />
         <button className="flex gap-1 items-center p-4 border-[1px] border-white/90  bg-white/10  rounded-full">
           <IoSettingsOutline size={20} />
