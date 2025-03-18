@@ -1,5 +1,5 @@
 'use client';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { MdArrowOutward } from 'react-icons/md';
 import { GoDotFill } from 'react-icons/go';
 
@@ -20,7 +20,7 @@ function getDayRatios(data) {
   const output = Object.fromEntries(
     Object.entries(dayCounts).map(([day, { total, trueCount }]) => [
       day.toLowerCase(),
-      trueCount / total,
+      (trueCount / total) * 100,
     ])
   );
 
@@ -30,7 +30,8 @@ function getDayRatios(data) {
 }
 
 const Progress = ({ attendance }) => {
-  const [progress, setProgress] = useState([{}]);
+  const progressBars = useRef();
+  const [progress, setProgress] = useState();
   useEffect(() => {
     if (attendance) setProgress(getDayRatios(attendance));
   }, [attendance]);
@@ -42,23 +43,32 @@ const Progress = ({ attendance }) => {
 
       <div className="grid grid-cols-7 mt-4 gap-3 h-full">
         <div className="flex flex-col items-center justify-end">
-          <div className="h-[100%] bg-eprimary w-[6px] rounded-3xl"></div>
+          <div
+            className="h-[100%] bg-eprimary w-[6px] rounded-3xl"
+            ref={progressBars[0]}
+          ></div>
           <div className="text-eprimary">
             <GoDotFill />
           </div>
           <h1 className="text-eprimary/90 font-semibold">S</h1>
         </div>
-        <div className="flex flex-col items-center justify-end">
+        <div
+          className="flex flex-col items-center justify-end"
+          ref={progressBars[1]}
+        >
           <div
             className="h-0 bg-eprimary w-[6px] rounded-3xl"
-            style={{ height: progress }}
+            style={{ height: progress && progress['monday'] }}
           ></div>
           <div className="text-eprimary">
             <GoDotFill />
           </div>
           <h1 className="text-eprimary/90 font-semibold">M</h1>
         </div>
-        <div className="flex flex-col items-center justify-end">
+        <div
+          className="flex flex-col items-center justify-end"
+          ref={progressBars[2]}
+        >
           <div className="h-[100%] bg-eprimary w-[6px] rounded-3xl"></div>
           <div className="text-eprimary">
             <GoDotFill />
@@ -66,28 +76,40 @@ const Progress = ({ attendance }) => {
           <h1 className="text-eprimary/90 font-semibold">T</h1>
         </div>
         <div className="flex flex-col items-center justify-end">
-          <div className="h-[100%] bg-eprimary w-[6px] rounded-3xl"></div>
+          <div
+            className="h-[100%] bg-eprimary w-[6px] rounded-3xl"
+            ref={progressBars[3]}
+          ></div>
           <div className="text-eprimary">
             <GoDotFill />
           </div>
           <h1 className="text-eprimary/90 font-semibold">W</h1>
         </div>
         <div className="flex flex-col items-center justify-end">
-          <div className="h-[100%] bg-eprimary w-[6px] rounded-3xl"></div>
+          <div
+            className="h-[100%] bg-eprimary w-[6px] rounded-3xl"
+            ref={progressBars[4]}
+          ></div>
           <div className="text-eprimary">
             <GoDotFill />
           </div>
           <h1 className="text-eprimary/90 font-semibold">T</h1>
         </div>
         <div className="flex flex-col items-center justify-end">
-          <div className="h-[100%] bg-eprimary w-[6px] rounded-3xl"></div>
+          <div
+            className="h-[100%] bg-eprimary w-[6px] rounded-3xl"
+            ref={progressBars[5]}
+          ></div>
           <div className="text-eprimary">
             <GoDotFill />
           </div>
           <h1 className="text-eprimary/90 font-semibold">F</h1>
         </div>
         <div className="flex flex-col items-center justify-end">
-          <div className="h-[100%] bg-eprimary w-[6px] rounded-3xl"></div>
+          <div
+            className="h-[100%] bg-eprimary w-[6px] rounded-3xl"
+            ref={progressBars[6]}
+          ></div>
           <div className="text-eprimary">
             <GoDotFill />
           </div>

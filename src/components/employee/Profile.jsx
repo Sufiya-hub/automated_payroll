@@ -16,7 +16,7 @@ const Profile = ({ imageName, position, empName }) => {
       <h1 className="text-3xl text-ehighlight font-medium capitalize">
         {empName}
       </h1>
-      <h1 className="bg-eprimary text-ehighlight px-2 py-1 font-medium capitalize rounded-full text-sm -mt-2">
+      <h1 className="bg-eprimary text-ehighlight px-2 py-1 font-bold capitalize rounded-full text-sm -mt-2">
         {position}
       </h1>
       {/* <h1 className="bg-eprimary text-ehighlight px-2 py-1 font-medium rounded-full text-sm -mt-2">
