@@ -21,7 +21,7 @@ const Header1 = ({ attendanceBtn, setAttendanceDialog, empName }) => {
             }}
             className="bg-brand font-bold text-white px-3 py-2 rounded-full  shadow-md hover:bg-brand/80 transition-all"
           >
-            Attendance
+            {/* Attendance */}
           </button>
         )}
         <Navbar />
