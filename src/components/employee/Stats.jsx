@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Progress from './Progress';
 import TimeTracker from './TimeTracker';
+import TransactionTable from './TransactionTable';
 
 function convertToISO(dateStr) {
   const [month, day, year] = dateStr.split('/'); // Split by "/"
@@ -90,7 +91,9 @@ const Stats = () => {
         <Progress attendance={attendance} />
         <TimeTracker attendance={attendance} />
       </div>
-      <div className="h-full w-full border-[1px] border-white/60 bg-white/5 rounded-xl"></div>
+      <div className="h-full w-full border-[1px] border-white/60 bg-white/5 rounded-xl">
+        <TransactionTable />
+      </div>
     </div>
   );
 };

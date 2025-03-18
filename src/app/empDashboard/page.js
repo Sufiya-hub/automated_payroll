@@ -77,7 +77,11 @@ const page = () => {
         setAttendanceDialog={setAttendanceDialog}
         empName={session?.data?.user?.name}
       />
-      <Section />
+      <Section
+        empName={session?.data?.user?.name}
+        imageName={session?.data?.user?.image}
+        position={session?.data?.user?.position}
+      />
     </div>
   );
 };
