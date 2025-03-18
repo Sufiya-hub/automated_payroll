@@ -109,11 +109,17 @@ export async function GET() {
       const fund_account_number = await getFundAccountNumber(emp.id);
       let transaction_status = null;
       if (fund_account_number) {
+        const paydivision = salaryCalc(
+          emp.salary,
+          emp.leaves,
+          totalLeaves,
+          emp.id
+        );
         const transaction_data = {
           account_number: process.env.ACCOUNT_NUMBER, // COMPANYS GLOBAL
           fund_account_id: fund_account_number,
           // amount: emp.salary,
-          amount: salaryCalc(emp.salary, emp.leaves, totalLeaves, emp.id),
+          amount: paydivision.net,
           currency: 'INR',
           mode: 'IMPS',
           purpose: 'salary',

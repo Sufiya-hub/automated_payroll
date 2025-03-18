@@ -397,11 +397,10 @@ export const getAttendanceNotif = async () => {
       .where(
         and(
           eq(notifTable.date, currentDate),
-          gte(notifTable.startTime, currentTime),
-          lte(notifTable.endTime, currentTime)
+          sql`CAST(${payrollTable.startTime} AS TIME) <= ${currentTime} 
+        AND ${currentTime} <= CAST(${payrollTable.endTime} AS TIME)`
         )
       );
-    console.log('atnotif data:', data);
     return { message: 'success', data };
   } catch (error) {
     console.log(error);
