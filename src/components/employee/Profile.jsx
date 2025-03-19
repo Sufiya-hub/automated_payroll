@@ -13,7 +13,7 @@ const Profile = ({ imageName, position, empName }) => {
         className="rounded-full max-h-[200px] max-w-[200px]"
       />
       {/* <h1 className="text-3xl text-ehighlight font-medium">KALYAN PENDEM</h1> */}
-      <h1 className="text-3xl text-ehighlight font-medium capitalize">
+      <h1 className="text-3xl text-ehighlight dark:text-white uppercase font-medium  ">
         {empName}
       </h1>
       <h1 className="bg-eprimary text-ehighlight px-2 py-1 font-bold capitalize rounded-full text-sm -mt-2">

@@ -7,7 +7,7 @@ const page = () => {
   return (
     <AdminLayout>
       <div className="bg-white rounded-xl p-4 flex flex-col gap-4 h-full overflow-hidden">
-        <AttendanceInfo />
+        {/* <AttendanceInfo /> */}
         <AttendanceTable />
       </div>
     </AdminLayout>

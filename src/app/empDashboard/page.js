@@ -70,7 +70,7 @@ const page = () => {
 
   return (
     <div className="h-[100vh] z-10 max-h-screen overflow-hidden relative w-full p-4 bg-empbg1 dark:bg-empdark">
-      <div className="absolute z-[-1] bg-brand h-[850px] w-[950px] blur-[200px] -right-1/2 -bottom-1/2"></div>
+      <div className="absolute z-[-1] bg-brand h-[850px] w-[950px] blur-[200px] -right-1/2  -bottom-1/2"></div>
       <div className="absolute z-[-1] bg-brand/60 h-[850px] w-[950px] blur-[200px] -right-0 -top-1/3"></div>
       <div className="absolute z-[-1] bg-brand/80 h-[850px] w-[950px] blur-[200px]  left-0 -bottom-[700px]"></div>
 
