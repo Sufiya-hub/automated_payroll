@@ -1,3 +1,4 @@
+import { double, float, int } from 'drizzle-orm/mysql-core';
 import {
   integer,
   pgTable,
@@ -72,8 +73,6 @@ export const payrollTable = pgTable('payroll', {
   tax: integer(),
   date: date().notNull(),
   merchant_id: varchar({ length: 14 }),
-  tax: varchar(),
-  date: date().notNull(),
 });
 
 export const notifTable = pgTable('notifs', {
@@ -86,4 +85,20 @@ export const notifTable = pgTable('notifs', {
   endTime: varchar(),
   ip: varchar(),
   setting: varchar(),
+});
+
+export const salaryComponentTable = pgTable('salaryComponents', {
+  id: serial('id').primaryKey(),
+  basic: integer().default(50),
+  da: integer().default(75),
+  hra: integer().default(15),
+  otherAllowances: integer().default(10),
+  pf: integer().default(12),
+});
+
+export const professionalTaxTable = pgTable('professionalTax', {
+  id: serial('id').primaryKey(),
+  minValue: integer().default(0),
+  maxValue: integer().default(null),
+  value: integer().default(0),
 });

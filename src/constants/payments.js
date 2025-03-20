@@ -220,3 +220,36 @@ export const EMP_DATA = [
     iconstyles: 'bg-purple-400',
   },
 ];
+
+export const SALARY_COMPONENTS = [
+  {
+    label: 'Basic Salary',
+    type: 'text',
+    bodyKey: 'basic',
+    hint: 'in %',
+  },
+  {
+    label: 'Dearness Allowance(DA)',
+    type: 'text',
+    bodyKey: 'da',
+    hint: 'in %',
+  },
+  {
+    label: 'House Rent Allowance(HRA)',
+    type: 'text',
+    bodyKey: 'hra',
+    hint: 'in %',
+  },
+  {
+    label: 'Other Allowances',
+    type: 'text',
+    bodyKey: 'otherAllowances',
+    hint: 'in %',
+  },
+  {
+    label: 'Provident Fund(PF)',
+    type: 'text',
+    bodyKey: 'pf',
+    hint: 'in %',
+  },
+];

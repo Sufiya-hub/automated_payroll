@@ -65,6 +65,7 @@ const salaryCalc = async (gross, leaves, totalLeaves, employeeId) => {
   // DEDUCTIONS
   const pf = Math.floor(basic * (12 / 100));
   const pt = gross < 15000 ? 0 : gross < 20000 ? 150 : 200;
+
   const deductions = pf + pt;
 
   // net * 12 = 10,80,000 * 14%

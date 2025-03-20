@@ -6,6 +6,8 @@ import {
   bankTable,
   payrollTable,
   notifTable,
+  salaryComponentTable,
+  professionalTaxTable,
 } from './db/schemas';
 import {
   eq,
@@ -450,6 +452,47 @@ export const getAttendanceByDate = async (date) => {
       .where(eq(attendanceTable.attendanceDate, date));
     console.log('attendance: ', data);
     return { message: 'success', data };
+  } catch (error) {
+    console.log(error);
+    return { message: 'error' };
+  }
+};
+
+export const getSalaryComponents = async () => {
+  try {
+    const data = await db.select().from(salaryComponentTable).limit(1);
+    return { message: 'success', data };
+  } catch (error) {
+    console.log(error);
+    return { message: 'error' };
+  }
+};
+
+export const updateSalaryComponents = async (data) => {
+  try {
+    const updatedData = await db.update(salaryComponentTable).set(data);
+    return { message: 'success', updatedData };
+  } catch (error) {
+    console.log(error);
+    return { message: 'error' };
+  }
+};
+
+export const getProfessionalTax = async () => {
+  try {
+    const data = await db.select().from(professionalTaxTable);
+    return { message: 'success', data };
+  } catch (error) {
+    console.log(error);
+    return { message: 'error' };
+  }
+};
+
+export const updateProfessionalTax = async (data) => {
+  try {
+    await db.delete(professionalTaxTable);
+    const updatedData = await db.insert(professionalTaxTable).values(data);
+    return { message: 'success', updatedData };
   } catch (error) {
     console.log(error);
     return { message: 'error' };
