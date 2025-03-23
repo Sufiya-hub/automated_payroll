@@ -6,6 +6,7 @@ import { IoMdStats } from 'react-icons/io';
 import { FaCcApplePay } from 'react-icons/fa';
 import { FaFileInvoice } from 'react-icons/fa';
 import { MdGroupAdd } from 'react-icons/md';
+import { FaCalendar } from 'react-icons/fa';
 
 export const SIDEBAR = [
   {
@@ -32,6 +33,12 @@ export const SIDEBAR = [
         key: 'attendance',
       },
 
+      {
+        label: 'Leave Management',
+        icon: <FaCalendar className="" />,
+        link: '/admin/leaveManagement',
+        key: 'leaveManagement',
+      },
       {
         label: 'Employees',
         icon: <MdGroupAdd className="" />,

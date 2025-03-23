@@ -8,6 +8,7 @@ import {
   notifTable,
   salaryComponentTable,
   professionalTaxTable,
+  leavesTable,
 } from './db/schemas';
 import {
   eq,
@@ -493,6 +494,16 @@ export const updateProfessionalTax = async (data) => {
     await db.delete(professionalTaxTable);
     const updatedData = await db.insert(professionalTaxTable).values(data);
     return { message: 'success', updatedData };
+  } catch (error) {
+    console.log(error);
+    return { message: 'error' };
+  }
+};
+
+export const postLeaveRequest = async (data) => {
+  try {
+    await db.insert(leavesTable).values(data);
+    return { message: 'success' };
   } catch (error) {
     console.log(error);
     return { message: 'error' };

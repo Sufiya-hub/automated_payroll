@@ -6,65 +6,117 @@ import {
   getPayrollEmployees,
   postPayroll,
   updateEmpLeaves,
+  getSalaryComponents,
+  getProfessionalTax,
 } from '@/server/queries';
 import axios from 'axios';
 import { v4 as uuidv4 } from 'uuid';
+import ProfessionalTax from '@/components/admin/ProfessionalTax';
+
+// function calculateIncomeTax(monthlyNetSalary) {
+//   const annualNetSalary = monthlyNetSalary * 12;
+//   // const standardDeduction = 50000;
+//   const taxableIncome = annualNetSalary;
+
+//   let tax = 0;
+
+//   if (taxableIncome <= 300000) {
+//     tax = 0;
+//   } else if (taxableIncome <= 600000) {
+//     tax = (taxableIncome - 300000) * 0.05;
+//   } else if (taxableIncome <= 900000) {
+//     tax = 300000 * 0.05 + (taxableIncome - 600000) * 0.1;
+//   } else if (taxableIncome <= 1200000) {
+//     tax = 300000 * 0.05 + 300000 * 0.1 + (taxableIncome - 900000) * 0.15;
+//   } else if (taxableIncome <= 1500000) {
+//     tax =
+//       300000 * 0.05 +
+//       300000 * 0.1 +
+//       300000 * 0.15 +
+//       (taxableIncome - 1200000) * 0.2;
+//   } else {
+//     tax =
+//       300000 * 0.05 +
+//       300000 * 0.1 +
+//       300000 * 0.15 +
+//       300000 * 0.2 +
+//       (taxableIncome - 1500000) * 0.3;
+//   }
+
+//   let cess = tax * 0.04;
+//   let totalAnnualTax = tax + cess;
+//   let monthlyTax = totalAnnualTax / 12;
+
+//   // return {
+//   //     annualTax: Math.round(totalAnnualTax),
+//   //     monthlyTax: Math.round(monthlyTax),
+//   //     netSalaryAfterTax: Math.round(monthlyNetSalary - monthlyTax)
+//   // };
+//   return monthlyTax;
+// }
 
 function calculateIncomeTax(monthlyNetSalary) {
   const annualNetSalary = monthlyNetSalary * 12;
-  // const standardDeduction = 50000;
-  const taxableIncome = annualNetSalary;
-
+  let taxableIncome = annualNetSalary;
   let tax = 0;
 
-  if (taxableIncome <= 300000) {
-    tax = 0;
-  } else if (taxableIncome <= 600000) {
-    tax = (taxableIncome - 300000) * 0.05;
-  } else if (taxableIncome <= 900000) {
-    tax = 300000 * 0.05 + (taxableIncome - 600000) * 0.1;
-  } else if (taxableIncome <= 1200000) {
-    tax = 300000 * 0.05 + 300000 * 0.1 + (taxableIncome - 900000) * 0.15;
-  } else if (taxableIncome <= 1500000) {
-    tax =
-      300000 * 0.05 +
-      300000 * 0.1 +
-      300000 * 0.15 +
-      (taxableIncome - 1200000) * 0.2;
+  if (taxableIncome <= 1200000) {
+    tax = 0; // No tax for income up to 12,00,000
+  } else if (taxableIncome <= 1600000) {
+    tax = (taxableIncome - 1200000) * 0.15;
+  } else if (taxableIncome <= 2000000) {
+    tax = 400000 * 0.15 + (taxableIncome - 1600000) * 0.2;
+  } else if (taxableIncome <= 2400000) {
+    tax = 400000 * 0.15 + 400000 * 0.2 + (taxableIncome - 2000000) * 0.25;
   } else {
     tax =
-      300000 * 0.05 +
-      300000 * 0.1 +
-      300000 * 0.15 +
-      300000 * 0.2 +
-      (taxableIncome - 1500000) * 0.3;
+      400000 * 0.15 +
+      400000 * 0.2 +
+      400000 * 0.25 +
+      (taxableIncome - 2400000) * 0.3;
   }
 
-  let cess = tax * 0.04;
-  let totalAnnualTax = tax + cess;
-  let monthlyTax = totalAnnualTax / 12;
+  const cess = tax * 0.04; // 4% Health & Education Cess
+  const totalAnnualTax = tax + cess;
+  const monthlyTax = totalAnnualTax / 12;
 
-  // return {
-  //     annualTax: Math.round(totalAnnualTax),
-  //     monthlyTax: Math.round(monthlyTax),
-  //     netSalaryAfterTax: Math.round(monthlyNetSalary - monthlyTax)
-  // };
   return monthlyTax;
 }
 
-const salaryCalc = async (gross, leaves, totalLeaves, employeeId) => {
+// Example Usage
+// const salary = 200000; // Monthly Salary in INR
+// console.log(calculateIncomeTax(salary));
+
+const salaryCalc = async (
+  gross,
+  leaves,
+  totalLeaves,
+  employeeId,
+  salaryComponents,
+  professionalTax
+) => {
   if (!gross) return;
 
   // GROSS
-  const basic = Math.floor(gross * (50 / 100));
-  const da = basic * (75 / 100);
-  const hra = basic * (15 / 100);
-  const allowances = basic * (10 / 100);
-  // const gross = basic + da + hra + allowances;
+  // const basic = Math.floor(gross * (50 / 100));
+  // const da = basic * (75 / 100);
+  // const hra = basic * (15 / 100);
+  // const allowances = basic * (10 / 100);
+  const basic = Math.floor(gross * (salaryComponents.basic / 100));
+  const da = basic * (salaryComponents.da / 100);
+  const hra = basic * (salaryComponents.hra / 100);
+  const allowances = basic * (salaryComponents.otherAllowances / 100);
+  gross = basic + da + hra + allowances;
 
   // DEDUCTIONS
-  const pf = Math.floor(basic * (12 / 100));
-  const pt = gross < 15000 ? 0 : gross < 20000 ? 150 : 200;
+  const pf = Math.floor(basic * (salaryComponents.pf / 100));
+  // const pt = gross < 15000 ? 0 : gross < 20000 ? 150 : 200;
+  let pt = 0;
+  for (const item in professionalTax) {
+    if (gross >= item?.minValue && gross <= item?.maxValue) {
+      pt = item?.value;
+    }
+  }
 
   const deductions = pf + pt;
 
@@ -105,6 +157,20 @@ export async function GET() {
       `${process.env.RAZORPAY_TEST_ID}:${process.env.RAZORPAY_SECRET}`
     ).toString('base64');
 
+    const salaryComponentsData = await getSalaryComponents();
+    const professionalTaxData = await getProfessionalTax();
+    if (
+      !salaryComponentsData ||
+      !professionalTaxData ||
+      salaryComponentsData?.message !== 'success' ||
+      professionalTaxData?.message !== 'success'
+    ) {
+      throw new Error('No Dynamic Payscales found');
+    }
+    const salaryComponents = salaryComponentsData.data[0];
+    const professionalTax = professionalTaxData.data;
+    console.log('professionalTax:', professionalTax);
+
     employees.forEach(async (emp) => {
       const idempotencyKey = uuidv4();
       const totalLeaves = await getEmpLeaves(emp.id);
@@ -115,7 +181,9 @@ export async function GET() {
           emp.salary,
           emp.leaves,
           totalLeaves,
-          emp.id
+          emp.id,
+          salaryComponents,
+          professionalTax
         );
 
         const transaction_data = {

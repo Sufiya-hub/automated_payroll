@@ -17,7 +17,12 @@ import {
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
 
-const Header1 = ({ attendanceBtn, setAttendanceDialog, empName }) => {
+const Header1 = ({
+  attendanceBtn,
+  setAttendanceDialog,
+  empName,
+  setApplyLeave,
+}) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const handleSwitch = (value) => {
@@ -44,6 +49,12 @@ const Header1 = ({ attendanceBtn, setAttendanceDialog, empName }) => {
           </div>
         )}
         <Navbar />
+        <button
+          className=" outline-none rounded-full px-4 py-2 bg-empbg2/30 dark:bg-white/10 border-[1px] border-white/90 dark:border-white/30 dark:text-ewhite/80 "
+          onClick={() => setApplyLeave(true)}
+        >
+          Apply Leave
+        </button>
         <DropdownMenu className="">
           <DropdownMenuTrigger className="" asChild>
             <button className="flex gap-1 outline-none items-center p-4 border-[1px] border-white/90  bg-white/10  rounded-full dark:border-white/30 dark:text-ewhite/80">

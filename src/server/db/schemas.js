@@ -102,3 +102,15 @@ export const professionalTaxTable = pgTable('professionalTax', {
   maxValue: integer().default(null),
   value: integer().default(0),
 });
+
+export const leavesTable = pgTable('leavesTable', {
+  id: serial('id').primaryKey(),
+  employeeId: integer('employeeid')
+    .notNull()
+    .references(() => employeeTable.id),
+  purpose: varchar().notNull(),
+  from: date().notNull(),
+  to: date().notNull(),
+  body: varchar(),
+  status: varchar().default('pending'),
+});
