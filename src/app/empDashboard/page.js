@@ -98,12 +98,7 @@ const page = () => {
             setAttendanceDialog={setAttendanceDialog}
           />
         )}
-      {applyLeave && (
-        <ApplyLeave
-          setApplyLeave={setApplyLeave}
-          className="dark:bg:[#1E1E1E]"
-        />
-      )}
+      {applyLeave && <ApplyLeave setApplyLeave={setApplyLeave} />}
     </div>
   );
 };

@@ -17,6 +17,7 @@ import {
   gte,
   lt,
   lte,
+  desc,
   between,
   sql,
   ne,
@@ -504,6 +505,59 @@ export const postLeaveRequest = async (data) => {
   try {
     await db.insert(leavesTable).values(data);
     return { message: 'success' };
+  } catch (error) {
+    console.log(error);
+    return { message: 'error' };
+  }
+};
+
+export const getLeavesData = async (id) => {
+  try {
+    const data = await db
+      .select()
+      .from(leavesTable)
+      .where(eq(leavesTable.employeeId, id))
+      .orderBy(desc(leavesTable.date));
+    return { message: 'success', data };
+  } catch (error) {
+    console.log(error);
+    return { message: 'error' };
+  }
+};
+
+export const getAllLeavesData = async () => {
+  try {
+    const data = await db
+      .select({
+        id: leavesTable.id,
+        purpose: leavesTable.purpose,
+        name: employeeTable.fullName,
+        employeeId: leavesTable.employeeId,
+        date: leavesTable.date,
+        from: leavesTable.from,
+        to: leavesTable.to,
+        body: leavesTable.body,
+        status: leavesTable.status,
+      })
+      .from(leavesTable)
+      .fullJoin(employeeTable, eq(leavesTable.employeeId, employeeTable.id))
+      .where(isNotNull(leavesTable.employeeId))
+      .orderBy(desc(leavesTable.date));
+
+    return { message: 'success', data };
+  } catch (error) {
+    console.log(error);
+    return { message: 'error' };
+  }
+};
+
+export const updateLeaveStatus = async (id, status) => {
+  try {
+    const updatedData = await db
+      .update(leavesTable)
+      .set({ status })
+      .where(eq(leavesTable.id, id));
+    return { message: 'success', updatedData };
   } catch (error) {
     console.log(error);
     return { message: 'error' };

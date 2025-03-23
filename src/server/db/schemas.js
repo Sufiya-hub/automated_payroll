@@ -109,6 +109,7 @@ export const leavesTable = pgTable('leavesTable', {
     .notNull()
     .references(() => employeeTable.id),
   purpose: varchar().notNull(),
+  date: date().notNull(),
   from: date().notNull(),
   to: date().notNull(),
   body: varchar(),

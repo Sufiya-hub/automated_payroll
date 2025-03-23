@@ -24,7 +24,7 @@ const ApplyLeave = ({ setApplyLeave }) => {
       : toast.error(<p className="font-semibold">Can't send Leave Report</p>);
   return (
     <div className="absolute inset-0 z-20 bg-black/70 flex flex-col items-center p-6 h-full w-full ">
-      <div className="flex flex-col relative bg-white  dark:bg-empaccent dark:border-[1px] dark:border-white/50 dark:text-white h-full w-3/4 py-4 px-10 rounded-lg gap-4">
+      <div className="flex flex-col relative bg-white  dark:bg-empaccent/60 backdrop-blur-xl dark:border-[1px] dark:border-white/50 dark:text-white h-full w-3/4 py-4 px-10 rounded-lg gap-4">
         <h1 className="font-medium text-3xl text-center mb-4 text-brand">
           Apply Leave
         </h1>
