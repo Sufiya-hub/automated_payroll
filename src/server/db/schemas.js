@@ -85,6 +85,8 @@ export const notifTable = pgTable('notifs', {
   endTime: varchar(),
   ip: varchar(),
   setting: varchar(),
+  rootLatitude: varchar(),
+  rootLongitude: varchar(),
 });
 
 export const salaryComponentTable = pgTable('salaryComponents', {
