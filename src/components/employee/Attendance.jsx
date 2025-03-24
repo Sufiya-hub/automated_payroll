@@ -74,7 +74,7 @@ const Attendance = ({ imageName, setAttendanceDialog, attendanceDialog }) => {
 
   // Handle Image Load
   useEffect(() => {
-    console.log('ref:', refImgRef.current);
+    // console.log('ref:', refImgRef.current);
     if (!modelsLoaded || !refImgRef.current) return;
 
     console.log('loading started');

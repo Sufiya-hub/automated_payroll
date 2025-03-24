@@ -37,16 +37,28 @@ const Section1 = ({ setAttendanceDialog }) => {
       const socket = new WebSocket(process.env.NEXT_PUBLIC_WS_URL);
       socket.onopen = async () => {
         const res = await getIpAddress();
-        if (res?.message === 'success') {
-          socket.send(JSON.stringify({ ip: res.ip }));
-          await handleAtRequest();
-          await postNotif({ ip: res.ip });
-          setIsLoading(false);
+        navigator.geolocation.getCurrentPosition(async (position) => {
+          const latitude = position.coords.latitude;
+          const longitude = position.coords.longitude;
 
-          return notify('success');
-        }
+          if (res?.message === 'success') {
+            socket.send(
+              JSON.stringify({
+                ip: res.ip,
+                adminLatitude: latitude,
+                adminLongitude: longitude,
+              })
+            );
+            await handleAtRequest();
+            await postNotif({ ip: res.ip });
+            setIsLoading(false);
+
+            return notify('success');
+          } else {
+            notify('fail');
+          }
+        });
         setIsLoading(false);
-        notify('fail');
       };
     } catch (error) {
       setIsLoading(false);

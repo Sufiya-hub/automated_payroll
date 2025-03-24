@@ -24,7 +24,7 @@ function getDayRatios(data) {
     ])
   );
 
-  console.log(output);
+  // console.log(output);
   // Convert to desired format as an object
   return output;
 }
@@ -35,7 +35,7 @@ const Progress = ({ attendance }) => {
   useEffect(() => {
     if (attendance) setProgress(getDayRatios(attendance));
   }, [attendance]);
-  console.log('progress: ', progress);
+  // console.log('progress: ', progress);
   return (
     <div className="flex flex-col gap-3 px-7 py-4  rounded-xl bg-white/5 border-[1px] border-white/60 w-full text-ehighlight h-auto transition-all">
       <div className="flex justify-between">
