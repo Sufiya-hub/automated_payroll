@@ -88,25 +88,28 @@ function calculateIncomeTax(monthlyNetSalary) {
 // console.log(calculateIncomeTax(salary));
 
 const salaryCalc = async (
-  gross,
+  // gross,
+  basic,
   leaves,
   totalLeaves,
   employeeId,
   salaryComponents,
   professionalTax
 ) => {
-  if (!gross) return;
+  if (!basic) return;
 
   // GROSS
   // const basic = Math.floor(gross * (50 / 100));
   // const da = basic * (75 / 100);
   // const hra = basic * (15 / 100);
   // const allowances = basic * (10 / 100);
-  const basic = Math.floor(gross * (salaryComponents.basic / 100));
+
+  // Prev basic cal
+  // const basic = Math.floor(gross * (salaryComponents.basic / 100));
   const da = basic * (salaryComponents.da / 100);
   const hra = basic * (salaryComponents.hra / 100);
   const allowances = basic * (salaryComponents.otherAllowances / 100);
-  gross = basic + da + hra + allowances;
+  const gross = basic + da + hra + allowances;
 
   // DEDUCTIONS
   const pf = Math.floor(basic * (salaryComponents.pf / 100));
@@ -149,6 +152,9 @@ const salaryCalc = async (
   console.log('results:', results);
   return results;
 };
+
+const data = salaryCalc(20000);
+console.log(data);
 
 export async function GET() {
   try {
