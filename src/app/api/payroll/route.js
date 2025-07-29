@@ -106,13 +106,13 @@ const salaryCalc = async (
 
   // Prev basic cal
   // const basic = Math.floor(gross * (salaryComponents.basic / 100));
-  const da = basic * (salaryComponents.da / 100);
-  const hra = basic * (salaryComponents.hra / 100);
-  const allowances = basic * (salaryComponents.otherAllowances / 100);
+  const da = basic * ((salaryComponents?.da || 75) / 100);
+  const hra = basic * ((salaryComponents?.hra || 15) / 100);
+  const allowances = basic * ((salaryComponents?.otherAllowances || 10) / 100);
   const gross = basic + da + hra + allowances;
 
   // DEDUCTIONS
-  const pf = Math.floor(basic * (salaryComponents.pf / 100));
+  const pf = Math.floor(basic * ((salaryComponents?.pf || 12) / 100));
   // const pt = gross < 15000 ? 0 : gross < 20000 ? 150 : 200;
   let pt = 0;
   for (const item in professionalTax) {
