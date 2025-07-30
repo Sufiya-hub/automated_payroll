@@ -87,8 +87,73 @@ function calculateIncomeTax(monthlyNetSalary) {
 // const salary = 200000; // Monthly Salary in INR
 // console.log(calculateIncomeTax(salary));
 
+// const salaryCalc = async (
+//   // gross,
+//   basic,
+//   leaves,
+//   totalLeaves,
+//   employeeId,
+//   salaryComponents,
+//   professionalTax
+// ) => {
+//   if (!basic) return;
+
+//   // GROSS
+//   // const basic = Math.floor(gross * (50 / 100));
+//   // const da = basic * (75 / 100);
+//   // const hra = basic * (15 / 100);
+//   // const allowances = basic * (10 / 100);
+
+//   // Prev basic cal
+//   // const basic = Math.floor(gross * (salaryComponents.basic / 100));
+//   const da = basic * ((salaryComponents?.da || 75) / 100);
+//   const hra = basic * ((salaryComponents?.hra || 15) / 100);
+//   const allowances = basic * ((salaryComponents?.otherAllowances || 10) / 100);
+//   const gross = basic + da + hra + allowances;
+
+//   // DEDUCTIONS
+//   const pf = Math.floor(basic * ((salaryComponents?.pf || 12) / 100));
+//   // const pt = gross < 15000 ? 0 : gross < 20000 ? 150 : 200;
+//   let pt = 0;
+//   for (const item in professionalTax) {
+//     if (gross >= item?.minValue && gross <= item?.maxValue) {
+//       pt = item?.value;
+//     }
+//   }
+
+//   const deductions = pf + pt;
+
+//   // net * 12 = 10,80,000 * 14%
+//   // NET
+//   let net = Math.floor(gross - deductions);
+//   const tax = calculateIncomeTax(net);
+//   net -= Math.floor(tax);
+
+//   // LOL
+//   // (totalfalse) - x
+//   //  if(totalfalse > x) net - (gross//30 * (totalfalse % x))
+//   let excessLeaves = 0;
+//   if (totalLeaves > leaves) {
+//     net = Math.floor(net - Math.floor(gross / 30) * (totalLeaves % leaves));
+//     await updateEmpLeaves(employeeId, totalLeaves);
+//   }
+//   const results = {
+//     basic,
+//     da,
+//     hra,
+//     allowances,
+//     gross,
+//     pf,
+//     pt,
+//     deductions,
+//     net,
+//     tax,
+//   };
+//   console.log('results:', results);
+//   return results;
+// };
+
 const salaryCalc = async (
-  // gross,
   basic,
   leaves,
   totalLeaves,
@@ -96,47 +161,38 @@ const salaryCalc = async (
   salaryComponents,
   professionalTax
 ) => {
-  if (!basic) return;
+  if (basic == null) return;
 
-  // GROSS
-  // const basic = Math.floor(gross * (50 / 100));
-  // const da = basic * (75 / 100);
-  // const hra = basic * (15 / 100);
-  // const allowances = basic * (10 / 100);
-
-  // Prev basic cal
-  // const basic = Math.floor(gross * (salaryComponents.basic / 100));
-  const da = basic * ((salaryComponents?.da || 75) / 100);
-  const hra = basic * ((salaryComponents?.hra || 15) / 100);
-  const allowances = basic * ((salaryComponents?.otherAllowances || 10) / 100);
+  const da = basic * ((salaryComponents?.da ?? 75) / 100);
+  const hra = basic * ((salaryComponents?.hra ?? 15) / 100);
+  const allowances = basic * ((salaryComponents?.otherAllowances ?? 10) / 100);
   const gross = basic + da + hra + allowances;
 
-  // DEDUCTIONS
-  const pf = Math.floor(basic * ((salaryComponents?.pf || 12) / 100));
-  // const pt = gross < 15000 ? 0 : gross < 20000 ? 150 : 200;
+  const pf = Math.floor(basic * ((salaryComponents?.pf ?? 12) / 100));
+
+  // Professional Tax Slab Logic Fix
   let pt = 0;
-  for (const item in professionalTax) {
-    if (gross >= item?.minValue && gross <= item?.maxValue) {
-      pt = item?.value;
+  for (const item of professionalTax) {
+    if (gross >= item.minValue && gross <= item.maxValue) {
+      pt = item.value;
+      break;
     }
   }
 
   const deductions = pf + pt;
 
-  // net * 12 = 10,80,000 * 14%
-  // NET
   let net = Math.floor(gross - deductions);
+
   const tax = calculateIncomeTax(net);
   net -= Math.floor(tax);
 
-  // LOL
-  // (totalfalse) - x
-  //  if(totalfalse > x) net - (gross//30 * (totalfalse % x))
-  let excessLeaves = 0;
   if (totalLeaves > leaves) {
-    net = Math.floor(net - Math.floor(gross / 30) * (totalLeaves % leaves));
+    const excessLeaves = totalLeaves - leaves;
+    const perDaySalary = gross / 30;
+    net -= Math.floor(perDaySalary * excessLeaves);
     await updateEmpLeaves(employeeId, totalLeaves);
   }
+
   const results = {
     basic,
     da,
@@ -149,6 +205,7 @@ const salaryCalc = async (
     net,
     tax,
   };
+
   console.log('results:', results);
   return results;
 };
