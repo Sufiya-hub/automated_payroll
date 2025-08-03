@@ -30,9 +30,13 @@ export async function POST(req) {
       account_number: body.account_number,
     };
 
+    console.log('dbData:', data);
+
     const auth = Buffer.from(
       `${process.env.RAZORPAY_TEST_ID}:${process.env.RAZORPAY_SECRET}`
     ).toString('base64');
+
+    console.log('auth:', auth);
 
     await axios
       .post('https://api.razorpay.com/v1/fund_accounts', data, {
@@ -42,7 +46,7 @@ export async function POST(req) {
         },
       })
       .then((response) => {
-        // console.log('Success:', response.data);
+        console.log('Success:', response.data);
         if (response?.data?.id) dbData.fund_account_number = response.data.id;
       })
       .catch((error) => {
