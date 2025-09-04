@@ -6,6 +6,7 @@ import { signIn } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react';
 import { ToastContainer, toast } from 'react-toastify';
+import ForgotPassword from '@/components/ForgotPassword';
 
 const Page = () => {
   const session = useSession();
@@ -30,6 +31,7 @@ const Page = () => {
   }, [user, router]);
 
   const [data, setData] = useState({ email: '', password: '' });
+  const [showForgot, setShowForgot] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -98,6 +100,17 @@ const Page = () => {
               }
             />
           </div>
+          <div className="flex items-center justify-between mt-2 text-sm">
+            <span className="text-gray-500">Forgot your password?</span>
+            <button
+              type="button"
+              className="text-blue-600 hover:underline"
+              onClick={() => setShowForgot(true)}
+            >
+              Reset password
+            </button>
+          </div>
+
           <button
             type="submit"
             className="border-2 hover:bg-zinc-800 active:scale-95 transition-all rounded-lg w-full text-center mt-6 p-2 shadow-xl font-medium bg-black text-white"
@@ -109,6 +122,11 @@ const Page = () => {
           <Image src={'/heroBg.jpg'} alt="heroBg" fill className="rounded-lg" />
         </div>
       </div>
+      <ForgotPassword
+        open={showForgot}
+        onClose={() => setShowForgot(false)}
+        presetEmail={data.email}
+      />
     </div>
   );
 };
