@@ -1,5 +1,7 @@
 'use client';
 import React, { useState } from 'react';
+import { useSession } from 'next-auth/react';
+import { ToastContainer, toast } from 'react-toastify';
 import { signOut } from 'next-auth/react';
 import Navbar from './Navbar';
 import { IoSettingsOutline } from 'react-icons/io5';
@@ -24,11 +26,44 @@ const Header1 = ({
   setApplyLeave,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const [isSendingReset, setIsSendingReset] = useState(false);
+  const session = useSession();
 
   const handleSwitch = (value) => {
     console.log('mode:', value);
     if (value) document.documentElement.classList.add('dark');
     else document.documentElement.classList.remove('dark');
+  };
+
+  const handleResetPassword = async () => {
+    try {
+      const email = session?.data?.user?.email;
+      if (!email) {
+        toast.error(<p className="font-semibold">No email on session</p>);
+        return;
+      }
+      setIsSendingReset(true);
+      const res = await fetch('/api/auth/forgot-password', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email }),
+      });
+      if (!res.ok) {
+        const body = await res.json().catch(() => ({}));
+        throw new Error(body?.message || 'Unable to send email');
+      }
+      toast.success(
+        <p className="font-semibold">Reset link sent if email exists</p>
+      );
+    } catch (err) {
+      toast.error(
+        <p className="font-semibold">
+          {err?.message || 'Something went wrong'}
+        </p>
+      );
+    } finally {
+      setIsSendingReset(false);
+    }
   };
 
   return (
@@ -80,6 +115,12 @@ const Header1 = ({
             </button>
           </DropdownMenuTrigger>
           <DropdownMenuContent className="">
+            <DropdownMenuItem
+              className="bg-white dark:bg-transparent font-bold hover:text-white   cursor-pointer px-3 py-2 rounded-lg  hover:shadow-xl  transition-all"
+              onClick={handleResetPassword}
+            >
+              {isSendingReset ? 'Sending…' : 'Reset password'}
+            </DropdownMenuItem>
             <DropdownMenuItem
               className="bg-white dark:bg-transparent font-bold hover:text-white   cursor-pointer px-3 py-2 rounded-lg  hover:shadow-xl  transition-all"
               onClick={signOut}

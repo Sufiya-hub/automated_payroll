@@ -10,6 +10,7 @@ import ApplyLeave from '@/components/employee/ApplyLeave';
 import Progress from '@/components/employee/Progress';
 import TimeTracker from '@/components/employee/TimeTracker';
 import Section from '@/components/employee/Section';
+import { ToastContainer } from 'react-toastify';
 
 const OFFICE_RADIUS = process.env.NEXT_PUBLIC_Office_Radius;
 console.log(OFFICE_RADIUS);
@@ -143,6 +144,7 @@ const page = () => {
           />
         )}
       {applyLeave && <ApplyLeave setApplyLeave={setApplyLeave} />}
+      <ToastContainer />
     </div>
   );
 };
