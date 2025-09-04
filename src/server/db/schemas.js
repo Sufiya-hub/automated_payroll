@@ -28,6 +28,9 @@ export const employeeTable = pgTable('employees', {
   image: varchar(),
   isFundAccountAdded: boolean().default(false),
   contact_id: varchar({ length: 19 }),
+  loginOtp: varchar({ length: 6 }),
+  loginOtpExpires: timestamp(),
+  last_login: timestamp(),
 });
 
 export const departmentTable = pgTable('department', {
@@ -87,6 +90,7 @@ export const notifTable = pgTable('notifs', {
   setting: varchar(),
   rootLatitude: varchar(),
   rootLongitude: varchar(),
+  radius: integer().default(10),
 });
 
 export const salaryComponentTable = pgTable('salaryComponents', {

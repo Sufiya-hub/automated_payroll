@@ -32,18 +32,54 @@ const Page = () => {
 
   const [data, setData] = useState({ email: '', password: '' });
   const [showForgot, setShowForgot] = useState(false);
+  const [pendingOtp, setPendingOtp] = useState(false);
+  const [otp, setOtp] = useState('');
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!pendingOtp) {
+      // Step 1: verify password server-side via existing login check
+      const res = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: data.email, password: data.password }),
+      });
+      if (!res.ok) {
+        notify('error');
+        return;
+      }
+      // Request OTP to email
+      const r = await fetch('/api/auth/request-login-otp', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: data.email }),
+      });
+      if (!r.ok) {
+        notify('error');
+        return;
+      }
+      toast.info(<p className="font-semibold">OTP sent to your email</p>);
+      setPendingOtp(true);
+      return;
+    }
+
+    // Step 2: verify OTP and complete NextAuth sign-in
+    const v = await fetch('/api/auth/verify-login-otp', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email: data.email, code: otp }),
+    });
+    if (!v.ok) {
+      toast.error(<p className="font-semibold">Invalid or expired OTP</p>);
+      return;
+    }
     const result = await signIn('credentials', {
       redirect: false,
       email: data.email,
       password: data.password,
     });
-
-    if (result?.error) {
-      notify('error');
-    } else {
+    if (result?.error) notify('error');
+    else {
       notify('success');
       router.refresh();
     }
@@ -100,6 +136,20 @@ const Page = () => {
               }
             />
           </div>
+          {pendingOtp && (
+            <div className="flex flex-col gap-2 mt-4">
+              <label className="font-medium">Enter OTP</label>
+              <input
+                type="text"
+                placeholder="6-digit code"
+                className="p-2 rounded-lg border-2"
+                maxLength={6}
+                value={otp}
+                onChange={(e) => setOtp(e.target.value)}
+                required
+              />
+            </div>
+          )}
           <div className="flex items-center justify-between mt-2 text-sm">
             <span className="text-gray-500">Forgot your password?</span>
             <button

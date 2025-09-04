@@ -68,6 +68,60 @@ export const login = async (email, password) => {
   }
 };
 
+export const setLoginOtp = async (email, code, expiresAt) => {
+  try {
+    await db
+      .update(employeeTable)
+      .set({ loginOtp: code, loginOtpExpires: expiresAt })
+      .where(eq(employeeTable.email, email));
+    return true;
+  } catch (error) {
+    console.log(error);
+    return false;
+  }
+};
+
+export const verifyLoginOtp = async (email, code) => {
+  try {
+    const users = await db
+      .select({
+        loginOtp: employeeTable.loginOtp,
+        loginOtpExpires: employeeTable.loginOtpExpires,
+        id: employeeTable.id,
+        position: employeeTable.position,
+        image: employeeTable.image,
+        fullName: employeeTable.fullName,
+        salary: employeeTable.salary,
+        email: employeeTable.email,
+      })
+      .from(employeeTable)
+      .where(eq(employeeTable.email, email));
+    const user = users?.[0];
+    if (!user) return false;
+    if (!user.loginOtp || !user.loginOtpExpires) return false;
+    const now = new Date();
+    const exp = new Date(user.loginOtpExpires);
+    if (now > exp) return false;
+    if (user.loginOtp !== code) return false;
+    // Clear OTP after use
+    await db
+      .update(employeeTable)
+      .set({ loginOtp: null, loginOtpExpires: null })
+      .where(eq(employeeTable.email, email));
+    return {
+      id: user.id,
+      email: user.email,
+      position: user.position,
+      image: user.image,
+      fullName: user.fullName,
+      salary: user.salary,
+    };
+  } catch (error) {
+    console.log(error);
+    return false;
+  }
+};
+
 export const getManagers = async () => {
   try {
     const data = await db

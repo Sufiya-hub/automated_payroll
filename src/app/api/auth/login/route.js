@@ -5,11 +5,11 @@ export async function POST(req) {
   try {
     const { email, password } = await req.json();
     const res = await login(email, password);
-    // console.log('res:', res);
-    if (!res?.[0]) throw new Error('Problem Occured');
-    return NextResponse.json({ data: res[0], message: 'ok' });
+    if (!res) return NextResponse.json({ message: 'invalid' }, { status: 401 });
+    // res is a user object (server/queries.login returns user or false)
+    return NextResponse.json({ message: 'ok' });
   } catch (error) {
     console.log(error);
-    return NextResponse.json({ message: 'error' });
+    return NextResponse.json({ message: 'error' }, { status: 500 });
   }
 }
