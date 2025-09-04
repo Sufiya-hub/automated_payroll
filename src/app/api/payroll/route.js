@@ -153,8 +153,8 @@ const salaryCalc = async (
   return results;
 };
 
-const data = salaryCalc(20000);
-console.log(data);
+// const data = salaryCalc(20000);
+// console.log(data);
 
 export async function GET() {
   try {

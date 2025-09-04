@@ -24,6 +24,8 @@ export async function POST(req) {
       },
     };
 
+    console.log('data:', data);
+
     let dbData = {
       employeeId: employeeData.id,
       ifsc: body.ifsc,
@@ -42,7 +44,7 @@ export async function POST(req) {
         },
       })
       .then((response) => {
-        // console.log('Success:', response.data);
+        console.log('Success:', response.data);
         if (response?.data?.id) dbData.fund_account_number = response.data.id;
       })
       .catch((error) => {
