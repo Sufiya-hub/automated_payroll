@@ -275,6 +275,7 @@ export const getPayrollEmployees = async () => {
 export const getEmpLeaves = async (id) => {
   try {
     const curyear = new Date().getFullYear();
+    const curmonth = new Date().getMonth();
     const leaves = await db
       .select({ count: sql`count(*)` })
       .from(attendanceTable)
@@ -282,8 +283,8 @@ export const getEmpLeaves = async (id) => {
         and(
           eq(attendanceTable.employeeId, id),
           eq(attendanceTable.status, false),
-          gte(attendanceTable.attendanceDate, `${curyear}-01-01`),
-          lte(attendanceTable.attendanceDate, `${curyear}-12-31`)
+          gte(attendanceTable.attendanceDate, `${curyear}-${curmonth}-01`),
+          lte(attendanceTable.attendanceDate, `${curyear}-${curmonth}-31`)
         )
       );
     // console.log({ leaves: data });
@@ -300,7 +301,8 @@ export const updateEmpLeaves = async (id, newLeaves) => {
     await db
       .update(employeeTable)
       .set({ leaves: newLeaves })
-      .where(employeeTable.id, id);
+      .where(eq(employeeTable.id, id));
+
     return { message: 'success' };
   } catch (error) {
     console.log(error);

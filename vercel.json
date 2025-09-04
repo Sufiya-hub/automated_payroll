@@ -1,8 +1,8 @@
 {
   "crons": [
     {
-      "path": "/api/payroll/transfer",
-      "schedule": "30 6 4 * * "
+      "path": "/api/payroll",
+      "schedule": "30 6 4 * *"
     }
   ]
 }

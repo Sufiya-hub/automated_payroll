@@ -13,48 +13,6 @@ import axios from 'axios';
 import { v4 as uuidv4 } from 'uuid';
 import ProfessionalTax from '@/components/admin/ProfessionalTax';
 
-// function calculateIncomeTax(monthlyNetSalary) {
-//   const annualNetSalary = monthlyNetSalary * 12;
-//   // const standardDeduction = 50000;
-//   const taxableIncome = annualNetSalary;
-
-//   let tax = 0;
-
-//   if (taxableIncome <= 300000) {
-//     tax = 0;
-//   } else if (taxableIncome <= 600000) {
-//     tax = (taxableIncome - 300000) * 0.05;
-//   } else if (taxableIncome <= 900000) {
-//     tax = 300000 * 0.05 + (taxableIncome - 600000) * 0.1;
-//   } else if (taxableIncome <= 1200000) {
-//     tax = 300000 * 0.05 + 300000 * 0.1 + (taxableIncome - 900000) * 0.15;
-//   } else if (taxableIncome <= 1500000) {
-//     tax =
-//       300000 * 0.05 +
-//       300000 * 0.1 +
-//       300000 * 0.15 +
-//       (taxableIncome - 1200000) * 0.2;
-//   } else {
-//     tax =
-//       300000 * 0.05 +
-//       300000 * 0.1 +
-//       300000 * 0.15 +
-//       300000 * 0.2 +
-//       (taxableIncome - 1500000) * 0.3;
-//   }
-
-//   let cess = tax * 0.04;
-//   let totalAnnualTax = tax + cess;
-//   let monthlyTax = totalAnnualTax / 12;
-
-//   // return {
-//   //     annualTax: Math.round(totalAnnualTax),
-//   //     monthlyTax: Math.round(monthlyTax),
-//   //     netSalaryAfterTax: Math.round(monthlyNetSalary - monthlyTax)
-//   // };
-//   return monthlyTax;
-// }
-
 function calculateIncomeTax(monthlyNetSalary) {
   const annualNetSalary = monthlyNetSalary * 12;
   let taxableIncome = annualNetSalary;
@@ -83,72 +41,269 @@ function calculateIncomeTax(monthlyNetSalary) {
   return monthlyTax;
 }
 
-// Example Usage
-// const salary = 200000; // Monthly Salary in INR
-// console.log(calculateIncomeTax(salary));
+// const salaryCalc = async (
+//   // gross,
+//   basic,
+//   leaves,
+//   totalLeaves,
+//   employeeId,
+//   salaryComponents,
+//   professionalTax
+// ) => {
+//   if (!basic) return;
+
+//   // GROSS
+//   // const basic = Math.floor(gross * (50 / 100));
+//   // const da = basic * (75 / 100);
+//   // const hra = basic * (15 / 100);
+//   // const allowances = basic * (10 / 100);
+
+//   // Prev basic cal
+//   // const basic = Math.floor(gross * (salaryComponents.basic / 100));
+//   const da = basic * ((salaryComponents?.da || 75) / 100);
+//   const hra = basic * ((salaryComponents?.hra || 15) / 100);
+//   const allowances = basic * ((salaryComponents?.otherAllowances || 10) / 100);
+//   const gross = basic + da + hra + allowances;
+
+//   // DEDUCTIONS
+//   const pf = Math.floor(basic * ((salaryComponents?.pf || 12) / 100));
+//   // const pt = gross < 15000 ? 0 : gross < 20000 ? 150 : 200;
+//   let pt = 0;
+//   for (const item in professionalTax) {
+//     if (gross >= item?.minValue && gross <= item?.maxValue) {
+//       pt = item?.value;
+//     }
+//   }
+
+//   const deductions = pf + pt;
+
+//   // net * 12 = 10,80,000 * 14%
+//   // NET
+//   let net = Math.floor(gross - deductions);
+//   const tax = calculateIncomeTax(net);
+//   net -= Math.floor(tax);
+
+//   // LOL
+//   // (totalfalse) - x
+//   //  if(totalfalse > x) net - (gross//30 * (totalfalse % x))
+//   let excessLeaves = 0;
+//   if (totalLeaves > leaves) {
+//     net = Math.floor(net - Math.floor(gross / 30) * (totalLeaves % leaves));
+//     await updateEmpLeaves(employeeId, totalLeaves);
+//   }
+//   const results = {
+//     basic,
+//     da,
+//     hra,
+//     allowances,
+//     gross,
+//     pf,
+//     pt,
+//     deductions,
+//     net,
+//     tax,
+//   };
+//   console.log('results:', results);
+//   return results;
+// };
+
+// const salaryCalc = async (
+//   basic,
+//   leaves,
+//   totalLeaves,
+//   employeeId,
+//   salaryComponents,
+//   professionalTax
+// ) => {
+//   if (basic == null) return;
+
+//   const da = basic * ((salaryComponents?.da ?? 75) / 100);
+//   const hra = basic * ((salaryComponents?.hra ?? 15) / 100);
+//   const allowances = basic * ((salaryComponents?.otherAllowances ?? 10) / 100);
+//   const gross = basic + da + hra + allowances;
+
+//   const pf = Math.floor(basic * ((salaryComponents?.pf ?? 12) / 100));
+
+//   // Professional Tax Slab Logic Fix
+//   let pt = 0;
+//   for (const item of professionalTax) {
+//     if (gross >= item.minValue && gross <= item.maxValue) {
+//       pt = item.value;
+//       break;
+//     }
+//   }
+
+//   const deductions = pf + pt;
+
+//   let net = Math.floor(gross - deductions);
+
+//   const tax = calculateIncomeTax(net);
+//   net -= Math.floor(tax);
+
+//   if (totalLeaves > leaves) {
+//     const excessLeaves = totalLeaves - leaves;
+//     const perDaySalary = gross / 30;
+//     net -= Math.floor(perDaySalary * excessLeaves);
+//     await updateEmpLeaves(employeeId, totalLeaves);
+//   }
+
+//   const results = {
+//     basic,
+//     da,
+//     hra,
+//     allowances,
+//     gross,
+//     pf,
+//     pt,
+//     deductions,
+//     net,
+//     tax,
+//   };
+
+//   console.log('results:', results);
+//   return results;
+// };
+
+// const salaryCalc = async (
+//   gross,
+//   leaves,
+//   totalLeaves,
+//   employeeId,
+//   salaryComponents,
+//   professionalTax
+// ) => {
+//   if (gross == null) return;
+
+//   const basic = gross * (50 / 100);
+//   const da = basic * ((salaryComponents?.da ?? 75) / 100);
+//   const hra = basic * ((salaryComponents?.hra ?? 15) / 100);
+//   const allowances = basic * ((salaryComponents?.otherAllowances ?? 10) / 100);
+//   //const gross = basic + da + hra + allowances;
+
+//   const pf = Math.floor(basic * ((salaryComponents?.pf ?? 12) / 100));
+
+//   // Professional Tax Slab Logic Fix
+//   let pt = 0;
+//   for (const item of professionalTax) {
+//     if (gross >= item.minValue && gross <= item.maxValue) {
+//       pt = item.value;
+//       break;
+//     }
+//   }
+
+//   const deductions = pf + pt;
+
+//   let net = Math.floor(gross - deductions);
+
+//   const tax = calculateIncomeTax(gross);
+//   net -= Math.floor(tax);
+
+//   if (totalLeaves > leaves) {
+//     const excessLeaves = totalLeaves - leaves;
+//     const perDaySalary = gross / 30;
+//     net -= Math.floor(perDaySalary * excessLeaves);
+//     await updateEmpLeaves(employeeId, totalLeaves);
+//   }
+
+//   const results = {
+//     basic,
+//     da,
+//     hra,
+//     allowances,
+//     gross,
+//     pf,
+//     pt,
+//     deductions,
+//     net,
+//     tax,
+//   };
+
+//   console.log('results:', results);
+//   return results;
+// };
 
 const salaryCalc = async (
-  // gross,
-  basic,
+  gross,
   leaves,
   totalLeaves,
   employeeId,
   salaryComponents,
   professionalTax
 ) => {
-  if (!basic) return;
+  if (gross == null) return;
 
-  // GROSS
-  // const basic = Math.floor(gross * (50 / 100));
-  // const da = basic * (75 / 100);
-  // const hra = basic * (15 / 100);
-  // const allowances = basic * (10 / 100);
+  const totalDaysInMonth = 30;
+  const presentDays = Math.max(0, totalDaysInMonth - totalLeaves);
+  const perDayGross = gross / totalDaysInMonth;
 
-  // Prev basic cal
-  // const basic = Math.floor(gross * (salaryComponents.basic / 100));
-  const da = basic * (salaryComponents.da / 100);
-  const hra = basic * (salaryComponents.hra / 100);
-  const allowances = basic * (salaryComponents.otherAllowances / 100);
-  const gross = basic + da + hra + allowances;
+  // Pay only for actual present days
+  const actualGross = perDayGross * presentDays;
 
-  // DEDUCTIONS
-  const pf = Math.floor(basic * (salaryComponents.pf / 100));
-  // const pt = gross < 15000 ? 0 : gross < 20000 ? 150 : 200;
+  const basic = gross * (50 / 100);
+  const da = basic * ((salaryComponents?.da ?? 75) / 100);
+  const hra = basic * ((salaryComponents?.hra ?? 15) / 100);
+  const allowances = basic * ((salaryComponents?.otherAllowances ?? 10) / 100);
+
+  const pf = Math.floor(basic * ((salaryComponents?.pf ?? 12) / 100));
+
+  // Professional Tax based on actual gross
   let pt = 0;
-  for (const item in professionalTax) {
-    if (gross >= item?.minValue && gross <= item?.maxValue) {
-      pt = item?.value;
+  if (professionalTax && professionalTax.length > 0)
+    for (const item of professionalTax) {
+      if (actualGross >= item.minValue && actualGross <= item.maxValue) {
+        pt = item.value;
+        break;
+      }
     }
-  }
 
-  const deductions = pf + pt;
+  const tax = calculateIncomeTax(gross); // Based on full monthly gross
+  const deductions = pf + pt + Math.floor(tax);
 
-  // net * 12 = 10,80,000 * 14%
-  // NET
-  let net = Math.floor(gross - deductions);
-  const tax = calculateIncomeTax(net);
-  net -= Math.floor(tax);
+  let net = Math.floor(actualGross - deductions);
 
-  // LOL
-  // (totalfalse) - x
-  //  if(totalfalse > x) net - (gross//30 * (totalfalse % x))
-  let excessLeaves = 0;
-  if (totalLeaves > leaves) {
-    net = Math.floor(net - Math.floor(gross / 30) * (totalLeaves % leaves));
+  // If no attendance, no salary
+  if (presentDays === 0) {
     await updateEmpLeaves(employeeId, totalLeaves);
+    return {
+      basic: basic || 0,
+      da: da || 0,
+      hra: hra || 0,
+      allowances: allowances || 0,
+      gross: gross || 0,
+      pf: pf || 0,
+      pt: pt || 0,
+      tax: tax || 0,
+      deductions: deductions || 0,
+      net: 0,
+      presentDays: presentDays || 0,
+      totalLeaves: totalLeaves || 0,
+    };
   }
+
+  // Deduct for excess leaves if any (beyond allowed)
+  if (totalLeaves > leaves) {
+    const excessLeaves = totalLeaves - leaves;
+    const excessLeaveDeduction = Math.floor(perDayGross * excessLeaves);
+    net -= excessLeaveDeduction;
+  }
+
+  await updateEmpLeaves(employeeId, totalLeaves);
+
   const results = {
-    basic,
-    da,
-    hra,
-    allowances,
-    gross,
-    pf,
-    pt,
-    deductions,
-    net,
-    tax,
+    basic: basic || 0,
+    da: da || 0,
+    hra: hra || 0,
+    allowances: allowances || 0,
+    gross: actualGross || 0,
+    pf: pf || 0,
+    pt: pt || 0,
+    tax: tax || 0,
+    deductions: deductions || 0,
+    net: net || 0,
+    presentDays: presentDays || 0,
+    totalLeaves: totalLeaves || 0,
   };
+
   console.log('results:', results);
   return results;
 };
@@ -229,7 +384,19 @@ export async function GET() {
               error.response ? error.response.data : error.message
             );
           });
-        if (transaction_status === 'success') {
+        // if (transaction_status === 'success') {
+        //   const dbData = {
+        //     employeeId: emp.id,
+        //     transactionId: transaction_res.id,
+        //     amount: transaction_res.amount,
+        //     fund_account_number: transaction_res.fund_account_id,
+        //     status: 'success',
+        //     purpose: 'salary',
+        //     tax: paydivision.tax,
+        //   };
+        //   await postPayroll(dbData);
+        // }
+        if (transaction_status === 'success' && transaction_res) {
           const dbData = {
             employeeId: emp.id,
             transactionId: transaction_res.id,
@@ -239,7 +406,20 @@ export async function GET() {
             purpose: 'salary',
             tax: paydivision.tax,
           };
-          await postPayroll(dbData);
+
+          // Skip if essential fields are missing
+          if (
+            !dbData.transactionId ||
+            !dbData.amount ||
+            !dbData.fund_account_number
+          ) {
+            console.warn(
+              `Skipping DB insert for emp ${emp.id}: Incomplete data`,
+              dbData
+            );
+          } else {
+            await postPayroll(dbData);
+          }
         }
       }
     });
