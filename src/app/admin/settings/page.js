@@ -2,6 +2,7 @@ import React from 'react';
 import AdminLayout from '@/components/AdminLayout';
 import SalaryComponent from '@/components/admin/SalaryComponent';
 import ProfessionalTax from '@/components/admin/ProfessionalTax';
+import AttendanceRadius from '@/components/admin/AttendanceRadius';
 
 const page = () => {
   return (
@@ -10,6 +11,7 @@ const page = () => {
         <h1 className="text-xl font-medium">Settings</h1>
         <SalaryComponent />
         <ProfessionalTax />
+        <AttendanceRadius />
       </div>
     </AdminLayout>
   );

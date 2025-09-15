@@ -6,6 +6,7 @@ import {
   bankTable,
   payrollTable,
   notifTable,
+  configTable,
   salaryComponentTable,
   professionalTaxTable,
   leavesTable,
@@ -495,6 +496,43 @@ export const postAttendanceNotif = async (ip) => {
   }
 };
 
+export const getAttendanceRadius = async () => {
+  try {
+    const data = await db
+      .select({ value: configTable.value })
+      .from(configTable)
+      .where(eq(configTable.key, 'RADIUS'));
+    const radius = data?.[0]?.value ? Number(data[0].value) : 10;
+    return { message: 'success', radius };
+  } catch (error) {
+    console.log(error);
+    return { message: 'error' };
+  }
+};
+
+export const updateAttendanceRadius = async (radius) => {
+  try {
+    const value = String(radius);
+    // Upsert: update if exists, else insert
+    const existing = await db
+      .select({ value: configTable.value })
+      .from(configTable)
+      .where(eq(configTable.key, 'RADIUS'));
+    if (existing?.length) {
+      await db
+        .update(configTable)
+        .set({ value })
+        .where(eq(configTable.key, 'RADIUS'));
+    } else {
+      await db.insert(configTable).values({ key: 'RADIUS', value });
+    }
+    return { message: 'success' };
+  } catch (error) {
+    console.log(error);
+    return { message: 'error' };
+  }
+};
+
 export const getAttendanceByDate = async (date) => {
   // let date = '2025-03-10';
   try {
@@ -575,6 +613,37 @@ export const getLeavesData = async (id) => {
       .where(eq(leavesTable.employeeId, id))
       .orderBy(desc(leavesTable.date));
     return { message: 'success', data };
+  } catch (error) {
+    console.log(error);
+    return { message: 'error' };
+  }
+};
+
+export const updateEmployeeById = async (id, data) => {
+  try {
+    const allowedKeys = [
+      'fullName',
+      'gender',
+      'maritalStatus',
+      'religion',
+      'birthDate',
+      'mobile',
+      'email',
+    ];
+    const updateData = {};
+    for (const key of allowedKeys) {
+      if (Object.prototype.hasOwnProperty.call(data, key)) {
+        updateData[key] = data[key];
+      }
+    }
+    if (Object.keys(updateData).length === 0) {
+      return { message: 'nothing to update' };
+    }
+    await db
+      .update(employeeTable)
+      .set(updateData)
+      .where(eq(employeeTable.id, id));
+    return { message: 'success' };
   } catch (error) {
     console.log(error);
     return { message: 'error' };

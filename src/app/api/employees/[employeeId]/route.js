@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { getEmployeeById } from '@/server/queries';
+import { getEmployeeById, updateEmployeeById } from '@/server/queries';
 
 export async function GET(request, context) {
   try {
@@ -10,5 +10,17 @@ export async function GET(request, context) {
   } catch (error) {
     console.log(error);
     return NextResponse.json({ message: error.message });
+  }
+}
+
+export async function PATCH(request, context) {
+  try {
+    const { employeeId } = await context.params;
+    const body = await request.json();
+    const result = await updateEmployeeById(Number(employeeId), body);
+    return NextResponse.json(result);
+  } catch (error) {
+    console.log(error);
+    return NextResponse.json({ message: error.message }, { status: 500 });
   }
 }

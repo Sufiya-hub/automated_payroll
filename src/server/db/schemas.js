@@ -121,3 +121,9 @@ export const leavesTable = pgTable('leavesTable', {
   body: varchar(),
   status: varchar().default('pending'),
 });
+
+// Global configuration key-value store
+export const configTable = pgTable('config', {
+  key: varchar({ length: 50 }).primaryKey(),
+  value: varchar({ length: 255 }),
+});

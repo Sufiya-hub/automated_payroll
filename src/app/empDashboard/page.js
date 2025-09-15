@@ -12,9 +12,6 @@ import TimeTracker from '@/components/employee/TimeTracker';
 import Section from '@/components/employee/Section';
 import { ToastContainer } from 'react-toastify';
 
-const OFFICE_RADIUS = process.env.NEXT_PUBLIC_Office_Radius;
-console.log(OFFICE_RADIUS);
-
 function haversine(lat1, lon1, lat2, lon2) {
   const R = 6371; // Radius of Earth in km
   const toRadians = (deg) => deg * (Math.PI / 180); // Convert degrees to radians
@@ -37,6 +34,7 @@ const page = () => {
   const [attendanceBtn, setAttendanceBtn] = useState(false);
   const [messages, setMessages] = useState([]);
   const [applyLeave, setApplyLeave] = useState(false);
+  const [officeRadiusKm, setOfficeRadiusKm] = useState(0);
 
   const session = useSession();
 
@@ -52,6 +50,22 @@ const page = () => {
     }
     return { message: 'failure' };
   };
+
+  useEffect(() => {
+    const loadRadius = async () => {
+      try {
+        const res = await fetch('/api/settings/attendanceRadius');
+        const json = await res.json();
+        const meters = Number(json?.radius);
+        if (Number.isFinite(meters) && meters > 0) {
+          setOfficeRadiusKm(meters / 1000);
+        }
+      } catch (e) {
+        console.log('radius fetch error', e);
+      }
+    };
+    loadRadius();
+  }, []);
 
   useEffect(() => {
     const socket = new WebSocket(process.env.NEXT_PUBLIC_WS_URL);
@@ -87,7 +101,7 @@ const page = () => {
           // console.log('distance', distance);
           if (
             distance &&
-            distance < OFFICE_RADIUS &&
+            distance < officeRadiusKm &&
             res?.message === 'success' &&
             res.ip === adminIp
           ) {
@@ -98,7 +112,7 @@ const page = () => {
     };
 
     return () => socket.close();
-  }, [session]);
+  }, [session, officeRadiusKm]);
 
   const checkActiveNotif = async () => {
     try {
