@@ -10,7 +10,9 @@ import {
   salaryComponentTable,
   professionalTaxTable,
   leavesTable,
+  auditLogsTable,
 } from './db/schemas';
+import bcrypt from 'bcryptjs';
 import {
   eq,
   and,
@@ -54,14 +56,12 @@ export const login = async (email, password) => {
     const user = await db
       .select()
       .from(employeeTable)
-      .where(
-        and(
-          eq(employeeTable.email, email),
-          eq(employeeTable.password, password)
-        )
-      );
-    // console.log('in login:', user);
-    if (user?.[0]) return user[0];
+      .where(eq(employeeTable.email, email));
+
+    if (user?.[0]) {
+      const isMatch = await bcrypt.compare(password, user[0].password);
+      if (isMatch) return user[0];
+    }
     return false;
   } catch (error) {
     console.log(error);
@@ -150,7 +150,12 @@ export const addManager = async (data) => {
 export const addEmployee = async (data) => {
   try {
     // console.log('add emp:', data);
-    await db.insert(employeeTable).values(data);
+    let employeeData = { ...data };
+    if (employeeData.password) {
+      const salt = await bcrypt.genSalt(10);
+      employeeData.password = await bcrypt.hash(employeeData.password, salt);
+    }
+    await db.insert(employeeTable).values(employeeData);
     return { message: 'Successfully Added' };
   } catch (error) {
     console.log('error:', error);
@@ -685,6 +690,29 @@ export const updateLeaveStatus = async (id, status) => {
     return { message: 'success', updatedData };
   } catch (error) {
     console.log(error);
+    return { message: 'error' };
+  }
+};
+
+export const createAuditLog = async (data) => {
+  try {
+    await db.insert(auditLogsTable).values(data);
+    return { message: 'success' };
+  } catch (error) {
+    console.log('Error creating audit log:', error);
+    return { message: 'error' };
+  }
+};
+
+export const getAuditLogs = async () => {
+  try {
+    const data = await db
+      .select()
+      .from(auditLogsTable)
+      .orderBy(desc(auditLogsTable.date));
+    return { message: 'success', data };
+  } catch (error) {
+    console.log('Error fetching audit logs:', error);
     return { message: 'error' };
   }
 };

@@ -21,7 +21,7 @@ export const employeeTable = pgTable('employees', {
   birthDate: varchar({ length: 10 }).notNull(),
   mobile: varchar({ length: 10 }).notNull(),
   email: varchar({ length: 255 }).notNull().unique(),
-  password: varchar({ length: 30 }).notNull(),
+  password: varchar({ length: 255 }).notNull(),
   status: varchar({ length: 30 }).notNull(),
   leaves: integer().default(15),
   salary: integer(),
@@ -126,4 +126,13 @@ export const leavesTable = pgTable('leavesTable', {
 export const configTable = pgTable('config', {
   key: varchar({ length: 50 }).primaryKey(),
   value: varchar({ length: 255 }),
+});
+
+export const auditLogsTable = pgTable('auditLogs', {
+  id: serial('id').primaryKey(),
+  action: varchar({ length: 50 }).notNull(), // e.g., 'PAYROLL_GENERATED', 'SALARY_UPDATED'
+  performedBy: varchar({ length: 255 }), // Can be admin ID or system
+  targetId: integer('target_id'), // E.g., employeeId or payrollId
+  details: varchar(), // JSON string or description
+  date: timestamp().defaultNow().notNull(),
 });

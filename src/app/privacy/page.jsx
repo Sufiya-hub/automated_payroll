@@ -17,7 +17,8 @@ const page = () => {
       <p>
         2. Data Usage All data used in the project is simulated and does not
         represent real individuals or organizations. The fake data is manually
-        created or auto-generated and used solely for testing and demonstration.{' '}
+        created or auto-generated and used solely for testing and
+        demonstration.{' '}
       </p>
       <p>
         3. No Data Collection This project: Does not collect personal or

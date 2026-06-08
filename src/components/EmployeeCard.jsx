@@ -11,8 +11,8 @@ const EmployeeCard = ({ ...emp }) => {
             emp?.image
               ? emp.image
               : emp.gender === 'female'
-              ? 'femalev.png'
-              : 'malev.png'
+                ? 'femalev.png'
+                : 'malev.png'
           }`}
           width={100}
           height={100}
@@ -30,8 +30,8 @@ const EmployeeCard = ({ ...emp }) => {
             emp?.status === 'Full-Time'
               ? 'text-green-500'
               : emp?.status === 'Part-Time'
-              ? 'text-blue-500'
-              : 'text-orange-500'
+                ? 'text-blue-500'
+                : 'text-orange-500'
           }`}
         >
           <span
@@ -39,8 +39,8 @@ const EmployeeCard = ({ ...emp }) => {
               emp?.status === 'Full-Time'
                 ? 'bg-green-500'
                 : emp?.status === 'Part-Time'
-                ? 'bg-blue-500'
-                : 'bg-orange-500'
+                  ? 'bg-blue-500'
+                  : 'bg-orange-500'
             }`}
           ></span>
           {emp?.status}

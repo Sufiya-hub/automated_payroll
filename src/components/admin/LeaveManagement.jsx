@@ -37,14 +37,14 @@ const statusStyle = (status, element) => {
     return status === 'approved'
       ? 'text-green-500'
       : status === 'pending'
-      ? 'text-yellow-600'
-      : 'text-orange-500';
+        ? 'text-yellow-600'
+        : 'text-orange-500';
   if (element === 'indicator')
     return status === 'approved'
       ? 'bg-green-500'
       : status === 'pending'
-      ? 'bg-yellow-500'
-      : 'bg-orange-500';
+        ? 'bg-yellow-500'
+        : 'bg-orange-500';
   // if(status === 'success')
   // return 'text'
 };

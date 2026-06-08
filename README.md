@@ -1,36 +1,68 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Automated Payroll System
 
-## Getting Started
+A comprehensive full-stack Next.js application for managing employee payrolls, attendance, and leave requests. 
+This project integrates with a Postgres database (via Drizzle ORM) and Razorpay for actual fund account creation and salary disbursements.
 
-First, run the development server:
+## Key Features
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+- **Dynamic Salary Calculation**: Supports custom salary components like basic, DA, HRA, allowances, PF, and dynamic professional tax slabs.
+- **Attendance & Leave Management**: Tracks daily attendance (with geofencing/IP checks) and automatically deducts pay for excess leaves.
+- **Razorpay Integration**: Directly creates fund accounts and processes IMPS salary payouts securely via POST APIs.
+- **Role-Based Access**: Distinguishes between standard employees and managers/admins for protected operations.
+- **Audit Logs**: Maintains a secure record of payroll generation and sensitive updates.
+- **Robust Security**: Uses Zod for strict data validation and bcrypt for password hashing.
+
+## Tech Stack
+
+- **Frontend**: Next.js (App Router), React, TailwindCSS
+- **Backend**: Next.js API Routes, NextAuth.js
+- **Database**: PostgreSQL with Drizzle ORM
+- **Payment Gateway**: Razorpay
+- **Validation & Security**: Zod, bcryptjs
+
+## Environment Setup
+
+Create a `.env` file in the root directory and add the following variables:
+
+```env
+DATABASE_URL=postgres://user:password@host:port/dbname
+NEXTAUTH_SECRET=your_nextauth_secret
+NEXTAUTH_URL=http://localhost:3000
+GOOGLE_CLIENT_ID=your_google_client_id
+GOOGLE_CLIENT_SCERET=your_google_client_secret
+
+RAZORPAY_TEST_ID=your_razorpay_key_id
+RAZORPAY_SECRET=your_razorpay_key_secret
+ACCOUNT_NUMBER=your_company_razorpay_account_number
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Running the Application
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+1. Install dependencies:
+   ```bash
+   npm install
+   ```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+2. Push Database Schema to PostgreSQL:
+   ```bash
+   npx drizzle-kit push:pg
+   ```
+   *(Note: Adjust the command based on your `drizzle.config.js` settings)*
 
-## Learn More
+3. Run the development server:
+   ```bash
+   npm run dev
+   ```
 
-To learn more about Next.js, take a look at the following resources:
+4. Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Code Quality
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+The codebase utilizes `Prettier` and `ESLint` to maintain code standards. You can format the code by running:
 
-## Deploy on Vercel
+```bash
+npx prettier --write .
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Demo Credentials
+To get started as an admin, you can manually insert a user with `position: 'admin'` or `'manager'` directly into your database.

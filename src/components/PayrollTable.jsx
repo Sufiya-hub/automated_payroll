@@ -36,14 +36,14 @@ const statusStyle = (status, element) => {
     return status === 'success'
       ? 'test-green-500'
       : status === 'processing'
-      ? 'text-blue-500'
-      : 'text-red-500';
+        ? 'text-blue-500'
+        : 'text-red-500';
   if (element === 'indicator')
     return status === 'success'
       ? 'bg-green-500'
       : status === 'processing'
-      ? 'bg-blue-500'
-      : 'bg-red-500';
+        ? 'bg-blue-500'
+        : 'bg-red-500';
   // if(status === 'success')
   // return 'text'
 };

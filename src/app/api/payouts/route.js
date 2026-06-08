@@ -1,20 +1,39 @@
 import { NextResponse } from 'next/server';
 import axios from 'axios';
 import { v4 as uuidv4 } from 'uuid';
+import { getServerSession } from 'next-auth';
+import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 
-export async function POST() {
+export async function POST(req) {
   try {
+    const session = await getServerSession(authOptions);
+    if (
+      !session ||
+      (session.user?.position !== 'manager' &&
+        session.user?.position !== 'admin')
+    ) {
+      return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
+    }
+
+    const body = await req.json();
+    if (!body || !body.fund_account_id || !body.amount) {
+      return NextResponse.json(
+        { message: 'Missing required fields' },
+        { status: 400 }
+      );
+    }
+
     const idempotencyKey = uuidv4();
     const data = {
       account_number: process.env.ACCOUNT_NUMBER, // COMPANYS GLOBAL
-      fund_account_id: 'fa_Q5bH0qADQ1AkII',
-      amount: 2000000,
+      fund_account_id: body.fund_account_id,
+      amount: body.amount,
       currency: 'INR',
       mode: 'IMPS',
       purpose: 'salary',
       queue_if_low_balance: true,
-      reference_id: 'Acme Transaction ID 12345',
-      narration: 'Acme Corp Fund Transfer',
+      reference_id: `Acme_Payout_${Date.now()}`,
+      narration: body.narration || 'Acme Corp Fund Transfer',
       notes: {
         notes_key_1: 'Employee Salary Credit',
       },
@@ -24,28 +43,27 @@ export async function POST() {
       `${process.env.RAZORPAY_TEST_ID}:${process.env.RAZORPAY_SECRET}`
     ).toString('base64');
 
-    await axios
+    const responseData = await axios
       .post('https://api.razorpay.com/v1/payouts', data, {
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Basic ${auth}`,
           'X-Payout-Idempotency': idempotencyKey,
-          // 'X-Payout-Idempotency': '53cda91c-8f81-4e77-bbb9-7388f4ac6bf4',
         },
       })
       .then((response) => {
-        console.log('Success:', response.data);
-        return NextResponse.json({ response });
+        return response.data;
       })
       .catch((error) => {
         console.error(
           'Error:',
           error.response ? error.response.data : error.message
         );
+        throw new Error(error.message);
       });
-    return NextResponse.json({});
+    return NextResponse.json({ response: responseData });
   } catch (error) {
-    console.log(error);
-    return NextResponse.json({ error: error?.message });
+    console.error(error);
+    return NextResponse.json({ error: error?.message }, { status: 500 });
   }
 }

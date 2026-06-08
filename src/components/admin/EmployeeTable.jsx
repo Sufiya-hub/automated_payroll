@@ -40,14 +40,14 @@ const statusStyle = (stat, element) => {
     return stat === 'Full-Time'
       ? 'border-green-500 text-green-500'
       : stat === 'Part-Time'
-      ? 'border-blue-500 text-blue-500'
-      : 'border-orange-500 text-orange-500';
+        ? 'border-blue-500 text-blue-500'
+        : 'border-orange-500 text-orange-500';
   if (element === 'indicator')
     return stat === 'Full-Time'
       ? 'bg-green-500'
       : stat === 'Part-Time'
-      ? 'bg-blue-500'
-      : 'bg-orange-500';
+        ? 'bg-blue-500'
+        : 'bg-orange-500';
 };
 
 export function EmployeeTable() {

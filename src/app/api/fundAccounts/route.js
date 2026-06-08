@@ -38,8 +38,6 @@ export async function POST(req) {
       `${process.env.RAZORPAY_TEST_ID}:${process.env.RAZORPAY_SECRET}`
     ).toString('base64');
 
-    console.log('auth:', auth);
-
     await axios
       .post('https://api.razorpay.com/v1/fund_accounts', data, {
         headers: {

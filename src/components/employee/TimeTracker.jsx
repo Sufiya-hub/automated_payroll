@@ -42,8 +42,8 @@ const TimeTracker = ({ attendance }) => {
               el.day === 'Sunday' || el.day === 'Saturday'
                 ? 'border-[1px] border-eprimary/50 text-eprimary'
                 : el.status
-                ? 'bg-brand border-white/50 text-[#F1F1F1]'
-                : 'bg-eprimary text-black'
+                  ? 'bg-brand border-white/50 text-[#F1F1F1]'
+                  : 'bg-eprimary text-black'
             } rounded-full`}
             key={i}
           >

@@ -49,8 +49,8 @@ const LeavesTable = () => {
                       item.status === 'pending'
                         ? 'text-yellow-500'
                         : item.status === 'approved'
-                        ? 'text-green-500'
-                        : 'text-orange-500'
+                          ? 'text-green-500'
+                          : 'text-orange-500'
                     }  capitalize flex items-center gap-2 justify-center`}
                   >
                     <span
@@ -58,8 +58,8 @@ const LeavesTable = () => {
                         item.status === 'pending'
                           ? 'bg-yellow-500'
                           : item.status === 'approved'
-                          ? 'bg-green-500'
-                          : 'bg-orange-500'
+                            ? 'bg-green-500'
+                            : 'bg-orange-500'
                       } h-2 w-2 rounded-full`}
                     ></span>
                     {item.status}

@@ -3,6 +3,7 @@ import { addEmployee, getAllEmployees } from '@/server/queries';
 import fs from 'fs';
 import path from 'path';
 import axios from 'axios';
+import { employeeSchema } from '@/lib/validations';
 
 export async function GET() {
   try {
@@ -36,7 +37,14 @@ export async function POST(req) {
     }
     let { data, employeeImage } = extractedData;
     data = JSON.parse(data);
-    console.log(employeeImage);
+
+    const validation = employeeSchema.safeParse(data);
+    if (!validation.success) {
+      return NextResponse.json(
+        { message: 'Validation failed', errors: validation.error.format() },
+        { status: 400 }
+      );
+    }
     const dirPath = path.join(process.cwd(), 'public/employees');
 
     // Ensure directory exists
@@ -81,10 +89,7 @@ export async function POST(req) {
         },
       })
       .then((response) => {
-        console.log('Success:', response.data);
         if (response.data.id) data.contact_id = response.data.id;
-        console.log('data:', data);
-        // return NextResponse.json({ response });
       })
       .catch((error) => {
         console.error(
